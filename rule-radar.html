@@ -1,0 +1,1163 @@
+?variant="standard" title="DMEvia Rule Radar – Complete HTML" id="72519"}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Rule Radar | DMEvia Healthcare Intelligence</title>
+
+<meta name="description" content="DMEvia Rule Radar helps DME suppliers monitor healthcare regulations, Medicare policy changes, coding updates and compliance developments.">
+
+<meta name="theme-color" content="#071b35">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+:root {
+    --navy:#071b35;
+    --navy2:#0d2746;
+    --teal:#00c6aa;
+    --cyan:#43d7e8;
+    --purple:#987cff;
+    --white:#ffffff;
+    --muted:#a9bbcf;
+    --border:rgba(255,255,255,.11);
+}
+
+* {
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+html {
+    scroll-behavior:smooth;
+}
+
+body {
+    font-family:'DM Sans',sans-serif;
+    background:var(--navy);
+    color:var(--white);
+    overflow-x:hidden;
+}
+
+a {
+    color:inherit;
+    text-decoration:none;
+}
+
+.background {
+    position:fixed;
+    inset:0;
+    z-index:-2;
+    pointer-events:none;
+    background:
+        radial-gradient(ellipse at 10% 15%,rgba(0,198,170,.16),transparent 38%),
+        radial-gradient(ellipse at 90% 30%,rgba(88,108,255,.16),transparent 38%),
+        #071b35;
+}
+
+.orb {
+    position:absolute;
+    width:350px;
+    height:350px;
+    border-radius:50%;
+    filter:blur(100px);
+    opacity:.22;
+    animation:float 12s ease-in-out infinite alternate;
+}
+
+.orb.one {
+    background:var(--teal);
+    left:-180px;
+    top:250px;
+}
+
+.orb.two {
+    background:var(--purple);
+    right:-160px;
+    top:700px;
+    animation-delay:-5s;
+}
+
+@keyframes float {
+    from {transform:translate(0,0);}
+    to {transform:translate(80px,-65px);}
+}
+
+.container {
+    width:min(1180px,88%);
+    margin:auto;
+}
+
+/* NAVIGATION */
+
+nav {
+    position:sticky;
+    top:0;
+    z-index:20;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:19px 6%;
+    background:rgba(7,27,53,.88);
+    backdrop-filter:blur(18px);
+    border-bottom:1px solid var(--border);
+}
+
+.logo {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-family:'Manrope',sans-serif;
+    font-weight:800;
+    font-size:25px;
+    letter-spacing:-1px;
+}
+
+.logo span {
+    color:var(--teal);
+}
+
+.logo-icon {
+    width:36px;
+    height:36px;
+}
+
+.nav-links {
+    display:flex;
+    align-items:center;
+    gap:28px;
+    font-size:13px;
+    color:#d1ddeb;
+}
+
+.nav-links a:hover {
+    color:var(--teal);
+}
+
+.nav-button {
+    padding:11px 19px;
+    border:1px solid rgba(0,198,170,.55);
+    border-radius:30px;
+    color:var(--teal)!important;
+}
+
+/* HERO */
+
+.hero {
+    padding:115px 0 90px;
+    text-align:center;
+    position:relative;
+}
+
+.badge {
+    display:inline-flex;
+    align-items:center;
+    gap:9px;
+    border:1px solid rgba(152,124,255,.35);
+    background:rgba(152,124,255,.1);
+    color:#c2b1ff;
+    padding:9px 17px;
+    border-radius:30px;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:1.6px;
+    text-transform:uppercase;
+    margin-bottom:28px;
+}
+
+.badge-dot {
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--purple);
+    box-shadow:0 0 12px var(--purple);
+}
+
+h1,h2,h3 {
+    font-family:'Manrope',sans-serif;
+}
+
+.hero h1 {
+    font-size:clamp(43px,6vw,76px);
+    line-height:1.12;
+    letter-spacing:-3px;
+    max-width:950px;
+    margin:auto;
+}
+
+.gradient {
+    background:linear-gradient(90deg,#00d5b5,#46cce8,#a18aff);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+}
+
+.hero-description {
+    max-width:720px;
+    margin:25px auto 0;
+    color:var(--muted);
+    line-height:1.9;
+    font-size:16px;
+}
+
+.hero-buttons {
+    display:flex;
+    justify-content:center;
+    gap:14px;
+    flex-wrap:wrap;
+    margin-top:34px;
+}
+
+.button {
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    padding:15px 25px;
+    border-radius:9px;
+    font-size:14px;
+    font-weight:800;
+    transition:.3s;
+}
+
+.button-primary {
+    background:linear-gradient(100deg,var(--teal),var(--cyan));
+    color:#062337;
+    box-shadow:0 8px 30px rgba(0,198,170,.18);
+}
+
+.button-primary:hover {
+    transform:translateY(-4px);
+    box-shadow:0 12px 35px rgba(0,198,170,.3);
+}
+
+.button-secondary {
+    border:1px solid rgba(255,255,255,.2);
+    background:rgba(255,255,255,.04);
+}
+
+.button-secondary:hover {
+    border-color:var(--purple);
+    transform:translateY(-4px);
+}
+
+/* TRUST STRIP */
+
+.trust-strip {
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:35px;
+    flex-wrap:wrap;
+    padding:25px 10px;
+    border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+    color:#b9c8da;
+    font-size:12px;
+    font-weight:700;
+    letter-spacing:.5px;
+}
+
+.trust-strip span::before {
+    content:"✦";
+    color:var(--teal);
+    margin-right:9px;
+}
+
+/* SECTIONS */
+
+.section {
+    padding:90px 0;
+}
+
+.section-heading {
+    text-align:center;
+    margin-bottom:45px;
+}
+
+.section-heading h2 {
+    font-size:clamp(29px,4vw,43px);
+    letter-spacing:-1.5px;
+}
+
+.section-heading p {
+    color:var(--muted);
+    margin-top:14px;
+    font-size:14px;
+    line-height:1.8;
+}
+
+/* CATEGORY GRID */
+
+.category-grid {
+    display:grid;
+    grid-template-columns:repeat(4,1fr);
+    gap:17px;
+}
+
+.category-card {
+    min-height:175px;
+    padding:25px 20px;
+    border:1px solid var(--border);
+    border-radius:15px;
+    background:linear-gradient(145deg,rgba(255,255,255,.075),rgba(255,255,255,.02));
+    transition:.35s;
+}
+
+.category-card:hover {
+    transform:translateY(-7px);
+    border-color:rgba(0,198,170,.55);
+    background:rgba(0,198,170,.07);
+}
+
+.category-icon {
+    font-size:27px;
+    margin-bottom:18px;
+}
+
+.category-card h3 {
+    font-size:16px;
+    margin-bottom:9px;
+}
+
+.category-card p {
+    font-size:12px;
+    color:var(--muted);
+    line-height:1.7;
+}
+
+/* INTELLIGENCE PREVIEW */
+
+.intelligence {
+    background:rgba(255,255,255,.025);
+    border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+}
+
+.intelligence-layout {
+    display:grid;
+    grid-template-columns:1.3fr .7fr;
+    gap:25px;
+}
+
+.featured-card,.side-card {
+    padding:32px;
+    border:1px solid var(--border);
+    border-radius:18px;
+    background:linear-gradient(145deg,rgba(255,255,255,.08),rgba(255,255,255,.025));
+}
+
+.featured-card {
+    position:relative;
+    overflow:hidden;
+}
+
+.featured-card::after {
+    content:"";
+    position:absolute;
+    width:220px;
+    height:220px;
+    background:var(--purple);
+    opacity:.12;
+    filter:blur(90px);
+    right:-80px;
+    top:-90px;
+    pointer-events:none;
+}
+
+.preview-label {
+    display:inline-block;
+    padding:7px 12px;
+    border-radius:20px;
+    background:rgba(152,124,255,.14);
+    color:#c7b7ff;
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:1px;
+    text-transform:uppercase;
+    margin-bottom:22px;
+}
+
+.featured-card h3 {
+    font-size:27px;
+    line-height:1.4;
+    margin-bottom:16px;
+}
+
+.featured-card p {
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.9;
+}
+
+.meta {
+    display:flex;
+    flex-wrap:wrap;
+    gap:18px;
+    margin-top:23px;
+    color:#9fb2c8;
+    font-size:11px;
+}
+
+.side-card h3 {
+    font-size:20px;
+    margin-bottom:20px;
+}
+
+.alert-item {
+    padding:17px 0;
+    border-bottom:1px solid var(--border);
+}
+
+.alert-item:last-child {
+    border-bottom:none;
+}
+
+.alert-item strong {
+    display:block;
+    font-size:13px;
+    margin-bottom:7px;
+}
+
+.alert-item span {
+    color:var(--muted);
+    font-size:11px;
+}
+
+/* HOW IT WORKS */
+
+.steps-grid {
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:22px;
+}
+
+.step-card {
+    padding:29px;
+    border-radius:16px;
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.04);
+}
+
+.step-number {
+    font-size:32px;
+    font-weight:800;
+    color:var(--teal);
+    font-family:'Manrope',sans-serif;
+    margin-bottom:19px;
+}
+
+.step-card h3 {
+    font-size:18px;
+    margin-bottom:12px;
+}
+
+.step-card p {
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.85;
+}
+
+/* ACTION SECTION */
+
+.action-banner {
+    padding:55px;
+    border:1px solid rgba(0,198,170,.25);
+    border-radius:22px;
+    background:
+        radial-gradient(ellipse at 90% 20%,rgba(0,198,170,.18),transparent 45%),
+        linear-gradient(120deg,rgba(0,198,170,.09),rgba(152,124,255,.09));
+    text-align:center;
+}
+
+.action-banner h2 {
+    font-size:clamp(27px,4vw,39px);
+    margin-bottom:17px;
+}
+
+.action-banner p {
+    color:var(--muted);
+    max-width:650px;
+    margin:0 auto 27px;
+    line-height:1.9;
+    font-size:14px;
+}
+
+/* PRICING */
+
+.pricing-grid {
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:20px;
+}
+
+.price-card {
+    padding:31px;
+    border:1px solid var(--border);
+    border-radius:17px;
+    background:rgba(255,255,255,.04);
+    transition:.35s;
+}
+
+.price-card:hover {
+    transform:translateY(-7px);
+    border-color:rgba(0,198,170,.5);
+}
+
+.price-card.featured {
+    border-color:rgba(0,198,170,.65);
+    background:linear-gradient(150deg,rgba(0,198,170,.13),rgba(255,255,255,.035));
+    box-shadow:0 15px 50px rgba(0,0,0,.15);
+}
+
+.plan-label {
+    color:var(--teal);
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+}
+
+.price-card h3 {
+    font-size:25px;
+    margin:15px 0;
+}
+
+.price {
+    font-size:34px;
+    font-weight:800;
+    font-family:'Manrope',sans-serif;
+}
+
+.price small {
+    font-size:12px;
+    color:var(--muted);
+    font-weight:500;
+}
+
+.price-card>p {
+    color:var(--muted);
+    font-size:12px;
+    margin:13px 0 22px;
+    line-height:1.7;
+}
+
+.price-card ul {
+    list-style:none;
+    margin:23px 0;
+}
+
+.price-card li {
+    color:#d2deea;
+    font-size:12px;
+    padding:11px 0;
+    border-bottom:1px solid var(--border);
+}
+
+.price-card li::before {
+    content:"✓";
+    color:var(--teal);
+    margin-right:10px;
+    font-weight:800;
+}
+
+.price-card .button {
+    width:100%;
+    margin-top:8px;
+}
+
+/* DISCLAIMER */
+
+.disclaimer {
+    padding:25px;
+    border:1px solid rgba(255,255,255,.1);
+    border-radius:12px;
+    background:rgba(255,255,255,.025);
+    color:#98abc1;
+    font-size:11px;
+    line-height:1.9;
+}
+
+/* FOOTER */
+
+footer {
+    padding:45px 0 25px;
+    border-top:1px solid var(--border);
+}
+
+.footer-content {
+    display:flex;
+    justify-content:space-between;
+    flex-wrap:wrap;
+    gap:35px;
+    padding-bottom:30px;
+}
+
+.footer-description {
+    max-width:310px;
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.8;
+    margin-top:14px;
+}
+
+.footer-column h4 {
+    font-size:13px;
+    margin-bottom:16px;
+}
+
+.footer-column a {
+    display:block;
+    font-size:12px;
+    color:var(--muted);
+    margin:11px 0;
+}
+
+.footer-column a:hover {
+    color:var(--teal);
+}
+
+.copyright {
+    padding-top:22px;
+    border-top:1px solid var(--border);
+    color:#8296ad;
+    text-align:center;
+    font-size:11px;
+}
+
+/* ANIMATIONS */
+
+.reveal {
+    opacity:0;
+    transform:translateY(25px);
+    transition:opacity .8s ease,transform .8s ease;
+}
+
+.reveal.visible {
+    opacity:1;
+    transform:translateY(0);
+}
+
+@media(max-width:900px) {
+    .category-grid {
+        grid-template-columns:repeat(2,1fr);
+    }
+
+    .intelligence-layout {
+        grid-template-columns:1fr;
+    }
+
+    .pricing-grid {
+        grid-template-columns:1fr;
+    }
+}
+
+@media(max-width:650px) {
+    nav {
+        padding:15px 5%;
+    }
+
+    .nav-links {
+        gap:13px;
+        font-size:11px;
+    }
+
+    .nav-button {
+        display:none;
+    }
+
+    .logo {
+        font-size:21px;
+    }
+
+    .hero {
+        padding:85px 0 65px;
+    }
+
+    .hero h1 {
+        letter-spacing:-1.8px;
+    }
+
+    .hero-description {
+        font-size:14px;
+    }
+
+    .trust-strip {
+        gap:15px;
+        font-size:10px;
+    }
+
+    .section {
+        padding:65px 0;
+    }
+
+    .category-grid {
+        gap:11px;
+    }
+
+    .category-card {
+        padding:19px 14px;
+    }
+
+    .steps-grid {
+        grid-template-columns:1fr;
+    }
+
+    .featured-card,.side-card {
+        padding:23px;
+    }
+
+    .action-banner {
+        padding:35px 22px;
+    }
+
+    .footer-content {
+        flex-direction:column;
+    }
+}
+
+@media(prefers-reduced-motion:reduce) {
+    *,*::before,*::after {
+        animation-duration:.01ms!important;
+        transition-duration:.01ms!important;
+        scroll-behavior:auto!important;
+    }
+
+    .reveal {
+        opacity:1;
+        transform:none;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="background">
+    <div class="orb one"></div>
+    <div class="orb two"></div>
+</div>
+
+<nav>
+
+    <a href="index.html" class="logo">
+        <svg class="logo-icon" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M24 3C12.7 3 4 11.6 4 22.2C4 36 24 46 24 46C24 46 44 36 44 22.2C44 11.6 35.3 3 24 3Z" fill="#00C6AA"/>
+            <path d="M24 9C16 9 10 15 10 22C10 31 24 40 24 40C24 40 38 31 38 22C38 15 32 9 24 9Z" fill="#071B35"/>
+            <path d="M21 14H27V20H33V26H27V32H21V26H15V20H21V14Z" fill="white"/>
+        </svg>
+        DME<span>via</span>
+    </a>
+
+    <div class="nav-links">
+        <a href="index.html">Home</a>
+        <a href="#intelligence">Intelligence</a>
+        <a href="#categories">Coverage</a>
+        <a href="#plans">Plans</a>
+        <a href="mailto:info@dmevia.com" class="nav-button">Contact</a>
+    </div>
+
+</nav>
+
+<header class="hero">
+    <div class="container">
+
+        <div class="badge">
+            <span class="badge-dot"></span>
+            DMEVIA HEALTHCARE INTELLIGENCE
+        </div>
+
+        <h1>
+            Stay Ahead of<br>
+            <span class="gradient">Every Important Rule.</span>
+        </h1>
+
+        <p class="hero-description">
+            Healthcare regulations change. Policies evolve. Compliance
+            requirements matter. Rule Radar brings important healthcare
+            regulatory developments together, helping DME businesses
+            understand what changed, why it matters and what to consider next.
+        </p>
+
+        <div class="hero-buttons">
+            <a href="#intelligence" class="button button-primary">
+                Explore Intelligence →
+            </a>
+
+            <a href="#plans" class="button button-secondary">
+                View Membership Plans
+            </a>
+        </div>
+
+    </div>
+</header>
+
+<div class="container">
+    <div class="trust-strip">
+        <span>CMS & Medicare</span>
+        <span>Medicaid</span>
+        <span>DME MACs</span>
+        <span>Payer Policies</span>
+        <span>HCPCS Updates</span>
+    </div>
+</div>
+
+<main>
+
+<section class="section" id="categories">
+    <div class="container">
+
+        <div class="section-heading reveal">
+            <h2>Know What Is <span class="gradient">Changing.</span></h2>
+            <p>Monitor important areas of the US healthcare and DME regulatory landscape.</p>
+        </div>
+
+        <div class="category-grid">
+
+            <div class="category-card reveal">
+                <div class="category-icon">🏛️</div>
+                <h3>CMS & Medicare</h3>
+                <p>Federal healthcare announcements, Medicare policies and programme developments.</p>
+            </div>
+
+            <div class="category-card reveal">
+                <div class="category-icon">📋</div>
+                <h3>HCPCS & Coding</h3>
+                <p>Equipment coding developments, code changes and classification updates.</p>
+            </div>
+
+            <div class="category-card reveal">
+                <div class="category-icon">🛡️</div>
+                <h3>Prior Authorization</h3>
+                <p>Authorization requirements, documentation guidance and policy changes.</p>
+            </div>
+
+            <div class="category-card reveal">
+                <div class="category-icon">🏥</div>
+                <h3>Medicaid</h3>
+                <p>State Medicaid programme developments and DME-related policy information.</p>
+            </div>
+
+            <div class="category-card reveal">
+                <div class="category-icon">📑</div>
+                <h3>DME MAC Updates</h3>
+                <p>Coverage articles, billing guidance and supplier-related publications.</p>
+            </div>
+
+            <div class="category-card reveal">
+                <div class="category-icon">💳</div>
+                <h3>Payer Policies</h3>
+                <p>Insurance policy developments, coverage requirements and payer announcements.</p>
+            </div>
+
+            <div class="category-card reveal">
+                <div class="category-icon">📦</div>
+                <h3>DME Coverage</h3>
+                <p>Equipment coverage developments, medical necessity and documentation topics.</p>
+            </div>
+
+            <div class="category-card reveal">
+                <div class="category-icon">⚖️</div>
+                <h3>Compliance</h3>
+                <p>Operational compliance considerations and regulatory risk awareness.</p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="section intelligence" id="intelligence">
+    <div class="container">
+
+        <div class="section-heading reveal">
+            <h2>Regulatory Intelligence, <span class="gradient">Made Clear.</span></h2>
+            <p>Go beyond headlines. Understand the operational significance of important developments.</p>
+        </div>
+
+        <div class="intelligence-layout">
+
+            <article class="featured-card reveal">
+
+                <div class="preview-label">Illustrative Content Preview</div>
+
+                <h3>
+                    From Policy Change to Operational Action
+                </h3>
+
+                <p>
+                    Imagine a new Medicare policy affecting documentation
+                    requirements for a particular DME category. Rule Radar
+                    will help suppliers identify the official announcement,
+                    understand its effective date, review the operational
+                    implications and prepare an appropriate action checklist.
+                </p>
+
+                <div class="meta">
+                    <span>◈ Regulatory Intelligence</span>
+                    <span>◷ Example Workflow</span>
+                    <span>✓ Source Verification Required</span>
+                </div>
+
+            </article>
+
+            <aside class="side-card reveal">
+
+                <h3>What Every Alert Should Explain</h3>
+
+                <div class="alert-item">
+                    <strong>What Changed?</strong>
+                    <span>A clear summary of the announcement.</span>
+                </div>
+
+                <div class="alert-item">
+                    <strong>Who Is Affected?</strong>
+                    <span>Relevant suppliers, equipment and stakeholders.</span>
+                </div>
+
+                <div class="alert-item">
+                    <strong>When Does It Apply?</strong>
+                    <span>Publication and effective dates, where available.</span>
+                </div>
+
+                <div class="alert-item">
+                    <strong>What Should You Consider?</strong>
+                    <span>Practical operational implications and next steps.</span>
+                </div>
+
+            </aside>
+
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+
+        <div class="section-heading reveal">
+            <h2>From Information to <span class="gradient">Action.</span></h2>
+            <p>Our intended intelligence workflow is designed around practical business needs.</p>
+        </div>
+
+        <div class="steps-grid">
+
+            <div class="step-card reveal">
+                <div class="step-number">01</div>
+                <h3>Discover</h3>
+                <p>
+                    Identify relevant announcements from official
+                    government, Medicare, Medicaid and payer sources.
+                </p>
+            </div>
+
+            <div class="step-card reveal">
+                <div class="step-number">02</div>
+                <h3>Understand</h3>
+                <p>
+                    Explain the development in straightforward language,
+                    including its potential impact on DME operations.
+                </p>
+            </div>
+
+            <div class="step-card reveal">
+                <div class="step-number">03</div>
+                <h3>Prepare</h3>
+                <p>
+                    Provide practical checklists and considerations
+                    to help businesses assess their next steps.
+                </p>
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+
+        <div class="action-banner reveal">
+            <h2>Don't Just Read the Rule.<br><span class="gradient">Understand Its Impact.</span></h2>
+
+            <p>
+                Rule Radar is being developed to make regulatory
+                intelligence more accessible and useful for DME businesses.
+                Get in touch to express interest in the upcoming platform.
+            </p>
+
+            <a href="mailto:info@dmevia.com?subject=Rule%20Radar%20Early%20Access"
+               class="button button-primary">
+                Request Early Access →
+            </a>
+        </div>
+
+    </div>
+</section>
+
+<section class="section" id="plans">
+    <div class="container">
+
+        <div class="section-heading reveal">
+            <h2>Choose Your <span class="gradient">Intelligence Plan.</span></h2>
+            <p>Proposed membership structure. Final features and pricing will be announced before launch.</p>
+        </div>
+
+        <div class="pricing-grid">
+
+            <div class="price-card reveal">
+
+                <div class="plan-label">Essential</div>
+
+                <h3>Starter</h3>
+
+                <div class="price">$29 <small>/ month (proposed)</small></div>
+
+                <p>For smaller suppliers who want to stay informed.</p>
+
+                <ul>
+                    <li>Selected regulatory updates</li>
+                    <li>Basic intelligence summaries</li>
+                    <li>Important effective dates</li>
+                    <li>Monthly overview</li>
+                </ul>
+
+                <a href="mailto:info@dmevia.com?subject=Rule%20Radar%20Starter%20Interest"
+                   class="button button-secondary">
+                    Express Interest
+                </a>
+
+            </div>
+
+            <div class="price-card featured reveal">
+
+                <div class="plan-label">Most Comprehensive</div>
+
+                <h3>Professional</h3>
+
+                <div class="price">$79 <small>/ month (proposed)</small></div>
+
+                <p>For growing DME businesses and operational teams.</p>
+
+                <ul>
+                    <li>Broader regulatory coverage</li>
+                    <li>Detailed intelligence summaries</li>
+                    <li>Operational impact analysis</li>
+                    <li>Action checklists</li>
+                    <li>Weekly intelligence digest</li>
+                </ul>
+
+                <a href="mailto:info@dmevia.com?subject=Rule%20Radar%20Professional%20Interest"
+                   class="button button-primary">
+                    Express Interest
+                </a>
+
+            </div>
+
+            <div class="price-card reveal">
+
+                <div class="plan-label">Business</div>
+
+                <h3>Enterprise</h3>
+
+                <div class="price">$149 <small>/ month (proposed)</small></div>
+
+                <p>For larger organisations and multi-location businesses.</p>
+
+                <ul>
+                    <li>Expanded intelligence coverage</li>
+                    <li>Detailed operational insights</li>
+                    <li>Compliance-oriented resources</li>
+                    <li>Team-focused intelligence</li>
+                    <li>Priority enquiry channel</li>
+                </ul>
+
+                <a href="mailto:info@dmevia.com?subject=Rule%20Radar%20Enterprise%20Interest"
+                   class="button button-secondary">
+                    Express Interest
+                </a>
+
+            </div>
+
+        </div>
+    </div>
+</section>
+
+<section class="section">
+    <div class="container">
+
+        <div class="disclaimer reveal">
+            <strong>Important Information:</strong> Rule Radar is an independent
+            healthcare information and intelligence initiative. DMEvia is
+            not affiliated with, endorsed by or operated by CMS, Medicare,
+            Medicaid or any government agency. Information published through
+            Rule Radar is intended for general informational and operational
+            awareness purposes and is not legal, medical, billing or compliance
+            advice. Official source documents should always be consulted
+            before making business or compliance decisions.
+        </div>
+
+    </div>
+</section>
+
+</main>
+
+<footer>
+    <div class="container">
+
+        <div class="footer-content">
+
+            <div>
+                <a href="index.html" class="logo">
+                    DME<span>via</span>
+                </a>
+
+                <p class="footer-description">
+                    Connecting healthcare intelligence with
+                    DME supplier discovery.
+                    Find the Right DME Supplier Near You.
+                </p>
+            </div>
+
+            <div class="footer-column">
+                <h4>Explore</h4>
+                <a href="index.html">Home</a>
+                <a href="index.html#suppliers">DME Suppliers</a>
+                <a href="rule-radar.html">Rule Radar</a>
+            </div>
+
+            <div class="footer-column">
+                <h4>Company</h4>
+                <a href="mailto:info@dmevia.com">Contact Us</a>
+                <a href="mailto:info@dmevia.com?subject=Supplier%20Enquiry">Supplier Enquiries</a>
+            </div>
+
+        </div>
+
+        <div class="copyright">
+            © <span id="year"></span> DMEvia. All rights reserved.
+        </div>
+
+    </div>
+</footer>
+
+<script>
+document.getElementById("year").textContent = new Date().getFullYear();
+
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add("visible");
+            observer.unobserve(entry.target);
+        }
+    });
+}, {threshold:0.12});
+
+document.querySelectorAll(".reveal").forEach(element => {
+    observer.observe(element);
+});
+</script>
+
+</body>
+</html>
