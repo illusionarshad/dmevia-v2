@@ -6,7 +6,6 @@
 <meta name="theme-color" content="#071b35">
 <title>Find DME Suppliers Near You | DMEvia</title>
 <meta name="description" content="Find durable medical equipment suppliers by US ZIP code and equipment category with DMEvia.">
-
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -69,11 +68,10 @@ h1{font-family:Manrope,sans-serif;font-size:clamp(39px,6vw,67px);line-height:1.1
 .section-top h2{font-family:Manrope,sans-serif;font-size:30px;letter-spacing:-1px;margin-bottom:9px}
 .section-top p{color:#a9bacd;font-size:14px}
 .category-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:13px}
-.category{border:1px solid #ffffff20;background:#ffffff0b;border-radius:16px;padding:20px 12px;text-align:center;transition:.3s;cursor:pointer;color:white}
+.category{border:1px solid #ffffff20;background:#ffffff0b;border-radius:16px;padding:20px 12px;text-align:center;transition:.3s;color:white}
 .category:hover,.category.active{border-color:var(--teal);background:#16c6b21a;transform:translateY(-5px)}
 .icon{width:53px;height:53px;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;border-radius:15px;background:linear-gradient(145deg,#ffffff16,#ffffff05);color:#66e2d4}
 .icon svg{width:38px;height:38px;overflow:visible}
-.icon svg *{vector-effect:non-scaling-stroke}
 .category strong{display:block;font-size:13px}
 .category small{display:block;color:#9eb2c5;font-size:10px;margin-top:5px}
 
@@ -226,7 +224,7 @@ DME<span>via</span>
 
 <div class="category-grid reveal">
 
-<button class="category" data-category="cpap">
+<button class="category" type="button" data-category="cpap">
 <div class="icon">
 <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2">
 <path d="M7 25h8l5-11 8 21 5-10h8" stroke-linecap="round" stroke-linejoin="round"/>
@@ -236,7 +234,7 @@ DME<span>via</span>
 </div><strong>CPAP</strong><small>Sleep therapy</small>
 </button>
 
-<button class="category" data-category="oxygen">
+<button class="category" type="button" data-category="oxygen">
 <div class="icon">
 <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2">
 <rect x="13" y="8" width="22" height="34" rx="7"/>
@@ -246,7 +244,7 @@ DME<span>via</span>
 </div><strong>Oxygen</strong><small>Oxygen equipment</small>
 </button>
 
-<button class="category" data-category="wheelchair">
+<button class="category" type="button" data-category="wheelchair">
 <div class="icon">
 <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2">
 <circle cx="17" cy="34" r="9" class="anim-rotate"/>
@@ -256,7 +254,7 @@ DME<span>via</span>
 </div><strong>Wheelchairs</strong><small>Mobility support</small>
 </button>
 
-<button class="category" data-category="hospitalbed">
+<button class="category" type="button" data-category="hospitalbed">
 <div class="icon">
 <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2">
 <path d="M6 34V13m0 18h36v-9H18a8 8 0 0 0-8 8m0-8v-7h9v7m23 0v-9m-36 25v-5m36 5v-5" stroke-linecap="round" stroke-linejoin="round"/>
@@ -265,7 +263,7 @@ DME<span>via</span>
 </div><strong>Hospital Beds</strong><small>Home care beds</small>
 </button>
 
-<button class="category" data-category="walker">
+<button class="category" type="button" data-category="walker">
 <div class="icon">
 <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2">
 <path d="M11 11v26m26-26v26M11 13h26M11 28h26M15 37l-4 4m22-4 4 4" stroke-linecap="round" stroke-linejoin="round"/>
@@ -275,7 +273,7 @@ DME<span>via</span>
 </div><strong>Walkers</strong><small>Mobility aids</small>
 </button>
 
-<button class="category" data-category="lift">
+<button class="category" type="button" data-category="lift">
 <div class="icon">
 <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2">
 <path d="M10 40h28M14 40V9h20v31M14 15h20M24 15v9m-5 0h10m-5 0v7m-8 0h16" stroke-linecap="round" stroke-linejoin="round"/>
@@ -284,7 +282,7 @@ DME<span>via</span>
 </div><strong>Patient Lifts</strong><small>Transfer equipment</small>
 </button>
 
-<button class="category" data-category="nebulizer">
+<button class="category" type="button" data-category="nebulizer">
 <div class="icon">
 <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2">
 <rect x="9" y="23" width="30" height="17" rx="5"/>
@@ -295,7 +293,7 @@ DME<span>via</span>
 </div><strong>Nebulizers</strong><small>Respiratory care</small>
 </button>
 
-<button class="category" data-category="glucose">
+<button class="category" type="button" data-category="glucose">
 <div class="icon">
 <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2">
 <rect x="13" y="5" width="22" height="38" rx="5"/>
@@ -306,7 +304,7 @@ DME<span>via</span>
 </div><strong>Glucose Supplies</strong><small>Diabetes care</small>
 </button>
 
-<button class="category" data-category="diabetic">
+<button class="category" type="button" data-category="diabetic">
 <div class="icon">
 <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2">
 <path d="M9 29q8 0 12-11l7 8q5 5 12 6v8H9z" stroke-linejoin="round"/>
@@ -315,7 +313,7 @@ DME<span>via</span>
 </div><strong>Diabetic Shoes</strong><small>Foot care</small>
 </button>
 
-<button class="category" data-category="enteral">
+<button class="category" type="button" data-category="enteral">
 <div class="icon">
 <svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="2">
 <path d="M18 5h12v7l4 5v25H14V17l4-5z"/>
@@ -387,9 +385,9 @@ const categoryTerms = {
  wheelchair:["wheelchairs"],
  hospitalbed:["hospital beds"],
  walker:["walkers"],
- lift:["patient lifts"],
+ lift:["patient lifts","lifts"],
  nebulizer:["nebulizer"],
- glucose:["blood glucose","glucose monitors"],
+ glucose:["blood glucose","glucose monitors","diabetic testing"],
  diabetic:["diabetic shoes","therapeutic shoes"],
  enteral:["enteral equipment","enteral supplies","enteral"]
 };
@@ -417,7 +415,7 @@ function getValue(row,...keys) {
 }
 
 function escapeHTML(value) {
- return String(value).replace(/[&<>"']/g, char => ({
+ return String(value).replace(/[&<>"']/g,char => ({
   "&":"&amp;",
   "<":"&lt;",
   ">":"&gt;",
@@ -436,20 +434,16 @@ function getSupplies(row) {
 
 function categoryMatches(row,category) {
  if (!category) return true;
-
  const supplies = getSupplies(row).toLowerCase();
  const terms = categoryTerms[category] || [];
-
  return terms.some(term => supplies.includes(term));
 }
 
 function formatPhone(value) {
  const digits = String(value).replace(/\D/g,"");
-
  if (digits.length === 10) {
   return `(${digits.slice(0,3)}) ${digits.slice(3,6)}-${digits.slice(6)}`;
  }
-
  return value || "";
 }
 
@@ -524,6 +518,7 @@ function renderResults(rows) {
 async function searchSuppliers(zip,category) {
  searchButton.disabled = true;
  searchButton.textContent = "Searching...";
+
  statusElement.className = "status loading";
  statusElement.textContent = "Searching the CMS supplier database for your ZIP code...";
  countElement.textContent = "Searching";
@@ -535,10 +530,18 @@ async function searchSuppliers(zip,category) {
   params.set("limit","1500");
   params.set("offset","0");
 
-  // Ask CMS to filter the ZIP code on its server.
+  /*
+   * CMS ZIP+4 values contain nine digits.
+   * These two conditions find every ZIP+4 value
+   * belonging to the visitor's five-digit ZIP.
+   */
   params.set("conditions[0][property]","practicezip9code");
-  params.set("conditions[0][value]",zip);
-  params.set("conditions[0][operator]","STARTS_WITH");
+  params.set("conditions[0][value]",zip + "0000");
+  params.set("conditions[0][operator]",">=");
+
+  params.set("conditions[1][property]","practicezip9code");
+  params.set("conditions[1][value]",zip + "9999");
+  params.set("conditions[1][operator]","<=");
 
   const requestURL = API_URL + "?" + params.toString();
 
@@ -560,7 +563,10 @@ async function searchSuppliers(zip,category) {
    throw new Error("Unexpected CMS response format.");
   }
 
-  // Keep a second ZIP check to prevent unrelated records appearing.
+  /*
+   * Safety check: only retain records whose ZIP+4
+   * begins with the exact five-digit ZIP entered.
+   */
   rows = rows.filter(row => {
    const supplierZIP = getValue(row,"practicezip9code").replace(/\D/g,"");
    return supplierZIP.startsWith(zip);
