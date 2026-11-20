@@ -474,6 +474,13 @@ h1,h2,h3 {
     text-align:center;
 }
 
+.banner-actions {
+    display:flex;
+    gap:14px;
+    justify-content:center;
+    flex-wrap:wrap;
+}
+
 .action-banner h2 {
     font-size:clamp(27px,4vw,39px);
     margin-bottom:17px;
@@ -719,6 +726,10 @@ footer {
         padding:35px 22px;
     }
 
+    .banner-actions .button {
+        width:100%;
+    }
+
     .footer-content {
         flex-direction:column;
     }
@@ -763,7 +774,7 @@ footer {
         <a href="#categories" class="nav-extra">Coverage</a>
         <a href="#plans">Plans</a>
         <a href="dme-suppliers.html">DME Suppliers</a>
-        <a href="mailto:info@dmevia.com" class="nav-button">Contact</a>
+        <a href="contact.html" class="nav-button">Contact</a>
     </div>
 
 </nav>
@@ -992,10 +1003,16 @@ footer {
                 Get in touch to express interest in the upcoming platform.
             </p>
 
-            <a href="mailto:info@dmevia.com?subject=Rule%20Radar%20Early%20Access"
-               class="button button-primary">
-                Request Early Access →
-            </a>
+            <div class="banner-actions">
+                <a href="contact.html?topic=rule-radar"
+                   class="button button-primary">
+                    Ask a DME Rule Question →
+                </a>
+                <a href="contact.html?topic=rule-radar-access"
+                   class="button button-secondary">
+                    Request Early Access
+                </a>
+            </div>
         </div>
 
     </div>
@@ -1028,7 +1045,7 @@ footer {
                     <li>Monthly overview</li>
                 </ul>
 
-                <a href="mailto:info@dmevia.com?subject=Rule%20Radar%20Starter%20Interest"
+                <a href="contact.html?topic=rule-radar-access&amp;plan=starter"
                    class="button button-secondary">
                     Express Interest
                 </a>
@@ -1053,7 +1070,7 @@ footer {
                     <li>Weekly intelligence digest</li>
                 </ul>
 
-                <a href="mailto:info@dmevia.com?subject=Rule%20Radar%20Professional%20Interest"
+                <a href="contact.html?topic=rule-radar-access&amp;plan=professional"
                    class="button button-primary">
                     Express Interest
                 </a>
@@ -1078,7 +1095,7 @@ footer {
                     <li>Priority enquiry channel</li>
                 </ul>
 
-                <a href="mailto:info@dmevia.com?subject=Rule%20Radar%20Enterprise%20Interest"
+                <a href="contact.html?topic=rule-radar-access&amp;plan=enterprise"
                    class="button button-secondary">
                     Express Interest
                 </a>
@@ -1134,8 +1151,8 @@ footer {
 
             <div class="footer-column">
                 <h4>Company</h4>
-                <a href="mailto:info@dmevia.com">Contact Us</a>
-                <a href="mailto:info@dmevia.com?subject=Supplier%20Enquiry">Supplier Enquiries</a>
+                <a href="contact.html">Contact Us</a>
+                <a href="contact.html?topic=partnership">Supplier Enquiries</a>
             </div>
 
             <div class="footer-column">

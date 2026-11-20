@@ -1,0 +1,746 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Contact DMEvia | Supplier Requests and Rule Questions</title>
+<meta name="description" content="Contact DMEvia: submit a DME supplier search request, ask a DME rule question, report a listing correction or get in touch about working together.">
+<meta name="theme-color" content="#0a1230">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 4C19 4 10 14 10 26c0 16 22 34 22 34s22-18 22-34C54 14 45 4 32 4z' fill='%2314b8a6'/%3E%3Cpath d='M28 17h8v8h8v8h-8v8h-8v-8h-8v-8h8z' fill='%230a1230'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy-950:#060b22;
+  --navy-900:#0a1230;
+  --navy-800:#101b44;
+  --navy-700:#1a2a5e;
+  --teal:#14d6c0;
+  --aqua:#5eead4;
+  --blue:#3b82f6;
+  --purple:#8b5cf6;
+  --white:#ffffff;
+  --text:#e6ebff;
+  --muted:#a4b0d6;
+  --line:rgba(160,185,255,.18);
+  --glass:rgba(20,32,78,.55);
+  --display:'Sora','Segoe UI',system-ui,-apple-system,Arial,sans-serif;
+  --body:'Plus Jakarta Sans','Segoe UI',system-ui,-apple-system,Arial,sans-serif;
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;
+  font-family:var(--body);
+  font-size:17px;
+  line-height:1.65;
+  color:var(--text);
+  background:var(--navy-900);
+  overflow-x:hidden;
+}
+img,svg{max-width:100%;display:block}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--aqua);outline-offset:3px;border-radius:6px}
+.skip{position:absolute;left:-999px;top:8px;background:var(--aqua);color:var(--navy-950);padding:10px 16px;border-radius:8px;z-index:100;font-weight:600}
+.skip:focus{left:8px}
+
+/* Background */
+.bg{position:fixed;inset:0;z-index:-1;background:
+  radial-gradient(900px 600px at 85% -10%,rgba(139,92,246,.30),transparent 60%),
+  radial-gradient(800px 600px at -10% 20%,rgba(20,214,192,.18),transparent 60%),
+  radial-gradient(900px 700px at 60% 110%,rgba(59,130,246,.22),transparent 60%),
+  linear-gradient(180deg,var(--navy-900),var(--navy-950));}
+.bg::after{content:"";position:absolute;inset:0;
+  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:64px 64px;opacity:.25;
+  -webkit-mask-image:radial-gradient(ellipse at 50% 30%,#000 10%,transparent 70%);
+  mask-image:radial-gradient(ellipse at 50% 30%,#000 10%,transparent 70%);}
+
+.wrap{width:min(1160px,100% - 40px);margin-inline:auto}
+
+/* Header */
+header.site{position:sticky;top:0;z-index:50;
+  background:rgba(8,14,38,.72);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:72px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--display);font-weight:700;font-size:1.35rem;letter-spacing:-.01em;color:var(--white)}
+.brand svg{width:32px;height:32px}
+.brand span b{color:var(--teal);font-weight:700}
+.menu{display:flex;align-items:center;gap:6px;list-style:none;margin:0;padding:0}
+.menu a{display:block;padding:10px 16px;border-radius:999px;text-decoration:none;color:var(--muted);font-weight:500;font-size:.97rem;transition:color .2s,background .2s}
+.menu a:hover{color:var(--white);background:rgba(255,255,255,.07)}
+.menu a[aria-current="page"]{color:var(--white);background:rgba(20,214,192,.14)}
+.menu a.pill{background:linear-gradient(135deg,var(--teal),var(--blue));color:var(--navy-950);font-weight:600;margin-left:6px}
+.menu a.pill:hover{filter:brightness(1.08);color:var(--navy-950)}
+.burger{display:none;background:none;border:1px solid var(--line);color:var(--white);width:46px;height:46px;border-radius:12px;cursor:pointer}
+.burger svg{width:22px;height:22px;margin:auto}
+
+/* Hero */
+.hero{padding:72px 0 88px}
+.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
+.hero h1{font-family:var(--display);font-weight:800;font-size:clamp(2.5rem,5.4vw,4.4rem);line-height:1.06;letter-spacing:-.03em;margin:0 0 22px;color:var(--white)}
+.hero h1 .grad{background:linear-gradient(100deg,var(--aqua),var(--blue) 55%,var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent}
+.lede{font-size:1.15rem;color:var(--muted);max-width:34em;margin:0 0 34px}
+.cta{display:flex;flex-wrap:wrap;gap:14px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;font-family:var(--display);font-weight:600;font-size:1rem;padding:15px 26px;border-radius:14px;border:1px solid transparent;transition:transform .2s,box-shadow .25s,background .25s;min-height:52px}
+.btn-primary{background:linear-gradient(135deg,var(--teal),var(--blue));color:var(--navy-950);box-shadow:0 10px 30px -8px rgba(20,214,192,.55)}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 36px -8px rgba(20,214,192,.7)}
+.btn-ghost{background:rgba(255,255,255,.05);border-color:rgba(160,185,255,.35);color:var(--white)}
+.btn-ghost:hover{transform:translateY(-2px);background:rgba(255,255,255,.1);border-color:var(--aqua)}
+.hero small{display:block;margin-top:22px;color:var(--muted);font-size:.9rem}
+
+/* Radar visual: the one signature moment */
+.radar-wrap{position:relative;width:min(470px,100%);aspect-ratio:1;margin-inline:auto}
+.radar{position:absolute;inset:0;border-radius:50%;
+  background:
+   radial-gradient(circle,rgba(20,214,192,.16) 0,transparent 62%),
+   repeating-radial-gradient(circle,transparent 0 58px,rgba(94,234,212,.22) 58px 59px);
+  border:1px solid rgba(94,234,212,.35);
+  box-shadow:0 0 80px -10px rgba(20,214,192,.35),inset 0 0 60px rgba(20,214,192,.08);
+  overflow:hidden}
+.radar::before,.radar::after{content:"";position:absolute;background:rgba(94,234,212,.2)}
+.radar::before{left:50%;top:0;bottom:0;width:1px}
+.radar::after{top:50%;left:0;right:0;height:1px}
+.sweep{position:absolute;inset:0;border-radius:50%;
+  background:conic-gradient(from 0deg,rgba(94,234,212,0) 0deg,rgba(94,234,212,0) 270deg,rgba(94,234,212,.5) 358deg,rgba(255,255,255,.85) 360deg);
+  animation:spin 6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.pin{position:absolute;left:50%;top:50%;width:92px;height:92px;transform:translate(-50%,-58%);filter:drop-shadow(0 12px 22px rgba(20,214,192,.55))}
+.blip{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--aqua);box-shadow:0 0 0 0 rgba(94,234,212,.7);animation:ping 3s ease-out infinite}
+.blip.b1{left:22%;top:30%}
+.blip.b2{left:72%;top:24%;animation-delay:1s;background:var(--purple);box-shadow:0 0 0 0 rgba(139,92,246,.7)}
+.blip.b3{left:68%;top:72%;animation-delay:2s}
+.blip.b4{left:27%;top:68%;animation-delay:1.5s;background:var(--blue)}
+@keyframes ping{0%{box-shadow:0 0 0 0 rgba(94,234,212,.65)}70%,100%{box-shadow:0 0 0 22px rgba(94,234,212,0)}}
+.chip{position:absolute;display:flex;align-items:center;gap:10px;padding:11px 16px;border-radius:14px;background:var(--glass);border:1px solid var(--line);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);font-size:.88rem;font-weight:600;color:var(--white);box-shadow:0 14px 34px -14px rgba(0,0,0,.6)}
+.chip i{width:9px;height:9px;border-radius:50%;background:var(--purple);box-shadow:0 0 12px var(--purple)}
+.chip.c2 i{background:var(--teal);box-shadow:0 0 12px var(--teal)}
+.chip.c1{left:-4%;top:10%}
+.chip.c2{right:-3%;bottom:11%}
+
+/* Sections */
+section{padding:84px 0}
+.sec-head{max-width:40em;margin:0 0 44px}
+.sec-head h2{font-family:var(--display);font-weight:700;font-size:clamp(1.9rem,3.6vw,2.7rem);line-height:1.15;letter-spacing:-.02em;margin:0 0 14px;color:var(--white)}
+.sec-head p{margin:0;color:var(--muted);font-size:1.08rem}
+
+.products{display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.card{position:relative;display:flex;flex-direction:column;padding:38px;border-radius:26px;background:var(--glass);border:1px solid var(--line);
+  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);overflow:hidden;
+  transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .35s,box-shadow .35s}
+.card::before{content:"";position:absolute;width:340px;height:340px;border-radius:50%;filter:blur(70px);opacity:.35;right:-120px;top:-140px;transition:opacity .35s}
+.card.rr::before{background:var(--purple)}
+.card.sp::before{background:var(--teal)}
+.card:hover{transform:translateY(-6px);border-color:rgba(94,234,212,.5);box-shadow:0 30px 60px -28px rgba(20,214,192,.45)}
+.card:hover::before{opacity:.55}
+.card > *{position:relative}
+.icon{width:64px;height:64px;border-radius:18px;display:grid;place-items:center;margin-bottom:24px;border:1px solid var(--line)}
+.rr .icon{background:linear-gradient(145deg,rgba(139,92,246,.35),rgba(59,130,246,.2))}
+.sp .icon{background:linear-gradient(145deg,rgba(20,214,192,.35),rgba(59,130,246,.2))}
+.icon svg{width:34px;height:34px}
+.status{align-self:flex-start;font-size:.8rem;font-weight:600;padding:5px 12px;border-radius:999px;margin-bottom:14px;border:1px solid var(--line)}
+.rr .status{color:#d6c8ff;background:rgba(139,92,246,.18)}
+.sp .status{color:#b6fff1;background:rgba(20,214,192,.16)}
+.card h3{font-family:var(--display);font-size:1.75rem;font-weight:700;margin:0 0 12px;color:var(--white);letter-spacing:-.015em}
+.card p{margin:0 0 22px;color:var(--muted)}
+.tags{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:0 0 30px}
+.tags li{font-size:.85rem;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--text)}
+.card .btn{margin-top:auto;align-self:flex-start}
+
+/* Trust strip */
+.trust{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
+.trust article{padding:28px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
+.trust h3{font-family:var(--display);font-size:1.1rem;font-weight:600;margin:0 0 8px;color:var(--white)}
+.trust p{margin:0;color:var(--muted);font-size:.97rem}
+
+/* Contact */
+.contact{padding-top:40px}
+.contact-box{display:flex;align-items:center;justify-content:space-between;gap:28px;flex-wrap:wrap;padding:44px;border-radius:28px;
+  background:linear-gradient(120deg,rgba(20,214,192,.18),rgba(59,130,246,.18) 50%,rgba(139,92,246,.22));
+  border:1px solid rgba(160,185,255,.3)}
+.contact-box h2{font-family:var(--display);font-size:clamp(1.6rem,3vw,2.2rem);margin:0 0 8px;color:var(--white);letter-spacing:-.02em}
+.contact-box p{margin:0;color:var(--text);max-width:34em}
+
+/* Footer */
+footer{border-top:1px solid var(--line);padding:52px 0 36px;background:rgba(5,9,26,.55)}
+.foot{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:36px}
+.foot p{color:var(--muted);font-size:.93rem;margin:12px 0 0;max-width:30em}
+.foot h4{font-family:var(--display);font-size:.98rem;margin:0 0 12px;color:var(--white)}
+.foot ul{list-style:none;margin:0;padding:0}
+.foot li{margin:8px 0}
+.foot a{color:var(--muted);text-decoration:none;font-size:.95rem}
+.foot a:hover{color:var(--aqua)}
+.legal{margin-top:36px;padding-top:24px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
+.legal p{margin:0 0 8px;max-width:70em}
+
+/* Entrance: one orchestrated hero reveal, then cards on scroll */
+.js .hero-copy > *{opacity:0;transform:translateY(18px);animation:rise .8s cubic-bezier(.2,.8,.2,1) forwards}
+.js .hero-copy > *:nth-child(2){animation-delay:.12s}
+.js .hero-copy > *:nth-child(3){animation-delay:.24s}
+.js .hero-copy > *:nth-child(4){animation-delay:.36s}
+.js .radar-wrap{opacity:0;transform:scale(.94);animation:pop 1s .2s cubic-bezier(.2,.8,.2,1) forwards}
+@keyframes rise{to{opacity:1;transform:none}}
+@keyframes pop{to{opacity:1;transform:none}}
+.js .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+.js .reveal.in{opacity:1;transform:none}
+.js .reveal.in.card:hover{transform:translateY(-6px)}
+
+/* Responsive */
+@media (max-width:960px){
+  .hero{padding:48px 0 64px}
+  .hero-grid{grid-template-columns:1fr;gap:48px}
+  .radar-wrap{width:min(400px,92%)}
+  .products{grid-template-columns:1fr}
+  .trust{grid-template-columns:1fr}
+  .foot{grid-template-columns:repeat(3,1fr)}
+  .foot > div:first-child{grid-column:1/-1}
+}
+@media (max-width:760px){
+  body{font-size:16px}
+  .burger{display:grid}
+  .menu{position:absolute;left:0;right:0;top:72px;flex-direction:column;align-items:stretch;gap:4px;padding:14px 20px 22px;background:rgba(8,14,38,.97);border-bottom:1px solid var(--line);display:none}
+  .menu.open{display:flex}
+  .menu a{padding:14px 16px;border-radius:12px}
+  .menu a.pill{margin:6px 0 0;text-align:center}
+  .card{padding:28px}
+  .contact-box{padding:30px}
+  .chip.c1{left:0;top:4%}
+  .chip.c2{right:0;bottom:5%}
+  .btn{width:100%}
+  .cta{flex-direction:column}
+  .contact-box .btn{width:auto}
+}
+@media (max-width:480px){
+  .foot{grid-template-columns:1fr 1fr}
+  .chip{font-size:.8rem;padding:9px 12px}
+  .pin{width:72px;height:72px}
+}
+
+/* Reduced motion: show everything, stop movement */
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none !important;transition:none !important}
+  .js .hero-copy > *,.js .radar-wrap,.js .reveal{opacity:1;transform:none}
+  .sweep{background:conic-gradient(from 0deg,rgba(94,234,212,0) 0deg,rgba(94,234,212,0) 300deg,rgba(94,234,212,.35) 360deg)}
+}
+
+/* ===== Contact page ===== */
+[hidden]{display:none !important}
+.page-hero{padding:64px 0 28px;text-align:center}
+.eyebrow{display:inline-flex;align-items:center;gap:9px;border:1px solid var(--line);background:rgba(255,255,255,.05);border-radius:999px;padding:8px 16px;color:var(--aqua);font-size:.78rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase}
+.eyebrow i{width:7px;height:7px;border-radius:50%;background:var(--teal);box-shadow:0 0 12px var(--teal)}
+.page-hero h1{font-family:var(--display);font-weight:800;font-size:clamp(2.2rem,5vw,3.6rem);line-height:1.08;letter-spacing:-.03em;margin:20px 0 14px;color:var(--white)}
+.page-hero p{margin:0 auto;max-width:36em;color:var(--muted);font-size:1.08rem}
+.form-wrap{padding:8px 0 90px}
+.form-card{max-width:780px;margin:0 auto;padding:clamp(24px,5vw,46px);border-radius:28px;background:var(--glass);border:1px solid var(--line);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);box-shadow:0 30px 70px -40px rgba(20,214,192,.35);position:relative;overflow:hidden}
+.form-card::before{content:"";position:absolute;width:320px;height:320px;border-radius:50%;background:var(--purple);filter:blur(90px);opacity:.22;right:-120px;top:-150px;pointer-events:none}
+.form-card > *{position:relative}
+.topic-head h2{font-family:var(--display);font-size:1.55rem;font-weight:700;margin:0 0 8px;color:var(--white);letter-spacing:-.015em}
+.topic-head p{margin:0 0 24px;color:var(--muted)}
+.fgrid{display:grid;grid-template-columns:1fr 1fr;gap:18px 18px}
+.field{display:flex;flex-direction:column;min-width:0}
+.field.full{grid-column:1/-1}
+.field label{font-size:.88rem;font-weight:600;color:var(--text);margin-bottom:7px}
+.field label .opt{font-weight:400;color:var(--muted)}
+.field label .req{color:var(--aqua);margin-left:3px}
+.field input,.field select,.field textarea{width:100%;font:inherit;font-size:1rem;color:var(--white);background:rgba(8,14,38,.55);border:1px solid rgba(160,185,255,.28);border-radius:12px;padding:13px 15px;min-height:50px;transition:border-color .2s,box-shadow .2s,background .2s}
+.field textarea{min-height:140px;resize:vertical;line-height:1.55}
+.field select{appearance:none;-webkit-appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='9' viewBox='0 0 14 9' fill='none' stroke='%235eead4' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 1.5l6 6 6-6'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 16px center;padding-right:42px}
+.field select option{background:#101b44;color:#fff}
+.field input::placeholder,.field textarea::placeholder{color:#7f8cb5}
+.field input:hover,.field select:hover,.field textarea:hover{border-color:rgba(94,234,212,.5)}
+.field input:focus,.field select:focus,.field textarea:focus{outline:none;border-color:var(--aqua);box-shadow:0 0 0 4px rgba(20,214,192,.18);background:rgba(8,14,38,.8)}
+.field [aria-invalid="true"]{border-color:#ff8da1;box-shadow:0 0 0 3px rgba(255,141,161,.15)}
+.err{min-height:0;margin:6px 0 0;font-size:.84rem;color:#ffb3c0}
+.err:empty{display:none}
+.hp{position:absolute !important;left:-9999px;width:1px;height:1px;overflow:hidden}
+.warn{display:flex;gap:14px;margin:0 0 22px;padding:16px 18px;border-radius:16px;border:1px solid rgba(255,196,102,.5);background:rgba(255,196,102,.09);color:#ffe6bd;font-size:.95rem;line-height:1.55}
+.warn svg{flex:none;width:22px;height:22px;margin-top:2px}
+.warn strong{color:#fff}
+.note{margin:22px 0 0;font-size:.84rem;color:var(--muted);line-height:1.6}
+.note a{color:var(--aqua);text-decoration:underline}
+.submit-row{margin-top:26px;display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.btn[disabled]{opacity:.7;cursor:progress;transform:none}
+.btn-submit{border:0;cursor:pointer;font-family:var(--display)}
+.spin{width:18px;height:18px;border-radius:50%;border:3px solid rgba(6,11,34,.25);border-top-color:var(--navy-950);animation:spin .8s linear infinite;display:none}
+.is-sending .spin{display:inline-block}
+.banner{display:none;margin:0 0 20px;padding:14px 18px;border-radius:14px;font-size:.95rem;line-height:1.55}
+.banner.show{display:block}
+.banner.error{background:rgba(255,141,161,.12);border:1px solid rgba(255,141,161,.5);color:#ffd3db}
+.success{text-align:center;padding:24px 8px 8px}
+.success .tick{width:76px;height:76px;margin:0 auto 22px;border-radius:50%;display:grid;place-items:center;background:linear-gradient(135deg,var(--teal),var(--blue));box-shadow:0 14px 40px -10px rgba(20,214,192,.7)}
+.success .tick svg{width:38px;height:38px}
+.success h2{font-family:var(--display);font-size:1.7rem;margin:0 0 10px;color:var(--white)}
+.success p{margin:0 auto 24px;max-width:30em;color:var(--muted)}
+.success .links{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.noscript{padding:18px;border-radius:14px;background:rgba(255,196,102,.1);border:1px solid rgba(255,196,102,.5);color:#ffe6bd}
+@media (max-width:640px){
+  .fgrid{grid-template-columns:1fr}
+  .page-hero{padding:44px 0 18px}
+  .submit-row .btn{width:100%}
+}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+<div class="bg" aria-hidden="true"></div>
+
+<header class="site">
+  <div class="wrap nav">
+    <a class="brand" href="index.html" aria-label="DMEvia home">
+      <svg viewBox="0 0 64 64" aria-hidden="true">
+        <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#14d6c0"/><stop offset="1" stop-color="#3b82f6"/></linearGradient></defs>
+        <path d="M32 3C18.7 3 9 13.4 9 26c0 17 23 35 23 35s23-18 23-35C55 13.4 45.3 3 32 3z" fill="url(#lg)"/>
+        <path d="M28 15h8v9h9v8h-9v9h-8v-9h-9v-8h9z" fill="#0a1230"/>
+      </svg>
+      <span>DME<b>via</b></span>
+    </a>
+    <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+    </button>
+    <ul class="menu" id="menu">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="rule-radar.html">Rule Radar</a></li>
+      <li><a href="dme-suppliers.html">DME Suppliers</a></li>
+      <li><a class="pill" href="contact.html" aria-current="page">Contact Us</a></li>
+    </ul>
+  </div>
+</header>
+<main id="main">
+  <div class="page-hero">
+    <div class="wrap">
+      <span class="eyebrow"><i></i> We read every message</span>
+      <h1>Contact DMEvia</h1>
+      <p>Looking for a DME supplier, have a question about a Medicare rule, or want to work with us? Send us a message and the DMEvia team will take a look.</p>
+    </div>
+  </div>
+
+  <div class="form-wrap">
+    <div class="wrap">
+      <div class="form-card" id="formCard">
+        <noscript><div class="noscript">This form needs JavaScript to work. Please turn JavaScript on in your browser and reload the page.</div></noscript>
+
+        <form id="enquiryForm" novalidate autocomplete="on">
+          <div class="topic-head" id="topicHead" aria-live="polite">
+            <h2 id="topicTitle">Send us a message</h2>
+            <p id="topicIntro">Choose a category and tell us how we can help.</p>
+          </div>
+
+          <div class="banner error" id="errorBanner" role="alert" tabindex="-1"></div>
+
+          <div class="warn" id="phiWarn" hidden>
+            <svg viewBox="0 0 24 24" fill="none" stroke="#ffc466" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l10 18H2L12 3z"/><path d="M12 10v5M12 18h.01"/></svg>
+            <div><strong>Please do not include patient information.</strong> Do not submit patient names, dates of birth, insurance or Medicare ID numbers, medical records, prescriptions or any other protected health information (PHI) or confidential records. Describe your situation in general terms only.</div>
+          </div>
+
+          <div class="fgrid">
+            <div class="field full">
+              <label for="category">Enquiry category<span class="req" aria-hidden="true">*</span></label>
+              <select id="category" name="Enquiry Category" required></select>
+              <p class="err" id="err-category"></p>
+            </div>
+            <div class="field">
+              <label for="fullName">Full name<span class="req" aria-hidden="true">*</span></label>
+              <input id="fullName" name="Full Name" type="text" autocomplete="name" maxlength="100" placeholder="Your full name" required>
+              <p class="err" id="err-fullName"></p>
+            </div>
+            <div class="field">
+              <label for="email">Email address<span class="req" aria-hidden="true">*</span></label>
+              <input id="email" name="email" type="email" autocomplete="email" maxlength="254" placeholder="you@example.com" required>
+              <p class="err" id="err-email"></p>
+            </div>
+          </div>
+
+          <div class="fgrid" id="dynamicFields" style="margin-top:18px"></div>
+
+          <!-- spam trap: real visitors never see or fill this in -->
+          <div class="hp" aria-hidden="true">
+            <label for="website">Leave this field empty</label>
+            <input id="website" name="_honey" type="text" tabindex="-1" autocomplete="off">
+          </div>
+
+          <div class="submit-row">
+            <button class="btn btn-primary btn-submit" id="submitBtn" type="submit">
+              <span class="spin" aria-hidden="true"></span>
+              <span id="submitLabel">Send message</span>
+            </button>
+          </div>
+
+          <p class="note">By submitting this form, you agree that your information will be used to respond to your enquiry. Our form service provider, FormSubmit, processes submissions on our behalf. Please review our <a href="privacy.html">Privacy Policy</a>. Fields marked with * are required.</p>
+        </form>
+
+        <div class="success" id="successPanel" hidden tabindex="-1">
+          <div class="tick" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#0a1230" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+          <h2>Thank you. Your message has been sent.</h2>
+          <p id="successText">The DMEvia team will review it and reply by email where appropriate.</p>
+          <div class="links">
+            <a class="btn btn-primary" href="index.html">Back to home</a>
+            <button class="btn btn-ghost" id="againBtn" type="button">Send another message</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+<footer>
+  <div class="wrap">
+    <div class="foot">
+      <div>
+        <a class="brand" href="index.html" aria-label="DMEvia home">
+          <svg viewBox="0 0 64 64" aria-hidden="true">
+            <path d="M32 3C18.7 3 9 13.4 9 26c0 17 23 35 23 35s23-18 23-35C55 13.4 45.3 3 32 3z" fill="#14d6c0"/>
+            <path d="M28 15h8v9h9v8h-9v9h-8v-9h-9v-8h9z" fill="#0a1230"/>
+          </svg>
+          <span>DME<b>via</b></span>
+        </a>
+        <p>Find the Right DME Supplier Near You.</p>
+      </div>
+      <div>
+        <h4>Explore</h4>
+        <ul>
+          <li><a href="index.html">Home</a></li>
+          <li><a href="rule-radar.html">Rule Radar</a></li>
+          <li><a href="dme-suppliers.html">DME Suppliers</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Contact</h4>
+        <ul>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="contact.html?topic=partnership">Supplier enquiries</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms of Use</a></li>
+          <li><a href="disclaimer.html">Disclaimer</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="legal">
+      <p>DMEvia is an independent company and is not affiliated with, endorsed by, or part of CMS, Medicare, Medicaid or any government agency. Information on this site is for general information only and is not legal, medical or billing advice.</p>
+      <p>&copy; <span id="yr">2026</span> DMEvia. All rights reserved.</p>
+    </div>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+
+  /* ---------- Settings ---------- */
+  // Same FormSubmit account and inbox as the existing DMEvia contact form.
+  var ENDPOINT = "https://formsubmit.co/ajax/info@dmevia.com";
+
+  var STATES = ["Alabama","Alaska","Arizona","Arkansas","California","Colorado","Connecticut","Delaware","District of Columbia","Florida","Georgia","Hawaii","Idaho","Illinois","Indiana","Iowa","Kansas","Kentucky","Louisiana","Maine","Maryland","Massachusetts","Michigan","Minnesota","Mississippi","Missouri","Montana","Nebraska","Nevada","New Hampshire","New Jersey","New Mexico","New York","North Carolina","North Dakota","Ohio","Oklahoma","Oregon","Pennsylvania","Rhode Island","South Carolina","South Dakota","Tennessee","Texas","Utah","Vermont","Virginia","Washington","West Virginia","Wisconsin","Wyoming"];
+
+  /* ---------- Field library ----------
+     To add a new kind of field later, add it here, then list it in a topic below. */
+  var FIELDS = {
+    org:        { label: "Business / organization", name: "Organization", type: "text", auto: "organization", max: 150, ph: "Company or organization name" },
+    state:      { label: "State", name: "State", type: "select", auto: "address-level1", options: STATES, blank: "Select a state" },
+    city:       { label: "City", name: "City", type: "text", auto: "address-level2", max: 100, ph: "City" },
+    zip:        { label: "ZIP code", name: "ZIP Code", type: "text", auto: "postal-code", max: 5, inputmode: "numeric", ph: "e.g. 75001", pattern: /^\d{5}$/, patternMsg: "Please enter a 5-digit US ZIP code." },
+    equipment:  { label: "Type of DME supplier or equipment needed", name: "Equipment or Supplier Type Needed", type: "text", max: 200, ph: "e.g. CPAP, oxygen, wheelchair", list: ["CPAP equipment","Oxygen equipment","Wheelchairs","Hospital beds","Walkers","Patient lifts","Nebulizers","Blood glucose supplies","Diabetic shoes","Enteral supplies","Other"], full: true },
+    details:    { label: "Additional details", name: "Additional Details", type: "textarea", max: 2000, ph: "Anything else that would help us understand what you need", full: true },
+    ruleTopic:  { label: "Topic", name: "Regulatory Topic", type: "select", options: ["Medicare","Medicaid","Commercial insurance","HCPCS","Documentation","Prior authorization","Coverage policy","Other"], blank: "Select a topic" },
+    question:   { label: "Your question or the clarification you need", name: "Question", type: "textarea", max: 3000, ph: "Describe your question in general terms. Please do not include patient information.", full: true },
+    plan:       { label: "Plan you are interested in", name: "Plan of Interest", type: "select", options: ["Starter","Professional","Enterprise","Not sure yet"], blank: "Select a plan (optional)" },
+    message:    { label: "Your message", name: "Message", type: "textarea", max: 3000, ph: "Tell us how we can help", full: true }
+  };
+
+  /* ---------- Topics ----------
+     Each enquiry category is one entry. Add a new category here and it appears in the menu,
+     can be opened with contact.html?topic=<key>, and is labelled in the email you receive. */
+  var TOPICS = [
+    { key: "general", label: "General enquiry", title: "Send us a message", intro: "Tell us how we can help and we will get back to you.",
+      fields: [["message", true]] },
+    { key: "supplier-search", label: "DME Supplier Search", title: "Submit a supplier search request", intro: "Can’t find the supplier you need? Tell us where you are and what equipment you are looking for, and the DMEvia team will review your request.", phi: true,
+      fields: [["org", false], ["state", true], ["city", false], ["zip", true], ["equipment", true], ["details", false]] },
+    { key: "rule-radar", label: "Rule Radar – Regulatory Enquiry", title: "Ask a DME rule question", intro: "Have a question about a Medicare, Medicaid or payer rule that affects durable medical equipment? Send it to us.", phi: true,
+      fields: [["org", false], ["ruleTopic", true], ["state", false], ["question", true]] },
+    { key: "rule-radar-access", label: "Rule Radar – Early Access", title: "Request Rule Radar early access", intro: "Rule Radar is still in development. Leave your details and tell us which plan interests you, and we will keep you in mind for early access.",
+      fields: [["org", false], ["plan", false], ["message", false]] },
+    { key: "correction", label: "Supplier information correction", title: "Request a supplier listing correction", intro: "Tell us which listing needs to be corrected and what the correct information is.",
+      fields: [["org", false], ["state", false], ["message", true]] },
+    { key: "partnership", label: "Supplier partnership or registration", title: "Supplier partnership or registration enquiry", intro: "Are you a DME supplier who would like to work with DMEvia? Tell us about your business.",
+      fields: [["org", true], ["state", false], ["message", true]] },
+    { key: "advertising", label: "Advertising or business opportunity", title: "Advertising or business opportunity", intro: "Tell us about your idea or organization.",
+      fields: [["org", false], ["message", true]] },
+    { key: "technical", label: "Website technical issue", title: "Report a website problem", intro: "Tell us what went wrong and which page you were on.",
+      fields: [["message", true]] },
+    { key: "other", label: "Other", title: "Send us a message", intro: "Tell us how we can help.",
+      fields: [["message", true]] }
+  ];
+
+  /* ---------- Page elements ---------- */
+  var form = document.getElementById("enquiryForm");
+  var category = document.getElementById("category");
+  var dyn = document.getElementById("dynamicFields");
+  var titleEl = document.getElementById("topicTitle");
+  var introEl = document.getElementById("topicIntro");
+  var phiWarn = document.getElementById("phiWarn");
+  var banner = document.getElementById("errorBanner");
+  var submitBtn = document.getElementById("submitBtn");
+  var submitLabel = document.getElementById("submitLabel");
+  var success = document.getElementById("successPanel");
+  var successText = document.getElementById("successText");
+  var againBtn = document.getElementById("againBtn");
+  var card = document.getElementById("formCard");
+
+  var sending = false;
+  var saved = {};          // remembers what the visitor typed when they switch category
+  var current = null;      // the active topic
+
+  function topicByKey(k) {
+    for (var i = 0; i < TOPICS.length; i++) { if (TOPICS[i].key === k) return TOPICS[i]; }
+    return null;
+  }
+
+  /* ---------- Build the category menu ---------- */
+  (function () {
+    var first = document.createElement("option");
+    first.value = ""; first.textContent = "Select an enquiry category";
+    category.appendChild(first);
+    TOPICS.forEach(function (t) {
+      var o = document.createElement("option");
+      o.value = t.key; o.textContent = t.label;
+      category.appendChild(o);
+    });
+  })();
+
+  /* ---------- Draw the fields for a topic ---------- */
+  function fieldId(k) { return "f-" + k; }
+
+  function remember() {
+    var els = dyn.querySelectorAll("[data-key]");
+    for (var i = 0; i < els.length; i++) { saved[els[i].getAttribute("data-key")] = els[i].value; }
+  }
+
+  function render(topic) {
+    remember();
+    current = topic;
+    dyn.innerHTML = "";
+    if (!topic) {
+      titleEl.textContent = "Send us a message";
+      introEl.textContent = "Choose a category and tell us how we can help.";
+      phiWarn.hidden = true;
+      return;
+    }
+    titleEl.textContent = topic.title;
+    introEl.textContent = topic.intro;
+    phiWarn.hidden = !topic.phi;
+
+    topic.fields.forEach(function (pair) {
+      var key = pair[0], required = pair[1], def = FIELDS[key];
+      var wrap = document.createElement("div");
+      wrap.className = "field" + (def.full ? " full" : "");
+
+      var label = document.createElement("label");
+      label.setAttribute("for", fieldId(key));
+      label.appendChild(document.createTextNode(def.label));
+      var mark = document.createElement("span");
+      if (required) { mark.className = "req"; mark.setAttribute("aria-hidden", "true"); mark.textContent = "*"; }
+      else { mark.className = "opt"; mark.textContent = " (optional)"; }
+      label.appendChild(mark);
+      wrap.appendChild(label);
+
+      var input;
+      if (def.type === "select") {
+        input = document.createElement("select");
+        var blank = document.createElement("option");
+        blank.value = ""; blank.textContent = def.blank || "Select";
+        input.appendChild(blank);
+        def.options.forEach(function (opt) {
+          var o = document.createElement("option"); o.value = opt; o.textContent = opt; input.appendChild(o);
+        });
+      } else if (def.type === "textarea") {
+        input = document.createElement("textarea");
+        if (def.max) input.maxLength = def.max;
+        if (def.ph) input.placeholder = def.ph;
+      } else {
+        input = document.createElement("input");
+        input.type = "text";
+        if (def.max) input.maxLength = def.max;
+        if (def.ph) input.placeholder = def.ph;
+        if (def.inputmode) input.setAttribute("inputmode", def.inputmode);
+        if (def.list) {
+          var dl = document.createElement("datalist");
+          dl.id = fieldId(key) + "-list";
+          def.list.forEach(function (v) { var o = document.createElement("option"); o.value = v; dl.appendChild(o); });
+          wrap.appendChild(dl);
+          input.setAttribute("list", dl.id);
+        }
+      }
+      input.id = fieldId(key);
+      input.name = def.name;
+      input.setAttribute("data-key", key);
+      if (def.auto) input.setAttribute("autocomplete", def.auto);
+      if (required) input.required = true;
+      input.setAttribute("aria-describedby", "err-" + fieldId(key));
+      if (saved[key]) input.value = saved[key];
+      wrap.appendChild(input);
+
+      var err = document.createElement("p");
+      err.className = "err"; err.id = "err-" + fieldId(key);
+      wrap.appendChild(err);
+      dyn.appendChild(wrap);
+    });
+  }
+
+  /* ---------- Validation ---------- */
+  function setError(input, msg) {
+    var err = document.getElementById("err-" + input.id);
+    if (err) err.textContent = msg || "";
+    if (msg) input.setAttribute("aria-invalid", "true"); else input.removeAttribute("aria-invalid");
+  }
+
+  function validate() {
+    var firstBad = null;
+    function bad(input, msg) { setError(input, msg); if (!firstBad) firstBad = input; }
+
+    var cat = document.getElementById("category");
+    setError(cat, ""); if (!cat.value) bad(cat, "Please choose an enquiry category.");
+
+    var name = document.getElementById("fullName");
+    setError(name, ""); if (!name.value.trim()) bad(name, "Please enter your full name.");
+
+    var email = document.getElementById("email");
+    setError(email, "");
+    var ev = email.value.trim();
+    if (!ev) bad(email, "Please enter your email address.");
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(ev)) bad(email, "Please enter a valid email address, like name@example.com.");
+
+    if (current) {
+      current.fields.forEach(function (pair) {
+        var key = pair[0], required = pair[1], def = FIELDS[key];
+        var input = document.getElementById(fieldId(key));
+        setError(input, "");
+        var v = input.value.trim();
+        if (required && !v) { bad(input, def.type === "select" ? "Please choose an option." : "Please fill in this field."); return; }
+        if (v && def.pattern && !def.pattern.test(v)) bad(input, def.patternMsg);
+      });
+    }
+    if (firstBad) firstBad.focus();
+    return !firstBad;
+  }
+
+  /* ---------- Messages ---------- */
+  function showError(msg) {
+    banner.textContent = msg;
+    banner.classList.add("show");
+  }
+  function clearError() { banner.textContent = ""; banner.classList.remove("show"); }
+
+  function setSending(on) {
+    sending = on;
+    submitBtn.disabled = on;
+    submitBtn.setAttribute("aria-busy", on ? "true" : "false");
+    form.classList.toggle("is-sending", on);
+    submitLabel.textContent = on ? "Sending…" : "Send message";
+  }
+
+  /* ---------- Send ---------- */
+  form.addEventListener("submit", function (e) {
+    e.preventDefault();
+    if (sending) return;                  // blocks accidental double submits
+    clearError();
+    if (!validate()) return;
+
+    // spam trap
+    if (document.getElementById("website").value) { showSuccess(); return; }
+
+    var fd = new FormData(form);
+    fd.set("Enquiry Category", current.label);
+    fd.set("_subject", "DMEvia enquiry: " + current.label);
+    fd.set("_template", "table");
+    fd.set("Entry Point", current.key);
+    var from = "direct visit";
+    try { if (document.referrer && new URL(document.referrer).origin === location.origin) { from = new URL(document.referrer).pathname; } } catch (x) {}
+    fd.set("Came From", from);
+
+    setSending(true);
+    fetch(ENDPOINT, { method: "POST", headers: { "Accept": "application/json" }, body: fd })
+      .then(function (res) {
+        return res.json().then(function (data) { return { ok: res.ok, data: data }; }, function () { return { ok: res.ok, data: {} }; });
+      })
+      .then(function (r) {
+        var d = r.data || {};
+        if (r.ok && (d.success === true || d.success === "true")) { showSuccess(); }
+        else { throw new Error("not accepted"); }
+      })
+      .catch(function () {
+        setSending(false);
+        showError("Sorry, we couldn’t send your message just now. Please check your internet connection and try again. Your answers are still here. If it keeps happening, you can reach us at info@dmevia.com.");
+        banner.focus();
+      });
+  });
+
+  function showSuccess() {
+    var name = (document.getElementById("fullName").value || "").trim().split(/\s+/)[0];
+    successText.textContent = (name ? "Thanks, " + name + ". " : "") + "The DMEvia team will review your message and reply by email where appropriate.";
+    form.hidden = true;
+    success.hidden = false;
+    setSending(false);
+    success.focus();
+    if (card.scrollIntoView) card.scrollIntoView({ block: "start", behavior: "smooth" });
+  }
+
+  againBtn.addEventListener("click", function () {
+    saved = {};
+    form.reset();
+    var keep = current ? current.key : "";
+    category.value = keep;
+    render(topicByKey(keep));
+    form.hidden = false;
+    success.hidden = true;
+    clearError();
+    document.getElementById("fullName").focus();
+  });
+
+  /* ---------- Category menu ---------- */
+  category.addEventListener("change", function () {
+    clearError();
+    render(topicByKey(category.value));
+  });
+
+  // live clean-up of messages as the visitor fixes things
+  form.addEventListener("input", function (e) {
+    var t = e.target;
+    if (t && t.getAttribute && t.getAttribute("aria-invalid") === "true") setError(t, "");
+  });
+
+  /* ---------- Open with a category already chosen (?topic=...) ---------- */
+  (function init() {
+    var params = new URLSearchParams(location.search);
+    var key = params.get("topic");
+    var topic = topicByKey(key) || null;
+    if (topic) { category.value = topic.key; }
+    render(topic);
+    var plan = params.get("plan");
+    if (topic && topic.key === "rule-radar-access" && plan) {
+      var map = { starter: "Starter", professional: "Professional", enterprise: "Enterprise" };
+      var sel = document.getElementById(fieldId("plan"));
+      if (sel && map[plan.toLowerCase()]) sel.value = map[plan.toLowerCase()];
+    }
+  })();
+
+  /* ---------- Header menu on phones ---------- */
+  var burger = document.getElementById("burger"), menu = document.getElementById("menu");
+  burger.addEventListener("click", function () {
+    var open = menu.classList.toggle("open");
+    burger.setAttribute("aria-expanded", open ? "true" : "false");
+    burger.setAttribute("aria-label", open ? "Close menu" : "Open menu");
+  });
+  menu.addEventListener("click", function (e) {
+    if (e.target.tagName === "A") { menu.classList.remove("open"); burger.setAttribute("aria-expanded", "false"); }
+  });
+  var yr = document.getElementById("yr"); if (yr) yr.textContent = new Date().getFullYear();
+})();
+</script>
+
+</body>
+</html>
