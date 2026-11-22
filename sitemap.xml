@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
+  <!-- Main website pages -->
   <url>
     <loc>https://dmevia.com/</loc>
   </url>
@@ -22,11 +23,37 @@
   <url>
     <loc>https://dmevia.com/disclaimer.html</loc>
   </url>
+
+  <!-- Texas DME supplier location pages -->
   <url>
     <loc>https://dmevia.com/texas-dme-suppliers.html</loc>
   </url>
   <url>
     <loc>https://dmevia.com/houston-dme-suppliers.html</loc>
+  </url>
+  <url>
+    <loc>https://dmevia.com/dallas-dme-suppliers.html</loc>
+  </url>
+  <url>
+    <loc>https://dmevia.com/san-antonio-dme-suppliers.html</loc>
+  </url>
+  <url>
+    <loc>https://dmevia.com/austin-dme-suppliers.html</loc>
+  </url>
+  <url>
+    <loc>https://dmevia.com/fort-worth-dme-suppliers.html</loc>
+  </url>
+  <url>
+    <loc>https://dmevia.com/el-paso-dme-suppliers.html</loc>
+  </url>
+  <url>
+    <loc>https://dmevia.com/plano-dme-suppliers.html</loc>
+  </url>
+  <url>
+    <loc>https://dmevia.com/arlington-dme-suppliers.html</loc>
+  </url>
+  <url>
+    <loc>https://dmevia.com/lubbock-dme-suppliers.html</loc>
   </url>
 
 </urlset>
