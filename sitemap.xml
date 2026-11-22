@@ -1,32 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-
-  <url>
-    <loc>https://dmevia.com/</loc>
-  </url>
-
-  <url>
-    <loc>https://dmevia.com/rule-radar.html</loc>
-  </url>
-
-  <url>
-    <loc>https://dmevia.com/dme-suppliers.html</loc>
-  </url>
-
-  <url>
-    <loc>https://dmevia.com/contact.html</loc>
-  </url>
-
-  <url>
-    <loc>https://dmevia.com/privacy.html</loc>
-  </url>
-
-  <url>
-    <loc>https://dmevia.com/terms.html</loc>
-  </url>
-
-  <url>
-    <loc>https://dmevia.com/disclaimer.html</loc>
-  </url>
-
+  <url><loc>https://dmevia.com/</loc></url>
+  <url><loc>https://dmevia.com/rule-radar.html</loc></url>
+  <url><loc>https://dmevia.com/dme-suppliers.html</loc></url>
+  <url><loc>https://dmevia.com/texas-dme-suppliers.html</loc></url>
+  <url><loc>https://dmevia.com/contact.html</loc></url>
+  <url><loc>https://dmevia.com/privacy.html</loc></url>
+  <url><loc>https://dmevia.com/terms.html</loc></url>
+  <url><loc>https://dmevia.com/disclaimer.html</loc></url>
 </urlset>
