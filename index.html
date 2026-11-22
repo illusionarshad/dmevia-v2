@@ -4,9 +4,8 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>DMEvia | Find the Right DME Supplier Near You</title>
-<meta name="description" content="DMEvia brings clarity to the changing world of durable medical equipment: Rule Radar for regulatory updates and a searchable directory of Medicare-enrolled DME suppliers.">
+<meta name="description" content="DMEvia helps people find durable medical equipment suppliers across the USA. Explore Texas DME supplier directories, Rule Radar regulatory updates and medical equipment listings.">
 
-<!-- Social sharing metadata: temporary GitHub Pages URL until domain migration -->
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="DMEvia">
 <meta property="og:title" content="DMEvia | Find the Right DME Supplier Near You">
@@ -24,9 +23,11 @@
 
 <meta name="theme-color" content="#0a1230">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath d='M32 4C19 4 10 14 10 26c0 16 22 34 22 34s22-18 22-34C54 14 45 4 32 4z' fill='%2314b8a6'/%3E%3Cpath d='M28 17h8v8h8v8h-8v8h-8v-8h-8v-8h8z' fill='%230a1230'/%3E%3C/svg%3E">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
 <style>
 :root{
   --navy-950:#060b22;
@@ -45,8 +46,10 @@
   --display:'Sora','Segoe UI',system-ui,-apple-system,Arial,sans-serif;
   --body:'Plus Jakarta Sans','Segoe UI',system-ui,-apple-system,Arial,sans-serif;
 }
+
 *,*::before,*::after{box-sizing:border-box}
 html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+
 body{
   margin:0;
   font-family:var(--body);
@@ -56,163 +59,627 @@ body{
   background:var(--navy-900);
   overflow-x:hidden;
 }
+
 img,svg{max-width:100%;display:block}
 a{color:inherit}
 :focus-visible{outline:3px solid var(--aqua);outline-offset:3px;border-radius:6px}
-.skip{position:absolute;left:-999px;top:8px;background:var(--aqua);color:var(--navy-950);padding:10px 16px;border-radius:8px;z-index:100;font-weight:600}
+
+.skip{
+  position:absolute;
+  left:-999px;
+  top:8px;
+  background:var(--aqua);
+  color:var(--navy-950);
+  padding:10px 16px;
+  border-radius:8px;
+  z-index:100;
+  font-weight:600
+}
+
 .skip:focus{left:8px}
 
 /* Background */
-.bg{position:fixed;inset:0;z-index:-1;background:
+
+.bg{
+  position:fixed;
+  inset:0;
+  z-index:-1;
+  background:
   radial-gradient(900px 600px at 85% -10%,rgba(139,92,246,.30),transparent 60%),
   radial-gradient(800px 600px at -10% 20%,rgba(20,214,192,.18),transparent 60%),
   radial-gradient(900px 700px at 60% 110%,rgba(59,130,246,.22),transparent 60%),
-  linear-gradient(180deg,var(--navy-900),var(--navy-950));}
-.bg::after{content:"";position:absolute;inset:0;
-  background-image:linear-gradient(var(--line) 1px,transparent 1px),linear-gradient(90deg,var(--line) 1px,transparent 1px);
-  background-size:64px 64px;opacity:.25;
+  linear-gradient(180deg,var(--navy-900),var(--navy-950));
+}
+
+.bg::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:
+  linear-gradient(var(--line) 1px,transparent 1px),
+  linear-gradient(90deg,var(--line) 1px,transparent 1px);
+  background-size:64px 64px;
+  opacity:.25;
   -webkit-mask-image:radial-gradient(ellipse at 50% 30%,#000 10%,transparent 70%);
-  mask-image:radial-gradient(ellipse at 50% 30%,#000 10%,transparent 70%);}
+  mask-image:radial-gradient(ellipse at 50% 30%,#000 10%,transparent 70%);
+}
 
 .wrap{width:min(1160px,100% - 40px);margin-inline:auto}
 
 /* Header */
-header.site{position:sticky;top:0;z-index:50;
+
+header.site{
+  position:sticky;
+  top:0;
+  z-index:50;
   background:rgba(8,14,38,.72);
-  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);
-  border-bottom:1px solid var(--line)}
+  -webkit-backdrop-filter:blur(14px);
+  backdrop-filter:blur(14px);
+  border-bottom:1px solid var(--line)
+}
+
 .nav{display:flex;align-items:center;justify-content:space-between;height:72px}
-.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font-family:var(--display);font-weight:700;font-size:1.35rem;letter-spacing:-.01em;color:var(--white)}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  text-decoration:none;
+  font-family:var(--display);
+  font-weight:700;
+  font-size:1.35rem;
+  letter-spacing:-.01em;
+  color:var(--white)
+}
+
 .brand svg{width:32px;height:32px}
 .brand span b{color:var(--teal);font-weight:700}
-.menu{display:flex;align-items:center;gap:6px;list-style:none;margin:0;padding:0}
-.menu a{display:block;padding:10px 16px;border-radius:999px;text-decoration:none;color:var(--muted);font-weight:500;font-size:.97rem;transition:color .2s,background .2s}
+
+.menu{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  list-style:none;
+  margin:0;
+  padding:0
+}
+
+.menu a{
+  display:block;
+  padding:10px 16px;
+  border-radius:999px;
+  text-decoration:none;
+  color:var(--muted);
+  font-weight:500;
+  font-size:.97rem;
+  transition:color .2s,background .2s
+}
+
 .menu a:hover{color:var(--white);background:rgba(255,255,255,.07)}
 .menu a[aria-current="page"]{color:var(--white);background:rgba(20,214,192,.14)}
 .menu a.pill{background:linear-gradient(135deg,var(--teal),var(--blue));color:var(--navy-950);font-weight:600;margin-left:6px}
 .menu a.pill:hover{filter:brightness(1.08);color:var(--navy-950)}
-.burger{display:none;background:none;border:1px solid var(--line);color:var(--white);width:46px;height:46px;border-radius:12px;cursor:pointer}
+
+.burger{
+  display:none;
+  background:none;
+  border:1px solid var(--line);
+  color:var(--white);
+  width:46px;
+  height:46px;
+  border-radius:12px;
+  cursor:pointer
+}
+
 .burger svg{width:22px;height:22px;margin:auto}
 
 /* Hero */
+
 .hero{padding:72px 0 88px}
-.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center}
-.hero h1{font-family:var(--display);font-weight:800;font-size:clamp(2.5rem,5.4vw,4.4rem);line-height:1.06;letter-spacing:-.03em;margin:0 0 22px;color:var(--white)}
-.hero h1 .grad{background:linear-gradient(100deg,var(--aqua),var(--blue) 55%,var(--purple));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+.hero-grid{
+  display:grid;
+  grid-template-columns:1.05fr .95fr;
+  gap:56px;
+  align-items:center
+}
+
+.hero h1{
+  font-family:var(--display);
+  font-weight:800;
+  font-size:clamp(2.5rem,5.4vw,4.4rem);
+  line-height:1.06;
+  letter-spacing:-.03em;
+  margin:0 0 22px;
+  color:var(--white)
+}
+
+.hero h1 .grad{
+  background:linear-gradient(100deg,var(--aqua),var(--blue) 55%,var(--purple));
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent
+}
+
 .lede{font-size:1.15rem;color:var(--muted);max-width:34em;margin:0 0 34px}
+
 .hero-subheading{
   font-family:var(--display);
   font-size:clamp(1.2rem,2.1vw,1.65rem);
   line-height:1.3;
   font-weight:700;
   color:var(--aqua);
-  margin:-8px 0 18px;
+  margin:-8px 0 18px
 }
+
 .cta{display:flex;flex-wrap:wrap;gap:14px}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;text-decoration:none;font-family:var(--display);font-weight:600;font-size:1rem;padding:15px 26px;border-radius:14px;border:1px solid transparent;transition:transform .2s,box-shadow .25s,background .25s;min-height:52px}
-.btn-primary{background:linear-gradient(135deg,var(--teal),var(--blue));color:var(--navy-950);box-shadow:0 10px 30px -8px rgba(20,214,192,.55)}
-.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 36px -8px rgba(20,214,192,.7)}
-.btn-ghost{background:rgba(255,255,255,.05);border-color:rgba(160,185,255,.35);color:var(--white)}
-.btn-ghost:hover{transform:translateY(-2px);background:rgba(255,255,255,.1);border-color:var(--aqua)}
+
+.btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  text-decoration:none;
+  font-family:var(--display);
+  font-weight:600;
+  font-size:1rem;
+  padding:15px 26px;
+  border-radius:14px;
+  border:1px solid transparent;
+  transition:transform .2s,box-shadow .25s,background .25s;
+  min-height:52px
+}
+
+.btn-primary{
+  background:linear-gradient(135deg,var(--teal),var(--blue));
+  color:var(--navy-950);
+  box-shadow:0 10px 30px -8px rgba(20,214,192,.55)
+}
+
+.btn-primary:hover{
+  transform:translateY(-2px);
+  box-shadow:0 16px 36px -8px rgba(20,214,192,.7)
+}
+
+.btn-ghost{
+  background:rgba(255,255,255,.05);
+  border-color:rgba(160,185,255,.35);
+  color:var(--white)
+}
+
+.btn-ghost:hover{
+  transform:translateY(-2px);
+  background:rgba(255,255,255,.1);
+  border-color:var(--aqua)
+}
+
 .hero small{display:block;margin-top:22px;color:var(--muted);font-size:.9rem}
 
-/* Radar visual: the one signature moment */
+/* Radar visual */
+
 .radar-wrap{position:relative;width:min(470px,100%);aspect-ratio:1;margin-inline:auto}
-.radar{position:absolute;inset:0;border-radius:50%;
+
+.radar{
+  position:absolute;
+  inset:0;
+  border-radius:50%;
   background:
    radial-gradient(circle,rgba(20,214,192,.16) 0,transparent 62%),
    repeating-radial-gradient(circle,transparent 0 58px,rgba(94,234,212,.22) 58px 59px);
   border:1px solid rgba(94,234,212,.35);
   box-shadow:0 0 80px -10px rgba(20,214,192,.35),inset 0 0 60px rgba(20,214,192,.08);
-  overflow:hidden}
+  overflow:hidden
+}
+
 .radar::before,.radar::after{content:"";position:absolute;background:rgba(94,234,212,.2)}
 .radar::before{left:50%;top:0;bottom:0;width:1px}
 .radar::after{top:50%;left:0;right:0;height:1px}
-.sweep{position:absolute;inset:0;border-radius:50%;
+
+.sweep{
+  position:absolute;
+  inset:0;
+  border-radius:50%;
   background:conic-gradient(from 0deg,rgba(94,234,212,0) 0deg,rgba(94,234,212,0) 270deg,rgba(94,234,212,.5) 358deg,rgba(255,255,255,.85) 360deg);
-  animation:spin 6s linear infinite}
+  animation:spin 6s linear infinite
+}
+
 @keyframes spin{to{transform:rotate(360deg)}}
-.pin{position:absolute;left:50%;top:50%;width:92px;height:92px;transform:translate(-50%,-58%);filter:drop-shadow(0 12px 22px rgba(20,214,192,.55))}
-.blip{position:absolute;width:12px;height:12px;border-radius:50%;background:var(--aqua);box-shadow:0 0 0 0 rgba(94,234,212,.7);animation:ping 3s ease-out infinite}
+
+.pin{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:92px;
+  height:92px;
+  transform:translate(-50%,-58%);
+  filter:drop-shadow(0 12px 22px rgba(20,214,192,.55))
+}
+
+.blip{
+  position:absolute;
+  width:12px;
+  height:12px;
+  border-radius:50%;
+  background:var(--aqua);
+  box-shadow:0 0 0 0 rgba(94,234,212,.7);
+  animation:ping 3s ease-out infinite
+}
+
 .blip.b1{left:22%;top:30%}
 .blip.b2{left:72%;top:24%;animation-delay:1s;background:var(--purple);box-shadow:0 0 0 0 rgba(139,92,246,.7)}
 .blip.b3{left:68%;top:72%;animation-delay:2s}
 .blip.b4{left:27%;top:68%;animation-delay:1.5s;background:var(--blue)}
-@keyframes ping{0%{box-shadow:0 0 0 0 rgba(94,234,212,.65)}70%,100%{box-shadow:0 0 0 22px rgba(94,234,212,0)}}
-.chip{position:absolute;display:flex;align-items:center;gap:10px;padding:11px 16px;border-radius:14px;background:var(--glass);border:1px solid var(--line);-webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);font-size:.88rem;font-weight:600;color:var(--white);box-shadow:0 14px 34px -14px rgba(0,0,0,.6)}
+
+@keyframes ping{
+  0%{box-shadow:0 0 0 0 rgba(94,234,212,.65)}
+  70%,100%{box-shadow:0 0 0 22px rgba(94,234,212,0)}
+}
+
+.chip{
+  position:absolute;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:11px 16px;
+  border-radius:14px;
+  background:var(--glass);
+  border:1px solid var(--line);
+  -webkit-backdrop-filter:blur(12px);
+  backdrop-filter:blur(12px);
+  font-size:.88rem;
+  font-weight:600;
+  color:var(--white);
+  box-shadow:0 14px 34px -14px rgba(0,0,0,.6)
+}
+
 .chip i{width:9px;height:9px;border-radius:50%;background:var(--purple);box-shadow:0 0 12px var(--purple)}
 .chip.c2 i{background:var(--teal);box-shadow:0 0 12px var(--teal)}
 .chip.c1{left:-4%;top:10%}
 .chip.c2{right:-3%;bottom:11%}
 
 /* Sections */
+
 section{padding:84px 0}
+
 .sec-head{max-width:40em;margin:0 0 44px}
-.sec-head h2{font-family:var(--display);font-weight:700;font-size:clamp(1.9rem,3.6vw,2.7rem);line-height:1.15;letter-spacing:-.02em;margin:0 0 14px;color:var(--white)}
+
+.sec-head h2{
+  font-family:var(--display);
+  font-weight:700;
+  font-size:clamp(1.9rem,3.6vw,2.7rem);
+  line-height:1.15;
+  letter-spacing:-.02em;
+  margin:0 0 14px;
+  color:var(--white)
+}
+
 .sec-head p{margin:0;color:var(--muted);font-size:1.08rem}
 
+/* Products */
+
 .products{display:grid;grid-template-columns:1fr 1fr;gap:28px}
-.card{position:relative;display:flex;flex-direction:column;padding:38px;border-radius:26px;background:var(--glass);border:1px solid var(--line);
-  -webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);overflow:hidden;
-  transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .35s,box-shadow .35s}
-.card::before{content:"";position:absolute;width:340px;height:340px;border-radius:50%;filter:blur(70px);opacity:.35;right:-120px;top:-140px;transition:opacity .35s}
+
+.card{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  padding:38px;
+  border-radius:26px;
+  background:var(--glass);
+  border:1px solid var(--line);
+  -webkit-backdrop-filter:blur(14px);
+  backdrop-filter:blur(14px);
+  overflow:hidden;
+  transition:transform .35s cubic-bezier(.2,.8,.2,1),border-color .35s,box-shadow .35s
+}
+
+.card::before{
+  content:"";
+  position:absolute;
+  width:340px;
+  height:340px;
+  border-radius:50%;
+  filter:blur(70px);
+  opacity:.35;
+  right:-120px;
+  top:-140px;
+  transition:opacity .35s
+}
+
 .card.rr::before{background:var(--purple)}
 .card.sp::before{background:var(--teal)}
-.card:hover{transform:translateY(-6px);border-color:rgba(94,234,212,.5);box-shadow:0 30px 60px -28px rgba(20,214,192,.45)}
+
+.card:hover{
+  transform:translateY(-6px);
+  border-color:rgba(94,234,212,.5);
+  box-shadow:0 30px 60px -28px rgba(20,214,192,.45)
+}
+
 .card:hover::before{opacity:.55}
 .card > *{position:relative}
-.icon{width:64px;height:64px;border-radius:18px;display:grid;place-items:center;margin-bottom:24px;border:1px solid var(--line)}
+
+.icon{
+  width:64px;
+  height:64px;
+  border-radius:18px;
+  display:grid;
+  place-items:center;
+  margin-bottom:24px;
+  border:1px solid var(--line)
+}
+
 .rr .icon{background:linear-gradient(145deg,rgba(139,92,246,.35),rgba(59,130,246,.2))}
 .sp .icon{background:linear-gradient(145deg,rgba(20,214,192,.35),rgba(59,130,246,.2))}
 .icon svg{width:34px;height:34px}
-.status{align-self:flex-start;font-size:.8rem;font-weight:600;padding:5px 12px;border-radius:999px;margin-bottom:14px;border:1px solid var(--line)}
+
+.status{
+  align-self:flex-start;
+  font-size:.8rem;
+  font-weight:600;
+  padding:5px 12px;
+  border-radius:999px;
+  margin-bottom:14px;
+  border:1px solid var(--line)
+}
+
 .rr .status{color:#d6c8ff;background:rgba(139,92,246,.18)}
 .sp .status{color:#b6fff1;background:rgba(20,214,192,.16)}
-.card h3{font-family:var(--display);font-size:1.75rem;font-weight:700;margin:0 0 12px;color:var(--white);letter-spacing:-.015em}
+
+.card h3{
+  font-family:var(--display);
+  font-size:1.75rem;
+  font-weight:700;
+  margin:0 0 12px;
+  color:var(--white);
+  letter-spacing:-.015em
+}
+
 .card p{margin:0 0 22px;color:var(--muted)}
-.tags{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:0 0 30px}
-.tags li{font-size:.85rem;padding:6px 12px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--line);color:var(--text)}
+
+.tags{
+  display:flex;
+  flex-wrap:wrap;
+  gap:8px;
+  list-style:none;
+  padding:0;
+  margin:0 0 30px
+}
+
+.tags li{
+  font-size:.85rem;
+  padding:6px 12px;
+  border-radius:999px;
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--line);
+  color:var(--text)
+}
+
 .card .btn{margin-top:auto;align-self:flex-start}
 
+/* Texas directory section */
+
+.texas-section{
+  position:relative;
+  overflow:hidden
+}
+
+.texas-panel{
+  position:relative;
+  padding:42px;
+  border-radius:28px;
+  background:
+    radial-gradient(circle at 90% 10%,rgba(139,92,246,.19),transparent 35%),
+    radial-gradient(circle at 5% 90%,rgba(20,214,192,.16),transparent 35%),
+    rgba(20,32,78,.65);
+  border:1px solid rgba(94,234,212,.25);
+  overflow:hidden
+}
+
+.texas-panel > *{position:relative}
+
+.texas-heading{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:25px;
+  margin-bottom:30px
+}
+
+.texas-heading h2{
+  font-family:var(--display);
+  font-size:clamp(1.8rem,3.5vw,2.6rem);
+  line-height:1.2;
+  letter-spacing:-.025em;
+  color:var(--white);
+  margin:0 0 12px
+}
+
+.texas-heading p{
+  max-width:650px;
+  color:var(--muted);
+  margin:0
+}
+
+.texas-badge{
+  flex-shrink:0;
+  padding:12px 16px;
+  border-radius:14px;
+  background:rgba(20,214,192,.12);
+  border:1px solid rgba(20,214,192,.3);
+  color:var(--aqua);
+  font-family:var(--display);
+  font-weight:700;
+  font-size:.9rem
+}
+
+.texas-cities{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:12px;
+  margin:28px 0 30px
+}
+
+.texas-city{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:12px;
+  padding:15px 17px;
+  min-width:0;
+  border-radius:13px;
+  background:rgba(255,255,255,.055);
+  border:1px solid var(--line);
+  color:var(--text);
+  text-decoration:none;
+  font-size:.95rem;
+  font-weight:600;
+  transition:transform .25s,border-color .25s,background .25s
+}
+
+.texas-city span:last-child{
+  color:var(--aqua);
+  font-size:1.15rem;
+  transition:transform .25s
+}
+
+.texas-city:hover{
+  transform:translateY(-3px);
+  border-color:rgba(94,234,212,.55);
+  background:rgba(20,214,192,.09)
+}
+
+.texas-city:hover span:last-child{transform:translateX(4px)}
+
+.texas-action{
+  display:flex;
+  flex-wrap:wrap;
+  align-items:center;
+  gap:15px
+}
+
+.texas-note{
+  color:var(--muted);
+  font-size:.82rem;
+  margin-top:18px
+}
+
 /* Trust strip */
+
 .trust{display:grid;grid-template-columns:repeat(3,1fr);gap:22px}
-.trust article{padding:28px;border-radius:20px;background:rgba(255,255,255,.04);border:1px solid var(--line)}
-.trust h3{font-family:var(--display);font-size:1.1rem;font-weight:600;margin:0 0 8px;color:var(--white)}
+
+.trust article{
+  padding:28px;
+  border-radius:20px;
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--line)
+}
+
+.trust h3{
+  font-family:var(--display);
+  font-size:1.1rem;
+  font-weight:600;
+  margin:0 0 8px;
+  color:var(--white)
+}
+
 .trust p{margin:0;color:var(--muted);font-size:.97rem}
 
 /* Contact */
+
 .contact{padding-top:40px}
-.contact-box{display:flex;align-items:center;justify-content:space-between;gap:28px;flex-wrap:wrap;padding:44px;border-radius:28px;
+
+.contact-box{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:28px;
+  flex-wrap:wrap;
+  padding:44px;
+  border-radius:28px;
   background:linear-gradient(120deg,rgba(20,214,192,.18),rgba(59,130,246,.18) 50%,rgba(139,92,246,.22));
-  border:1px solid rgba(160,185,255,.3)}
-.contact-box h2{font-family:var(--display);font-size:clamp(1.6rem,3vw,2.2rem);margin:0 0 8px;color:var(--white);letter-spacing:-.02em}
+  border:1px solid rgba(160,185,255,.3)
+}
+
+.contact-box h2{
+  font-family:var(--display);
+  font-size:clamp(1.6rem,3vw,2.2rem);
+  margin:0 0 8px;
+  color:var(--white);
+  letter-spacing:-.02em
+}
+
 .contact-box p{margin:0;color:var(--text);max-width:34em}
 
 /* Footer */
-footer{border-top:1px solid var(--line);padding:52px 0 36px;background:rgba(5,9,26,.55)}
-.foot{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:36px}
+
+footer{
+  border-top:1px solid var(--line);
+  padding:52px 0 36px;
+  background:rgba(5,9,26,.55)
+}
+
+.foot{
+  display:grid;
+  grid-template-columns:1.4fr 1fr 1fr 1fr;
+  gap:36px
+}
+
 .foot p{color:var(--muted);font-size:.93rem;margin:12px 0 0;max-width:30em}
-.foot h4{font-family:var(--display);font-size:.98rem;margin:0 0 12px;color:var(--white)}
+
+.foot h4{
+  font-family:var(--display);
+  font-size:.98rem;
+  margin:0 0 12px;
+  color:var(--white)
+}
+
 .foot ul{list-style:none;margin:0;padding:0}
 .foot li{margin:8px 0}
 .foot a{color:var(--muted);text-decoration:none;font-size:.95rem}
 .foot a:hover{color:var(--aqua)}
-.legal{margin-top:36px;padding-top:24px;border-top:1px solid var(--line);color:var(--muted);font-size:.85rem}
+
+.legal{
+  margin-top:36px;
+  padding-top:24px;
+  border-top:1px solid var(--line);
+  color:var(--muted);
+  font-size:.85rem
+}
+
 .legal p{margin:0 0 8px;max-width:70em}
 
-/* Entrance: one orchestrated hero reveal, then cards on scroll */
-.js .hero-copy > *{opacity:0;transform:translateY(18px);animation:rise .8s cubic-bezier(.2,.8,.2,1) forwards}
+/* Entrance animations */
+
+.js .hero-copy > *{
+  opacity:0;
+  transform:translateY(18px);
+  animation:rise .8s cubic-bezier(.2,.8,.2,1) forwards
+}
+
 .js .hero-copy > *:nth-child(2){animation-delay:.12s}
 .js .hero-copy > *:nth-child(3){animation-delay:.24s}
 .js .hero-copy > *:nth-child(4){animation-delay:.36s}
-.js .radar-wrap{opacity:0;transform:scale(.94);animation:pop 1s .2s cubic-bezier(.2,.8,.2,1) forwards}
+
+.js .radar-wrap{
+  opacity:0;
+  transform:scale(.94);
+  animation:pop 1s .2s cubic-bezier(.2,.8,.2,1) forwards
+}
+
 @keyframes rise{to{opacity:1;transform:none}}
 @keyframes pop{to{opacity:1;transform:none}}
-.js .reveal{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)}
+
+.js .reveal{
+  opacity:0;
+  transform:translateY(26px);
+  transition:opacity .7s ease,transform .7s cubic-bezier(.2,.8,.2,1)
+}
+
 .js .reveal.in{opacity:1;transform:none}
 .js .reveal.in.card:hover{transform:translateY(-6px)}
 
 /* Responsive */
+
 @media (max-width:960px){
   .hero{padding:48px 0 64px}
   .hero-grid{grid-template-columns:1fr;gap:48px}
@@ -221,14 +688,31 @@ footer{border-top:1px solid var(--line);padding:52px 0 36px;background:rgba(5,9,
   .trust{grid-template-columns:1fr}
   .foot{grid-template-columns:repeat(3,1fr)}
   .foot > div:first-child{grid-column:1/-1}
+  .texas-heading{flex-direction:column}
 }
+
 @media (max-width:760px){
   body{font-size:16px}
   .burger{display:grid}
-  .menu{position:absolute;left:0;right:0;top:72px;flex-direction:column;align-items:stretch;gap:4px;padding:14px 20px 22px;background:rgba(8,14,38,.97);border-bottom:1px solid var(--line);display:none}
+
+  .menu{
+    position:absolute;
+    left:0;
+    right:0;
+    top:72px;
+    flex-direction:column;
+    align-items:stretch;
+    gap:4px;
+    padding:14px 20px 22px;
+    background:rgba(8,14,38,.97);
+    border-bottom:1px solid var(--line);
+    display:none
+  }
+
   .menu.open{display:flex}
   .menu a{padding:14px 16px;border-radius:12px}
   .menu a.pill{margin:6px 0 0;text-align:center}
+
   .card{padding:28px}
   .contact-box{padding:30px}
   .chip.c1{left:0;top:4%}
@@ -236,14 +720,23 @@ footer{border-top:1px solid var(--line);padding:52px 0 36px;background:rgba(5,9,
   .btn{width:100%}
   .cta{flex-direction:column}
   .contact-box .btn{width:auto}
+
+  .texas-panel{padding:28px 22px}
+  .texas-cities{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .texas-city{padding:13px 12px;font-size:.87rem}
 }
+
 @media (max-width:480px){
   .foot{grid-template-columns:1fr 1fr}
   .chip{font-size:.8rem;padding:9px 12px}
   .pin{width:72px;height:72px}
+  .texas-badge{font-size:.8rem}
+  .texas-cities{grid-template-columns:1fr 1fr}
+  .texas-city{font-size:.82rem}
 }
 
-/* Reduced motion: show everything, stop movement */
+/* Reduced motion */
+
 @media (prefers-reduced-motion:reduce){
   html{scroll-behavior:auto}
   *,*::before,*::after{animation:none !important;transition:none !important}
@@ -251,8 +744,11 @@ footer{border-top:1px solid var(--line);padding:52px 0 36px;background:rgba(5,9,
   .sweep{background:conic-gradient(from 0deg,rgba(94,234,212,0) 0deg,rgba(94,234,212,0) 300deg,rgba(94,234,212,.35) 360deg)}
 }
 </style>
+
 <script>document.documentElement.classList.add('js');</script>
+
 <link rel="canonical" href="https://dmevia.com/">
+
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -279,79 +775,130 @@ footer{border-top:1px solid var(--line);padding:52px 0 36px;background:rgba(5,9,
 }
 </script>
 </head>
+
 <body>
+
 <a class="skip" href="#main">Skip to main content</a>
 <div class="bg" aria-hidden="true"></div>
 
 <header class="site">
   <div class="wrap nav">
+
     <a class="brand" href="index.html" aria-label="DMEvia home">
       <svg viewBox="0 0 64 64" aria-hidden="true">
-        <defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#14d6c0"/><stop offset="1" stop-color="#3b82f6"/></linearGradient></defs>
+        <defs>
+          <linearGradient id="lg" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0" stop-color="#14d6c0"/>
+            <stop offset="1" stop-color="#3b82f6"/>
+          </linearGradient>
+        </defs>
         <path d="M32 3C18.7 3 9 13.4 9 26c0 17 23 35 23 35s23-18 23-35C55 13.4 45.3 3 32 3z" fill="url(#lg)"/>
         <path d="M28 15h8v9h9v8h-9v9h-8v-9h-9v-8h9z" fill="#0a1230"/>
       </svg>
       <span>DME<b>via</b></span>
     </a>
+
     <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false" aria-controls="menu">
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true">
+        <path d="M4 7h16M4 12h16M4 17h16"/>
+      </svg>
     </button>
+
     <ul class="menu" id="menu">
       <li><a href="index.html" aria-current="page">Home</a></li>
       <li><a href="rule-radar.html">Rule Radar</a></li>
       <li><a href="dme-suppliers.html">DME Suppliers</a></li>
       <li><a class="pill" href="contact.html">Contact Us</a></li>
     </ul>
+
   </div>
 </header>
 
 <main id="main">
+
   <!-- HERO -->
+
   <div class="hero">
     <div class="wrap hero-grid">
+
       <div class="hero-copy">
+
         <h1>Smarter Healthcare. <span class="grad">Better Connections.</span></h1>
+
         <h2 class="hero-subheading">Find Durable Medical Equipment (DME) Suppliers Across the USA</h2>
-        <p class="lede">Bringing clarity to the changing world of durable medical equipment — and helping people find the suppliers who can help them move forward.</p>
+
+        <p class="lede">
+          Bringing clarity to the changing world of durable medical equipment —
+          and helping people find the suppliers who can help them move forward.
+        </p>
+
         <div class="cta">
           <a class="btn btn-primary" href="rule-radar.html">Explore Rule Radar</a>
           <a class="btn btn-ghost" href="dme-suppliers.html">Find a DME Supplier</a>
         </div>
+
         <small>Independent. Not affiliated with CMS, Medicare, Medicaid or any government agency.</small>
+
       </div>
 
       <div class="radar-wrap" aria-hidden="true">
         <div class="radar">
           <div class="sweep"></div>
-          <span class="blip b1"></span><span class="blip b2"></span><span class="blip b3"></span><span class="blip b4"></span>
+          <span class="blip b1"></span>
+          <span class="blip b2"></span>
+          <span class="blip b3"></span>
+          <span class="blip b4"></span>
         </div>
+
         <svg class="pin" viewBox="0 0 64 64">
-          <defs><linearGradient id="pg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#5eead4"/><stop offset="1" stop-color="#3b82f6"/></linearGradient></defs>
+          <defs>
+            <linearGradient id="pg" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0" stop-color="#5eead4"/>
+              <stop offset="1" stop-color="#3b82f6"/>
+            </linearGradient>
+          </defs>
           <path d="M32 3C18.7 3 9 13.4 9 26c0 17 23 35 23 35s23-18 23-35C55 13.4 45.3 3 32 3z" fill="url(#pg)"/>
           <path d="M28 15h8v9h9v8h-9v9h-8v-9h-9v-8h9z" fill="#0a1230"/>
         </svg>
+
         <div class="chip c1"><i></i>Regulatory updates</div>
         <div class="chip c2"><i></i>Suppliers by ZIP code</div>
       </div>
+
     </div>
   </div>
 
   <!-- TWO PRODUCTS -->
+
   <section id="products" aria-labelledby="products-title">
     <div class="wrap">
+
       <div class="sec-head reveal">
         <h2 id="products-title">Two tools for the DME world</h2>
         <p>One helps businesses keep up with policy changes. The other helps people find a supplier close to home.</p>
       </div>
 
       <div class="products">
+
         <article class="card rr reveal">
+
           <div class="icon" aria-hidden="true">
-            <svg viewBox="0 0 40 40" fill="none" stroke="#c9b8ff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="20" r="15"/><circle cx="20" cy="20" r="8"/><path d="M20 20L31 9"/><circle cx="20" cy="20" r="1.6" fill="#c9b8ff"/></svg>
+            <svg viewBox="0 0 40 40" fill="none" stroke="#c9b8ff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="20" cy="20" r="15"/>
+              <circle cx="20" cy="20" r="8"/>
+              <path d="M20 20L31 9"/>
+              <circle cx="20" cy="20" r="1.6" fill="#c9b8ff"/>
+            </svg>
           </div>
+
           <span class="status">Early access</span>
           <h3>Rule Radar</h3>
-          <p>Policy and regulatory news for the DME industry, explained in plain language: what changed, who is affected, when it applies and what to consider doing.</p>
+
+          <p>
+            Policy and regulatory news for the DME industry, explained in plain language:
+            what changed, who is affected, when it applies and what to consider doing.
+          </p>
+
           <ul class="tags" aria-label="Rule Radar categories">
             <li>CMS and Medicare</li>
             <li>HCPCS and coding</li>
@@ -362,16 +909,28 @@ footer{border-top:1px solid var(--line);padding:52px 0 36px;background:rgba(5,9,
             <li>Coverage</li>
             <li>Compliance</li>
           </ul>
+
           <a class="btn btn-primary" href="rule-radar.html">Explore Rule Radar</a>
+
         </article>
 
         <article class="card sp reveal">
+
           <div class="icon" aria-hidden="true">
-            <svg viewBox="0 0 40 40" fill="none" stroke="#9ff5e6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 36s11-9.5 11-18a11 11 0 0 0-22 0c0 8.500 11 18 11 18z"/><circle cx="20" cy="18" r="4"/></svg>
+            <svg viewBox="0 0 40 40" fill="none" stroke="#9ff5e6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M20 36s11-9.5 11-18a11 11 0 0 0-22 0c0 8.500 11 18 11 18z"/>
+              <circle cx="20" cy="18" r="4"/>
+            </svg>
           </div>
+
           <span class="status">Free to use</span>
           <h3>DME Suppliers</h3>
-          <p>Search Medicare-enrolled equipment suppliers by ZIP code. See addresses, phone numbers and map links in one place.</p>
+
+          <p>
+            Search Medicare-enrolled equipment suppliers by ZIP code.
+            See addresses, phone numbers and map links in one place.
+          </p>
+
           <ul class="tags" aria-label="Equipment categories">
             <li>CPAP</li>
             <li>Oxygen</li>
@@ -384,53 +943,166 @@ footer{border-top:1px solid var(--line);padding:52px 0 36px;background:rgba(5,9,
             <li>Diabetic shoes</li>
             <li>Enteral supplies</li>
           </ul>
+
           <a class="btn btn-primary" href="dme-suppliers.html">Find a DME Supplier</a>
+
         </article>
+
       </div>
     </div>
   </section>
 
+  <!-- TEXAS DME SUPPLIER DIRECTORY -->
+
+  <section class="texas-section" id="texas-directory" aria-labelledby="texas-title">
+    <div class="wrap">
+
+      <div class="texas-panel reveal">
+
+        <div class="texas-heading">
+
+          <div>
+            <div class="sec-head" style="margin-bottom:15px">
+              <p style="color:var(--aqua);font-size:.85rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:12px">
+                TEXAS SUPPLIER DIRECTORY
+              </p>
+              <h2 id="texas-title">Looking for DME suppliers in Texas?</h2>
+              <p>
+                Explore our Texas supplier directory and dedicated city guides.
+                Find information about medical equipment suppliers across major
+                Texas locations.
+              </p>
+            </div>
+          </div>
+
+          <div class="texas-badge">✦ Texas Coverage</div>
+
+        </div>
+
+        <div class="texas-cities">
+
+          <a class="texas-city" href="houston-dme-suppliers.html">
+            Houston <span>→</span>
+          </a>
+
+          <a class="texas-city" href="dallas-dme-suppliers.html">
+            Dallas <span>→</span>
+          </a>
+
+          <a class="texas-city" href="san-antonio-dme-suppliers.html">
+            San Antonio <span>→</span>
+          </a>
+
+          <a class="texas-city" href="austin-dme-suppliers.html">
+            Austin <span>→</span>
+          </a>
+
+          <a class="texas-city" href="fort-worth-dme-suppliers.html">
+            Fort Worth <span>→</span>
+          </a>
+
+          <a class="texas-city" href="el-paso-dme-suppliers.html">
+            El Paso <span>→</span>
+          </a>
+
+          <a class="texas-city" href="plano-dme-suppliers.html">
+            Plano <span>→</span>
+          </a>
+
+          <a class="texas-city" href="arlington-dme-suppliers.html">
+            Arlington <span>→</span>
+          </a>
+
+          <a class="texas-city" href="lubbock-dme-suppliers.html">
+            Lubbock <span>→</span>
+          </a>
+
+        </div>
+
+        <div class="texas-action">
+
+          <a class="btn btn-primary" href="texas-dme-suppliers.html">
+            Explore Texas DME Directory →
+          </a>
+
+          <a class="btn btn-ghost" href="dme-suppliers.html">
+            Search by ZIP Code
+          </a>
+
+        </div>
+
+        <p class="texas-note">
+          Supplier information is based on publicly available CMS records.
+          Always contact suppliers directly to confirm current details and availability.
+        </p>
+
+      </div>
+
+    </div>
+  </section>
+
   <!-- TRUST -->
+
   <section aria-labelledby="trust-title" style="padding-top:20px">
     <div class="wrap">
+
       <div class="sec-head reveal">
         <h2 id="trust-title">Built on official sources</h2>
         <p>We tell you where information comes from and what it can and cannot tell you.</p>
       </div>
+
       <div class="trust">
+
         <article class="reveal">
           <h3>Supplier data from CMS</h3>
           <p>Supplier listings come from the CMS Provider Data directory. Records may be incomplete or out of date, so confirm details with the supplier.</p>
         </article>
+
         <article class="reveal">
           <h3>Sources you can check</h3>
           <p>Rule Radar is being built to link every alert back to the official source and show its publication and effective dates.</p>
         </article>
+
         <article class="reveal">
           <h3>Independent</h3>
           <p>DMEvia is a private company. We do not provide legal, medical or billing advice.</p>
         </article>
+
       </div>
     </div>
   </section>
 
   <!-- CONTACT -->
+
   <section class="contact" id="contact" aria-labelledby="contact-title">
     <div class="wrap">
+
       <div class="contact-box reveal">
+
         <div>
           <h2 id="contact-title">Questions or feedback?</h2>
-          <p>Supplier owners, DME professionals and patients are all welcome to get in touch. Use our contact form to request a supplier search, ask a DME rule question or ask about Rule Radar early access.</p>
+          <p>
+            Supplier owners, DME professionals and patients are all welcome to get in touch.
+            Use our contact form to request a supplier search, ask a DME rule question
+            or ask about Rule Radar early access.
+          </p>
         </div>
+
         <a class="btn btn-primary" href="contact.html">Send Us a Message</a>
+
       </div>
     </div>
   </section>
+
 </main>
+
+<!-- FOOTER -->
 
 <footer>
   <div class="wrap">
+
     <div class="foot">
+
       <div>
         <a class="brand" href="index.html" aria-label="DMEvia home">
           <svg viewBox="0 0 64 64" aria-hidden="true">
@@ -439,16 +1111,29 @@ footer{border-top:1px solid var(--line);padding:52px 0 36px;background:rgba(5,9,
           </svg>
           <span>DME<b>via</b></span>
         </a>
+
         <p>Find the Right DME Supplier Near You.</p>
       </div>
+
       <div>
         <h4>Explore</h4>
         <ul>
           <li><a href="index.html">Home</a></li>
           <li><a href="rule-radar.html">Rule Radar</a></li>
           <li><a href="dme-suppliers.html">DME Suppliers</a></li>
+          <li><a href="texas-dme-suppliers.html">Texas DME Directory</a></li>
+          <li><a href="houston-dme-suppliers.html">Houston</a></li>
+          <li><a href="dallas-dme-suppliers.html">Dallas</a></li>
+          <li><a href="san-antonio-dme-suppliers.html">San Antonio</a></li>
+          <li><a href="austin-dme-suppliers.html">Austin</a></li>
+          <li><a href="fort-worth-dme-suppliers.html">Fort Worth</a></li>
+          <li><a href="el-paso-dme-suppliers.html">El Paso</a></li>
+          <li><a href="plano-dme-suppliers.html">Plano</a></li>
+          <li><a href="arlington-dme-suppliers.html">Arlington</a></li>
+          <li><a href="lubbock-dme-suppliers.html">Lubbock</a></li>
         </ul>
       </div>
+
       <div>
         <h4>Contact</h4>
         <ul>
@@ -456,6 +1141,7 @@ footer{border-top:1px solid var(--line);padding:52px 0 36px;background:rgba(5,9,
           <li><a href="contact.html?topic=partnership">Supplier enquiries</a></li>
         </ul>
       </div>
+
       <div>
         <h4>Legal</h4>
         <ul>
@@ -464,40 +1150,71 @@ footer{border-top:1px solid var(--line);padding:52px 0 36px;background:rgba(5,9,
           <li><a href="disclaimer.html">Disclaimer</a></li>
         </ul>
       </div>
+
     </div>
+
     <div class="legal">
       <p>DMEvia is an independent company and is not affiliated with, endorsed by, or part of CMS, Medicare, Medicaid or any government agency. Information on this site is for general information only and is not legal, medical or billing advice.</p>
       <p>&copy; <span id="yr">2026</span> DMEvia. All rights reserved.</p>
     </div>
+
   </div>
 </footer>
 
 <script>
 (function(){
-  var y=document.getElementById('yr'); if(y){y.textContent=new Date().getFullYear();}
 
-  var burger=document.getElementById('burger'), menu=document.getElementById('menu');
+  var y=document.getElementById('yr');
+  if(y){y.textContent=new Date().getFullYear();}
+
+  var burger=document.getElementById('burger');
+  var menu=document.getElementById('menu');
+
   burger.addEventListener('click',function(){
     var open=menu.classList.toggle('open');
     burger.setAttribute('aria-expanded',open?'true':'false');
     burger.setAttribute('aria-label',open?'Close menu':'Open menu');
   });
+
   menu.addEventListener('click',function(e){
-    if(e.target.tagName==='A'){menu.classList.remove('open');burger.setAttribute('aria-expanded','false');}
+    if(e.target.tagName==='A'){
+      menu.classList.remove('open');
+      burger.setAttribute('aria-expanded','false');
+    }
   });
 
   var items=document.querySelectorAll('.reveal');
+
   if(!('IntersectionObserver' in window)){
-    items.forEach(function(el){el.classList.add('in');});
+    items.forEach(function(el){
+      el.classList.add('in');
+    });
     return;
   }
+
   var io=new IntersectionObserver(function(entries){
     entries.forEach(function(en){
-      if(en.isIntersecting){var t=en.target;t.classList.add('in');io.unobserve(t);setTimeout(function(){t.style.transitionDelay='';},1200);}
+      if(en.isIntersecting){
+        var t=en.target;
+        t.classList.add('in');
+        io.unobserve(t);
+        setTimeout(function(){
+          t.style.transitionDelay='';
+        },1200);
+      }
     });
-  },{threshold:.12,rootMargin:'0px 0px -40px 0px'});
-  items.forEach(function(el,i){el.style.transitionDelay=(i%3)*90+'ms';io.observe(el);});
+  },{
+    threshold:.12,
+    rootMargin:'0px 0px -40px 0px'
+  });
+
+  items.forEach(function(el,i){
+    el.style.transitionDelay=(i%3)*90+'ms';
+    io.observe(el);
+  });
+
 })();
 </script>
+
 </body>
 </html>
