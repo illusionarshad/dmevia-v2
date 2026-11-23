@@ -1,0 +1,851 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Customer Account | DMEvia</title>
+<meta name="description" content="Create your DMEvia account or sign in to access Rule Radar.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root {
+    --navy:#071b35;
+    --navy2:#0d2746;
+    --teal:#00c6aa;
+    --cyan:#43d7e8;
+    --purple:#987cff;
+    --white:#ffffff;
+    --muted:#a9bbcf;
+    --border:rgba(255,255,255,.12);
+}
+
+* {
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body {
+    min-height:100vh;
+    font-family:'DM Sans',sans-serif;
+    color:var(--white);
+    background:
+        radial-gradient(ellipse at 10% 15%,rgba(0,198,170,.16),transparent 40%),
+        radial-gradient(ellipse at 90% 80%,rgba(152,124,255,.16),transparent 40%),
+        var(--navy);
+}
+
+a {
+    text-decoration:none;
+    color:inherit;
+}
+
+nav {
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:20px 7%;
+    border-bottom:1px solid var(--border);
+    background:rgba(7,27,53,.8);
+}
+
+.logo {
+    font-family:'Manrope',sans-serif;
+    font-size:27px;
+    font-weight:800;
+    letter-spacing:-1px;
+}
+
+.logo span {
+    color:var(--teal);
+}
+
+.nav-link {
+    color:var(--muted);
+    font-size:13px;
+}
+
+.nav-link:hover {
+    color:var(--teal);
+}
+
+.main {
+    min-height:calc(100vh - 150px);
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    padding:55px 20px;
+}
+
+.account-layout {
+    width:min(100%,1000px);
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    border:1px solid var(--border);
+    border-radius:22px;
+    overflow:hidden;
+    background:rgba(255,255,255,.035);
+    box-shadow:0 25px 80px rgba(0,0,0,.25);
+}
+
+.intro {
+    padding:55px 42px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    background:
+        radial-gradient(ellipse at 10% 10%,rgba(0,198,170,.2),transparent 55%),
+        linear-gradient(145deg,#102c4b,#071b35);
+}
+
+.badge {
+    display:inline-block;
+    width:max-content;
+    padding:8px 13px;
+    border-radius:25px;
+    border:1px solid rgba(0,198,170,.35);
+    background:rgba(0,198,170,.08);
+    color:var(--teal);
+    font-size:10px;
+    font-weight:800;
+    letter-spacing:1.5px;
+    margin-bottom:27px;
+}
+
+.intro h1 {
+    font-family:'Manrope',sans-serif;
+    font-size:clamp(32px,4vw,48px);
+    line-height:1.2;
+    letter-spacing:-1.5px;
+}
+
+.gradient {
+    background:linear-gradient(90deg,#00d5b5,#46cce8,#a18aff);
+    -webkit-background-clip:text;
+    background-clip:text;
+    color:transparent;
+}
+
+.intro p {
+    margin-top:22px;
+    color:var(--muted);
+    font-size:14px;
+    line-height:1.9;
+}
+
+.benefits {
+    margin-top:30px;
+    display:grid;
+    gap:16px;
+}
+
+.benefit {
+    display:flex;
+    align-items:center;
+    gap:12px;
+    color:#d4e1ed;
+    font-size:13px;
+}
+
+.check {
+    width:25px;
+    height:25px;
+    border-radius:50%;
+    display:grid;
+    place-items:center;
+    color:var(--teal);
+    background:rgba(0,198,170,.12);
+}
+
+.form-panel {
+    padding:48px 42px;
+    background:rgba(7,27,53,.55);
+}
+
+.form-panel h2 {
+    font-family:'Manrope',sans-serif;
+    font-size:29px;
+    margin-bottom:9px;
+}
+
+.subtitle {
+    color:var(--muted);
+    font-size:13px;
+    line-height:1.7;
+    margin-bottom:27px;
+}
+
+.tabs {
+    display:flex;
+    gap:8px;
+    padding:5px;
+    border-radius:9px;
+    background:rgba(255,255,255,.05);
+    margin-bottom:25px;
+}
+
+.tab {
+    flex:1;
+    padding:11px;
+    border:0;
+    border-radius:7px;
+    background:transparent;
+    color:var(--muted);
+    font-family:inherit;
+    font-size:13px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.tab.active {
+    background:rgba(0,198,170,.15);
+    color:var(--teal);
+}
+
+.field {
+    margin-bottom:17px;
+}
+
+label {
+    display:block;
+    font-size:12px;
+    font-weight:700;
+    margin-bottom:9px;
+    color:#d5e1ed;
+}
+
+input {
+    width:100%;
+    padding:14px 15px;
+    border-radius:8px;
+    border:1px solid var(--border);
+    background:rgba(255,255,255,.045);
+    color:white;
+    font-family:inherit;
+    font-size:13px;
+    outline:none;
+    transition:.25s;
+}
+
+input:focus {
+    border-color:var(--teal);
+    box-shadow:0 0 0 3px rgba(0,198,170,.1);
+}
+
+input::placeholder {
+    color:#8296ad;
+}
+
+.primary-button {
+    width:100%;
+    padding:15px;
+    margin-top:8px;
+    border:0;
+    border-radius:8px;
+    background:linear-gradient(100deg,var(--teal),var(--cyan));
+    color:#062337;
+    font-family:inherit;
+    font-size:14px;
+    font-weight:800;
+    cursor:pointer;
+    transition:.25s;
+}
+
+.primary-button:hover {
+    transform:translateY(-2px);
+    box-shadow:0 8px 25px rgba(0,198,170,.2);
+}
+
+.primary-button:disabled {
+    opacity:.6;
+    cursor:wait;
+    transform:none;
+}
+
+.form-footer {
+    text-align:center;
+    margin-top:22px;
+    color:var(--muted);
+    font-size:12px;
+    line-height:1.8;
+}
+
+.form-footer a {
+    color:var(--teal);
+    font-weight:700;
+}
+
+.forgot {
+    display:block;
+    text-align:right;
+    margin-top:-5px;
+    margin-bottom:18px;
+    color:var(--teal);
+    font-size:11px;
+    cursor:pointer;
+    background:none;
+    border:0;
+    font-family:inherit;
+}
+
+.message {
+    display:none;
+    padding:13px;
+    margin-bottom:18px;
+    border-radius:8px;
+    font-size:12px;
+    line-height:1.7;
+}
+
+.message.success {
+    display:block;
+    color:#8ff2d7;
+    background:rgba(0,198,170,.1);
+    border:1px solid rgba(0,198,170,.25);
+}
+
+.message.error {
+    display:block;
+    color:#ffaaaa;
+    background:rgba(255,80,80,.1);
+    border:1px solid rgba(255,80,80,.25);
+}
+
+footer {
+    padding:20px;
+    text-align:center;
+    border-top:1px solid var(--border);
+    color:#8296ad;
+    font-size:11px;
+}
+
+.hidden {
+    display:none!important;
+}
+
+@media(max-width:750px) {
+    nav {
+        padding:17px 6%;
+    }
+
+    .account-layout {
+        grid-template-columns:1fr;
+    }
+
+    .intro {
+        padding:35px 27px;
+    }
+
+    .intro h1 {
+        font-size:34px;
+    }
+
+    .benefits {
+        grid-template-columns:1fr 1fr;
+        gap:12px;
+    }
+
+    .benefit {
+        font-size:11px;
+    }
+
+    .form-panel {
+        padding:35px 27px;
+    }
+}
+
+@media(max-width:420px) {
+    .benefits {
+        grid-template-columns:1fr;
+    }
+
+    .intro {
+        padding:30px 23px;
+    }
+
+    .form-panel {
+        padding:30px 22px;
+    }
+}
+
+@media(prefers-reduced-motion:reduce) {
+    *,*::before,*::after {
+        transition:none!important;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <a href="index.html" class="logo">DME<span>via</span></a>
+    <a href="rule-radar.html" class="nav-link">← Back to Rule Radar</a>
+</nav>
+
+<main class="main">
+
+<div class="account-layout">
+
+    <section class="intro">
+
+        <div class="badge">DMEVIA CUSTOMER PORTAL</div>
+
+        <h1>
+            Intelligence that keeps your business
+            <span class="gradient">one step ahead.</span>
+        </h1>
+
+        <p>
+            Create your DMEvia account to prepare for access
+            to Rule Radar, our healthcare regulatory intelligence
+            platform for US DME suppliers.
+        </p>
+
+        <div class="benefits">
+            <div class="benefit">
+                <span class="check">✓</span>
+                Secure customer account
+            </div>
+
+            <div class="benefit">
+                <span class="check">✓</span>
+                Regulatory intelligence
+            </div>
+
+            <div class="benefit">
+                <span class="check">✓</span>
+                Subscription management
+            </div>
+
+            <div class="benefit">
+                <span class="check">✓</span>
+                Dedicated customer portal
+            </div>
+        </div>
+
+    </section>
+
+    <section class="form-panel">
+
+        <h2 id="formTitle">Welcome to DMEvia</h2>
+
+        <p class="subtitle" id="formSubtitle">
+            Sign in or create your account to get started.
+        </p>
+
+        <div id="message" class="message" role="status" aria-live="polite"></div>
+
+        <div class="tabs" id="tabs">
+            <button class="tab active" id="loginTab" type="button">
+                Sign In
+            </button>
+
+            <button class="tab" id="signupTab" type="button">
+                Create Account
+            </button>
+        </div>
+
+        <form id="accountForm">
+
+            <div class="field hidden" id="nameField">
+                <label for="fullName">Full Name</label>
+                <input
+                    type="text"
+                    id="fullName"
+                    autocomplete="name"
+                    placeholder="Enter your full name">
+            </div>
+
+            <div class="field">
+                <label for="email">Email Address</label>
+                <input
+                    type="email"
+                    id="email"
+                    autocomplete="email"
+                    placeholder="you@company.com"
+                    required>
+            </div>
+
+            <div class="field">
+                <label for="password">Password</label>
+                <input
+                    type="password"
+                    id="password"
+                    autocomplete="current-password"
+                    placeholder="Enter your password"
+                    required
+                    minlength="8">
+            </div>
+
+            <button type="button" class="forgot" id="forgotButton">
+                Forgot password?
+            </button>
+
+            <button type="submit" class="primary-button" id="submitButton">
+                Sign In →
+            </button>
+
+        </form>
+
+        <div class="form-footer" id="formFooter">
+            New to DMEvia?
+            <a href="#" id="switchLink">Create an account</a>
+        </div>
+
+        <div class="form-footer">
+            By continuing, you agree to our
+            <a href="terms.html">Terms of Use</a> and
+            <a href="privacy.html">Privacy Policy</a>.
+        </div>
+
+    </section>
+
+</div>
+
+</main>
+
+<footer>
+    © <span id="year"></span> DMEvia. All rights reserved.
+</footer>
+
+<script>
+/* =========================================
+   SUPABASE CONNECTION
+   ========================================= */
+
+const SUPABASE_URL =
+    "https://bqdixzojehjsrjjasudd.supabase.co";
+
+const SUPABASE_PUBLISHABLE_KEY =
+    "sb_publishable_IFF6nlYE26b550sMxS1KqA_FXFaWMnM";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
+
+/* =========================================
+   PAGE ELEMENTS
+   ========================================= */
+
+const form = document.getElementById("accountForm");
+const message = document.getElementById("message");
+const nameField = document.getElementById("nameField");
+const fullName = document.getElementById("fullName");
+const email = document.getElementById("email");
+const password = document.getElementById("password");
+
+const loginTab = document.getElementById("loginTab");
+const signupTab = document.getElementById("signupTab");
+const submitButton = document.getElementById("submitButton");
+const forgotButton = document.getElementById("forgotButton");
+const switchLink = document.getElementById("switchLink");
+
+const formTitle = document.getElementById("formTitle");
+const formSubtitle = document.getElementById("formSubtitle");
+const formFooter = document.getElementById("formFooter");
+const tabs = document.getElementById("tabs");
+
+document.getElementById("year").textContent =
+    new Date().getFullYear();
+
+let currentMode = "login";
+
+/* =========================================
+   MESSAGES
+   ========================================= */
+
+function showMessage(text, type) {
+    message.textContent = text;
+    message.className = "message " + type;
+}
+
+function clearMessage() {
+    message.textContent = "";
+    message.className = "message";
+}
+
+function setLoading(loading, text) {
+    submitButton.disabled = loading;
+    submitButton.textContent = loading ? "Please wait..." : text;
+}
+
+/* =========================================
+   FORM MODES
+   ========================================= */
+
+function setMode(mode) {
+
+    currentMode = mode;
+    clearMessage();
+
+    tabs.classList.remove("hidden");
+    nameField.classList.add("hidden");
+    password.classList.remove("hidden");
+    forgotButton.classList.remove("hidden");
+    formFooter.classList.remove("hidden");
+
+    loginTab.classList.toggle("active", mode === "login");
+    signupTab.classList.toggle("active", mode === "signup");
+
+    if (mode === "login") {
+
+        formTitle.textContent = "Welcome Back";
+        formSubtitle.textContent = "Sign in to your DMEvia account.";
+        submitButton.textContent = "Sign In →";
+        switchLink.textContent = "Create an account";
+        formFooter.firstChild.textContent = "New to DMEvia? ";
+
+        password.autocomplete = "current-password";
+
+    } else if (mode === "signup") {
+
+        formTitle.textContent = "Create Your Account";
+        formSubtitle.textContent = "Join DMEvia and prepare for Rule Radar access.";
+        nameField.classList.remove("hidden");
+        fullName.required = true;
+        submitButton.textContent = "Create Account →";
+        switchLink.textContent = "Sign in instead";
+        formFooter.firstChild.textContent = "Already registered? ";
+
+        password.autocomplete = "new-password";
+
+    } else if (mode === "reset") {
+
+        tabs.classList.add("hidden");
+        formTitle.textContent = "Reset Password";
+        formSubtitle.textContent = "Choose a new password for your account.";
+        forgotButton.classList.add("hidden");
+        formFooter.classList.add("hidden");
+        submitButton.textContent = "Update Password →";
+        password.autocomplete = "new-password";
+
+    } else if (mode === "forgot") {
+
+        tabs.classList.add("hidden");
+        nameField.classList.add("hidden");
+        formTitle.textContent = "Forgot Password?";
+        formSubtitle.textContent = "Enter your registered email address.";
+        password.classList.add("hidden");
+        forgotButton.classList.add("hidden");
+        submitButton.textContent = "Send Reset Link →";
+        formFooter.classList.remove("hidden");
+        switchLink.textContent = "Back to Sign In";
+        formFooter.firstChild.textContent = "";
+
+    }
+
+    if (mode !== "signup") {
+        fullName.required = false;
+    }
+
+}
+
+loginTab.addEventListener("click", () => setMode("login"));
+signupTab.addEventListener("click", () => setMode("signup"));
+
+switchLink.addEventListener("click", function(event) {
+    event.preventDefault();
+
+    if (currentMode === "login") {
+        setMode("signup");
+    } else {
+        setMode("login");
+    }
+});
+
+forgotButton.addEventListener("click", () => setMode("forgot"));
+
+/* =========================================
+   ACCOUNT ACTIONS
+   ========================================= */
+
+form.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+    clearMessage();
+
+    const userEmail = email.value.trim();
+    const userPassword = password.value;
+
+    try {
+
+        setLoading(true, submitButton.textContent);
+
+        /* CREATE ACCOUNT */
+
+        if (currentMode === "signup") {
+
+            const name = fullName.value.trim();
+
+            if (!name) {
+                throw new Error("Please enter your full name.");
+            }
+
+            if (userPassword.length < 8) {
+                throw new Error("Your password must contain at least 8 characters.");
+            }
+
+            const { data, error } =
+                await supabaseClient.auth.signUp({
+
+                    email: userEmail,
+                    password: userPassword,
+
+                    options: {
+                        data: {
+                            full_name: name
+                        },
+
+                        emailRedirectTo:
+                            window.location.origin +
+                            "/account.html?mode=login"
+                    }
+
+                });
+
+            if (error) throw error;
+
+            if (data.session) {
+
+                showMessage(
+                    "Your account has been created successfully. You are signed in. Customer dashboard access will be enabled after the subscription system is completed.",
+                    "success"
+                );
+
+            } else {
+
+                showMessage(
+                    "Registration successful! Please check your email and click the confirmation link before signing in.",
+                    "success"
+                );
+
+            }
+
+        }
+
+        /* SIGN IN */
+
+        else if (currentMode === "login") {
+
+            const { data, error } =
+                await supabaseClient.auth.signInWithPassword({
+
+                    email: userEmail,
+                    password: userPassword
+
+                });
+
+            if (error) throw error;
+
+            showMessage(
+                "Sign-in successful! Your account is verified. The customer dashboard is still under development.",
+                "success"
+            );
+
+        }
+
+        /* FORGOT PASSWORD */
+
+        else if (currentMode === "forgot") {
+
+            const { error } =
+                await supabaseClient.auth.resetPasswordForEmail(
+                    userEmail,
+                    {
+                        redirectTo:
+                            window.location.origin +
+                            "/account.html?mode=reset"
+                    }
+                );
+
+            if (error) throw error;
+
+            showMessage(
+                "If an account exists for this email, a password reset link will be sent. Please check your inbox.",
+                "success"
+            );
+
+        }
+
+        /* UPDATE PASSWORD */
+
+        else if (currentMode === "reset") {
+
+            if (userPassword.length < 8) {
+                throw new Error("Your new password must contain at least 8 characters.");
+            }
+
+            const { error } =
+                await supabaseClient.auth.updateUser({
+
+                    password: userPassword
+
+                });
+
+            if (error) throw error;
+
+            showMessage(
+                "Your password has been updated successfully. You can now sign in.",
+                "success"
+            );
+
+            password.value = "";
+            setMode("login");
+
+            showMessage(
+                "Your password has been updated successfully. Please sign in with your new password.",
+                "success"
+            );
+
+        }
+
+    } catch (error) {
+
+        showMessage(
+            error.message || "Something went wrong. Please try again.",
+            "error"
+        );
+
+    } finally {
+
+        const buttonText = {
+            login: "Sign In →",
+            signup: "Create Account →",
+            forgot: "Send Reset Link →",
+            reset: "Update Password →"
+        };
+
+        setLoading(false, buttonText[currentMode]);
+
+    }
+
+});
+
+/* =========================================
+   HANDLE EMAIL RESET LINKS
+   ========================================= */
+
+const urlParams = new URLSearchParams(window.location.search);
+
+if (urlParams.get("mode") === "reset") {
+
+    setMode("reset");
+
+} else if (urlParams.get("mode") === "login") {
+
+    setMode("login");
+
+}
+
+</script>
+
+</body>
+</html>
