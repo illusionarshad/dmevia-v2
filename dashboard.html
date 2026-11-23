@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer Dashboard | DMEvia Rule Radar</title>
+<meta name="description" content="Your DMEvia Rule Radar customer dashboard.">
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+<style>
+:root {
+    --bg: #080d18;
+    --panel: #111a2b;
+    --panel2: #162238;
+    --text: #f4f7ff;
+    --muted: #9ba9c0;
+    --blue: #548cff;
+    --cyan: #36d8e8;
+    --green: #42d69a;
+    --border: rgba(255,255,255,.09);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: Inter, Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+button {
+    font-family: inherit;
+    cursor: pointer;
+}
+
+.background-glow {
+    position: fixed;
+    width: 500px;
+    height: 500px;
+    border-radius: 50%;
+    background: rgba(50,110,255,.10);
+    filter: blur(120px);
+    top: -200px;
+    right: -150px;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.navbar {
+    height: 76px;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 7%;
+    background: rgba(8,13,24,.9);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    backdrop-filter: blur(15px);
+}
+
+.logo {
+    font-size: 25px;
+    font-weight: 800;
+    letter-spacing: -1px;
+}
+
+.logo span {
+    color: var(--cyan);
+}
+
+.nav-right {
+    display: flex;
+    align-items: center;
+    gap: 22px;
+}
+
+.nav-link {
+    color: var(--muted);
+    font-size: 14px;
+}
+
+.nav-link:hover {
+    color: white;
+}
+
+.logout-btn {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,.2);
+    color: white;
+    padding: 10px 18px;
+    border-radius: 9px;
+    font-size: 13px;
+}
+
+.logout-btn:hover {
+    background: rgba(255,255,255,.08);
+}
+
+.container {
+    width: 86%;
+    max-width: 1250px;
+    margin: 55px auto;
+}
+
+.welcome {
+    margin-bottom: 35px;
+    animation: fadeUp .6s ease;
+}
+
+.eyebrow {
+    color: var(--cyan);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-bottom: 13px;
+}
+
+.welcome h1 {
+    font-size: clamp(30px, 4vw, 43px);
+    letter-spacing: -1.5px;
+    margin-bottom: 10px;
+}
+
+.welcome p {
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: 1.5fr 1fr;
+    gap: 22px;
+}
+
+.card {
+    background: linear-gradient(145deg, var(--panel), #0e1727);
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 28px;
+    position: relative;
+    overflow: hidden;
+    animation: fadeUp .7s ease;
+}
+
+.card h2 {
+    font-size: 18px;
+    margin-bottom: 12px;
+}
+
+.card p {
+    color: var(--muted);
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.plan-card {
+    background:
+        radial-gradient(circle at 100% 0%, rgba(54,216,232,.13), transparent 45%),
+        linear-gradient(145deg, #142440, #101929);
+}
+
+.plan-label {
+    color: var(--cyan);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 1.5px;
+    margin-bottom: 18px;
+}
+
+.plan-name {
+    font-size: 34px;
+    font-weight: 800;
+    margin-bottom: 10px;
+}
+
+.status {
+    display: inline-block;
+    padding: 7px 12px;
+    border-radius: 30px;
+    font-size: 12px;
+    font-weight: 700;
+    background: rgba(255,255,255,.08);
+    color: var(--muted);
+    margin: 8px 0 20px;
+}
+
+.status.active {
+    color: var(--green);
+    background: rgba(66,214,154,.12);
+}
+
+.status.cancelled {
+    color: #ff9a9a;
+    background: rgba(255,100,100,.12);
+}
+
+.plan-details {
+    display: flex;
+    gap: 35px;
+    margin-top: 18px;
+    flex-wrap: wrap;
+}
+
+.detail-label {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 7px;
+}
+
+.detail-value {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.action-btn {
+    display: inline-block;
+    background: linear-gradient(110deg, var(--blue), #3679e8);
+    color: white;
+    padding: 13px 20px;
+    border-radius: 9px;
+    font-size: 13px;
+    font-weight: 700;
+    margin-top: 22px;
+    border: none;
+    transition: .25s;
+}
+
+.action-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(84,140,255,.25);
+}
+
+.secondary-btn {
+    display: inline-block;
+    border: 1px solid var(--border);
+    padding: 12px 18px;
+    border-radius: 9px;
+    font-size: 13px;
+    color: white;
+    margin-top: 20px;
+}
+
+.icon {
+    font-size: 28px;
+    margin-bottom: 18px;
+}
+
+.feature-list {
+    list-style: none;
+    margin-top: 18px;
+}
+
+.feature-list li {
+    color: #c4d0e3;
+    font-size: 13px;
+    margin: 12px 0;
+}
+
+.feature-list li::before {
+    content: "✓";
+    color: var(--green);
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+.full-width {
+    grid-column: 1 / -1;
+}
+
+.account-row {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    padding: 15px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+}
+
+.account-row:last-child {
+    border-bottom: none;
+}
+
+.account-row span:first-child {
+    color: var(--muted);
+}
+
+.account-row span:last-child {
+    color: white;
+    overflow-wrap: anywhere;
+    text-align: right;
+}
+
+.notice {
+    border: 1px solid rgba(54,216,232,.2);
+    background: rgba(54,216,232,.06);
+    border-radius: 12px;
+    padding: 16px;
+    color: #b8dce8;
+    font-size: 13px;
+    line-height: 1.7;
+    margin-top: 18px;
+}
+
+.loading {
+    text-align: center;
+    padding: 100px 20px;
+    color: var(--muted);
+}
+
+.error {
+    text-align: center;
+    padding: 100px 20px;
+}
+
+footer {
+    border-top: 1px solid var(--border);
+    padding: 28px 7%;
+    margin-top: 70px;
+    color: var(--muted);
+    font-size: 12px;
+    text-align: center;
+}
+
+footer a {
+    color: var(--cyan);
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media(max-width: 800px) {
+    .grid {
+        grid-template-columns: 1fr;
+    }
+
+    .container {
+        width: 90%;
+        margin-top: 35px;
+    }
+
+    .navbar {
+        padding: 0 5%;
+    }
+
+    .nav-right {
+        gap: 12px;
+    }
+
+    .nav-link {
+        display: none;
+    }
+
+    .card {
+        padding: 23px;
+    }
+
+    .plan-details {
+        gap: 22px;
+    }
+}
+
+@media(max-width: 420px) {
+    .logo {
+        font-size: 21px;
+    }
+
+    .logout-btn {
+        padding: 9px 12px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="background-glow"></div>
+
+<div id="loading" class="loading">
+    <h2>Loading your DMEvia dashboard...</h2>
+    <p style="margin-top:12px;">Please wait a moment.</p>
+</div>
+
+<div id="dashboard" style="display:none;">
+
+<nav class="navbar">
+    <a href="index.html" class="logo">DME<span>via</span></a>
+
+    <div class="nav-right">
+        <a href="rule-radar.html" class="nav-link">Rule Radar</a>
+        <a href="dme-suppliers.html" class="nav-link">Find Suppliers</a>
+        <button class="logout-btn" id="logoutBtn">Sign Out</button>
+    </div>
+</nav>
+
+<main class="container">
+
+    <section class="welcome">
+        <div class="eyebrow">Customer Portal</div>
+        <h1>Welcome back, <span id="customerName">Customer</span>.</h1>
+        <p>Your DMEvia account and Rule Radar subscription overview.</p>
+    </section>
+
+    <div class="grid">
+
+        <section class="card plan-card">
+            <div class="plan-label">YOUR SUBSCRIPTION</div>
+            <div class="plan-name" id="planName">No active plan</div>
+            <p id="planDescription">
+                You haven't subscribed to Rule Radar yet.
+            </p>
+
+            <span class="status" id="subscriptionStatus">
+                No subscription
+            </span>
+
+            <div class="plan-details">
+                <div>
+                    <div class="detail-label">Subscription Status</div>
+                    <div class="detail-value" id="statusDetail">Not subscribed</div>
+                </div>
+
+                <div>
+                    <div class="detail-label">Next Billing Date</div>
+                    <div class="detail-value" id="billingDate">—</div>
+                </div>
+            </div>
+
+            <a href="rule-radar.html" class="action-btn" id="planButton">
+                Explore Rule Radar
+            </a>
+        </section>
+
+        <section class="card">
+            <div class="icon">📡</div>
+            <h2>Rule Radar</h2>
+            <p>
+                Stay informed about US DME regulatory developments,
+                policy changes and industry intelligence.
+            </p>
+
+            <ul class="feature-list">
+                <li>Regulatory monitoring</li>
+                <li>Policy and industry updates</li>
+                <li>Actionable compliance intelligence</li>
+            </ul>
+
+            <a href="rule-radar.html" class="secondary-btn">
+                Explore Rule Radar →
+            </a>
+        </section>
+
+        <section class="card">
+            <div class="icon">🔍</div>
+            <h2>DME Supplier Directory</h2>
+            <p>
+                Discover DME suppliers across the United States
+                through the DMEvia supplier directory.
+            </p>
+
+            <ul class="feature-list">
+                <li>Search suppliers by location</li>
+                <li>Explore equipment categories</li>
+                <li>Access public supplier information</li>
+            </ul>
+
+            <a href="dme-suppliers.html" class="secondary-btn">
+                Find Suppliers →
+            </a>
+        </section>
+
+        <section class="card">
+            <div class="icon">💳</div>
+            <h2>Billing & Payments</h2>
+            <p>
+                Subscription billing and payment management
+                will be available here.
+            </p>
+
+            <div class="notice">
+                Billing management is being prepared.
+                Your subscription details will appear here
+                once payment integration is complete.
+            </div>
+        </section>
+
+        <section class="card full-width">
+            <div class="icon">👤</div>
+            <h2>Account Information</h2>
+
+            <div class="account-row">
+                <span>Full Name</span>
+                <span id="accountName">—</span>
+            </div>
+
+            <div class="account-row">
+                <span>Email Address</span>
+                <span id="accountEmail">—</span>
+            </div>
+
+            <div class="account-row">
+                <span>Account Status</span>
+                <span style="color:var(--green);">Verified</span>
+            </div>
+
+            <a href="account.html" class="secondary-btn">
+                Account & Password Settings →
+            </a>
+        </section>
+
+    </div>
+</main>
+
+<footer>
+    © 2026 DMEvia. All rights reserved.
+    <br><br>
+    <a href="privacy.html">Privacy Policy</a>
+    &nbsp; | &nbsp;
+    <a href="terms.html">Terms of Service</a>
+    &nbsp; | &nbsp;
+    <a href="disclaimer.html">Disclaimer</a>
+</footer>
+
+</div>
+
+<script>
+const SUPABASE_URL = "https://bqdixzojehjsrjjasudd.supabase.co";
+
+const SUPABASE_KEY =
+"sb_publishable_IFF6nlYE26b550sMxS1KqA_FXFaWMnM";
+
+const supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_KEY
+);
+
+async function loadDashboard() {
+
+    const loading = document.getElementById("loading");
+    const dashboard = document.getElementById("dashboard");
+
+    try {
+
+        const { data: { user }, error: authError } =
+            await supabaseClient.auth.getUser();
+
+        if (authError || !user) {
+            window.location.replace("account.html?mode=login");
+            return;
+        }
+
+        const metadata = user.user_metadata || {};
+
+        const fullName =
+            metadata.full_name ||
+            user.email.split("@")[0];
+
+        document.getElementById("customerName").textContent = fullName;
+        document.getElementById("accountName").textContent = fullName;
+        document.getElementById("accountEmail").textContent = user.email;
+
+        // Load the customer's profile from Supabase.
+
+        const { error: profileError } = await supabaseClient
+            .from("profiles")
+            .select("id")
+            .eq("id", user.id)
+            .maybeSingle();
+
+        if (profileError) {
+            console.error("Profile loading issue:", profileError.message);
+        }
+
+        // Load subscription information.
+        // Subscription records must be created by the secure
+        // Paddle webhook, never directly by the browser.
+
+        const { data: subscriptions, error: subscriptionError } =
+            await supabaseClient
+                .from("subscriptions")
+                .select("*")
+                .eq("user_id", user.id)
+                .order("created_at", { ascending: false })
+                .limit(1);
+
+        if (subscriptionError) {
+            console.error(
+                "Subscription loading issue:",
+                subscriptionError.message
+            );
+        }
+
+        if (!subscriptionError && subscriptions && subscriptions.length) {
+
+            const sub = subscriptions[0];
+
+            const plan = sub.plan_name || "Rule Radar";
+            const status = (sub.subscription_status || "unknown").toLowerCase();
+
+            document.getElementById("planName").textContent = plan;
+            document.getElementById("planDescription").textContent =
+                "Your Rule Radar subscription information.";
+
+            const statusElement =
+                document.getElementById("subscriptionStatus");
+
+            statusElement.textContent =
+                status.charAt(0).toUpperCase() + status.slice(1);
+
+            document.getElementById("statusDetail").textContent =
+                status.charAt(0).toUpperCase() + status.slice(1);
+
+            if (["active", "trialing"].includes(status)) {
+                statusElement.classList.add("active");
+                document.getElementById("planButton").textContent =
+                    "View Rule Radar";
+            } else if (["canceled", "cancelled", "paused"].includes(status)) {
+                statusElement.classList.add("cancelled");
+            }
+
+            if (sub.current_period_end) {
+                document.getElementById("billingDate").textContent =
+                    new Date(sub.current_period_end).toLocaleDateString(
+                        "en-US",
+                        { year: "numeric", month: "short", day: "numeric" }
+                    );
+            }
+
+        }
+
+        loading.style.display = "none";
+        dashboard.style.display = "block";
+
+    } catch (error) {
+
+        console.error("Dashboard error:", error);
+
+        loading.innerHTML = `
+            <div class="error">
+                <h2>Unable to load your dashboard</h2>
+                <p style="margin-top:12px;">
+                    Please refresh the page or sign in again.
+                </p>
+                <a href="account.html" class="action-btn">
+                    Return to Account
+                </a>
+            </div>
+        `;
+    }
+}
+
+document.getElementById("logoutBtn").addEventListener("click", async () => {
+
+    const { error } = await supabaseClient.auth.signOut();
+
+    if (error) {
+        alert("Unable to sign out. Please try again.");
+        return;
+    }
+
+    window.location.replace("account.html?mode=login");
+});
+
+loadDashboard();
+</script>
+
+</body>
+</html>
