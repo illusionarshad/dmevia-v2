@@ -67,15 +67,29 @@
       padding: 21px; border: 1px solid var(--line); border-radius: 17px;
       background: linear-gradient(145deg, rgba(18, 48, 69, .9), rgba(11, 29, 46, .88));
       transition: transform .25s ease, border-color .25s ease;
-      animation: rise .45s ease both;
+      animation: rise .45s ease both; min-width: 0;
     }
     .article:hover { transform: translateY(-4px); border-color: rgba(56, 223, 194, .48); }
     .category { color: var(--teal); font-size: .73rem; text-transform: uppercase; letter-spacing: 1.3px; font-weight: 850; }
-    .article h3 { margin: 10px 0 8px; font-size: 1.2rem; }
+    .article h3 { margin: 10px 0 8px; font-size: 1.2rem; line-height: 1.35; }
     .summary { color: var(--muted); line-height: 1.6; margin: 0 0 15px; }
-    details { border-top: 1px solid var(--line); padding-top: 13px; }
-    summary { color: #bcece4; cursor: pointer; font-weight: 750; }
+    .badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+    .badge { display: inline-flex; align-items: center; border-radius: 999px; padding: 6px 10px; font-size: .73rem; font-weight: 800; border: 1px solid var(--line); color: #d5e5f1; background: rgba(7, 19, 33, .55); }
+    .impact-critical { color: #ffc0c7; border-color: rgba(255, 110, 130, .55); background: rgba(255, 80, 105, .12); }
+    .impact-high { color: #ffcfad; border-color: rgba(255, 160, 100, .5); background: rgba(255, 145, 75, .1); }
+    .impact-medium { color: #ffe2a6; border-color: rgba(255, 210, 122, .42); }
+    .impact-low { color: #b9e8d7; border-color: rgba(56, 223, 194, .35); }
+    .facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 16px 0; }
+    .fact { padding: 11px 12px; border-radius: 11px; background: rgba(5, 17, 29, .42); border: 1px solid rgba(164, 204, 230, .1); min-width: 0; }
+    .fact-label { display: block; color: #829caf; font-size: .7rem; text-transform: uppercase; letter-spacing: .9px; margin-bottom: 5px; }
+    .fact-value { color: #e2eef7; font-size: .86rem; line-height: 1.45; overflow-wrap: anywhere; }
+    .section-label { color: #bcece4; font-size: .83rem; font-weight: 800; margin: 18px 0 7px; }
     .body-copy { white-space: pre-wrap; color: #d9e7f2; line-height: 1.75; margin: 14px 0 0; }
+    .action-box { margin-top: 16px; padding: 14px; border-left: 3px solid var(--teal); border-radius: 8px; background: rgba(56, 223, 194, .07); color: #d9eee9; line-height: 1.6; font-size: .9rem; }
+    .source-link { display: inline-flex; margin-top: 15px; color: var(--teal); font-weight: 800; text-decoration: none; }
+    .source-link:hover { text-decoration: underline; }
+    details { border-top: 1px solid var(--line); padding-top: 13px; margin-top: 16px; }
+    summary { color: #bcece4; cursor: pointer; font-weight: 750; }
     .date { color: #829caf; font-size: .78rem; margin-top: 16px; }
     .empty, .message { text-align: center; padding: 42px 20px; color: var(--muted); line-height: 1.7; }
     .empty h3 { color: var(--text); margin-top: 0; }
@@ -92,6 +106,12 @@
       .toolbar { align-items: flex-start; flex-direction: column; }
       .filters { width: 100%; }
       input, select { flex: 1; min-width: 0; width: 100%; }
+    }
+    @media (max-width: 440px) {
+      main { width: min(100% - 24px, 1120px); padding-top: 38px; }
+      .facts { grid-template-columns: 1fr; }
+      .panel { padding: 17px; }
+      .article { padding: 17px; }
     }
     @media (prefers-reduced-motion: reduce) {
       *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
@@ -135,7 +155,7 @@
         <p>No intelligence updates have been published yet. New content will appear here when DMEvia publishes it.</p>
         <a href="contact.html">Contact DMEvia</a>
       </div>
-      <div id="feed" class="feed"></div>
+      <div id="feed" class="feed" aria-live="polite"></div>
     </section>
 
     <div class="notice">
@@ -163,23 +183,51 @@
     function showError(message) {
       loading.classList.add("hidden");
       emptyBox.classList.add("hidden");
+      feed.replaceChildren();
       errorBox.textContent = message;
       errorBox.classList.remove("hidden");
     }
 
     function safeDate(value) {
-      if (!value) return "";
+      if (!value) return "Not specified";
       const date = new Date(value);
-      return Number.isNaN(date.getTime()) ? "" : date.toLocaleDateString(undefined, {
-        year: "numeric", month: "short", day: "numeric"
+      return Number.isNaN(date.getTime()) ? "Not specified" : date.toLocaleDateString(undefined, {
+        year: "numeric", month: "short", day: "numeric", timeZone: "UTC"
       });
+    }
+
+    function addFact(container, label, value) {
+      if (value === null || value === undefined || value === "") return;
+      const fact = document.createElement("div");
+      fact.className = "fact";
+      const factLabel = document.createElement("span");
+      factLabel.className = "fact-label";
+      factLabel.textContent = label;
+      const factValue = document.createElement("span");
+      factValue.className = "fact-value";
+      factValue.textContent = value;
+      fact.append(factLabel, factValue);
+      container.append(fact);
+    }
+
+    function validHttpUrl(value) {
+      try {
+        const url = new URL(value);
+        return url.protocol === "https:" || url.protocol === "http:" ? url.href : null;
+      } catch {
+        return null;
+      }
     }
 
     function renderArticles() {
       const term = searchInput.value.trim().toLowerCase();
       const category = categoryFilter.value;
       const filtered = articles.filter(item => {
-        const text = [item.title, item.category, item.summary, item.body].join(" ").toLowerCase();
+        const products = Array.isArray(item.affected_products) ? item.affected_products.join(" ") : "";
+        const text = [
+          item.title, item.category, item.summary, item.body, item.recommended_action,
+          item.source_name, item.jurisdiction, products, item.impact_level
+        ].join(" ").toLowerCase();
         return (!term || text.includes(term)) && (!category || item.category === category);
       });
 
@@ -194,30 +242,87 @@
         categoryEl.textContent = item.category || "Industry update";
 
         const title = document.createElement("h3");
-        title.textContent = item.title;
+        title.textContent = item.title || "Untitled update";
 
         const summary = document.createElement("p");
         summary.className = "summary";
         summary.textContent = item.summary || "";
 
-        const details = document.createElement("details");
-        const summaryToggle = document.createElement("summary");
-        summaryToggle.textContent = "Read full update";
-        const body = document.createElement("p");
-        body.className = "body-copy";
-        body.textContent = item.body;
-        details.append(summaryToggle, body);
+        const badges = document.createElement("div");
+        badges.className = "badges";
+        const impact = (item.impact_level || "medium").toLowerCase();
+        const impactBadge = document.createElement("span");
+        impactBadge.className = `badge impact-${["low", "medium", "high", "critical"].includes(impact) ? impact : "medium"}`;
+        impactBadge.textContent = `${impact.charAt(0).toUpperCase() + impact.slice(1)} impact`;
+        badges.append(impactBadge);
+        if (item.jurisdiction) {
+          const jurisdictionBadge = document.createElement("span");
+          jurisdictionBadge.className = "badge";
+          jurisdictionBadge.textContent = item.jurisdiction;
+          badges.append(jurisdictionBadge);
+        }
+
+        const facts = document.createElement("div");
+        facts.className = "facts";
+        addFact(facts, "Effective date", safeDate(item.effective_date));
+        addFact(facts, "Published", safeDate(item.source_published_at || item.published_at));
+        addFact(facts, "Source", item.source_name || "Not specified");
+        addFact(facts, "Update type", (item.update_type || "Industry update").replaceAll("_", " "));
+
+        card.append(categoryEl, title, summary, badges);
+        if (facts.childElementCount) card.append(facts);
+
+        if (Array.isArray(item.affected_products) && item.affected_products.length) {
+          const affectedLabel = document.createElement("div");
+          affectedLabel.className = "section-label";
+          affectedLabel.textContent = "Who or what is affected";
+          const affected = document.createElement("p");
+          affected.className = "body-copy";
+          affected.textContent = item.affected_products.join(" • ");
+          card.append(affectedLabel, affected);
+        }
+
+        if (item.recommended_action) {
+          const action = document.createElement("div");
+          action.className = "action-box";
+          const actionTitle = document.createElement("strong");
+          actionTitle.textContent = "Recommended action: ";
+          action.append(actionTitle, document.createTextNode(item.recommended_action));
+          card.append(action);
+        }
+
+        const sourceUrl = validHttpUrl(item.source_url);
+        if (sourceUrl) {
+          const sourceLink = document.createElement("a");
+          sourceLink.className = "source-link";
+          sourceLink.href = sourceUrl;
+          sourceLink.target = "_blank";
+          sourceLink.rel = "noopener noreferrer";
+          sourceLink.textContent = "View official source ↗";
+          card.append(sourceLink);
+        }
+
+        if (item.body) {
+          const details = document.createElement("details");
+          const summaryToggle = document.createElement("summary");
+          summaryToggle.textContent = "Read full intelligence analysis";
+          const body = document.createElement("p");
+          body.className = "body-copy";
+          body.textContent = item.body;
+          details.append(summaryToggle, body);
+          card.append(details);
+        }
 
         const date = document.createElement("div");
         date.className = "date";
-        date.textContent = item.published_at ? `Published ${safeDate(item.published_at)}` : "";
-
-        card.append(categoryEl, title, summary, details, date);
+        date.textContent = item.published_at ? `Added to Rule Radar ${safeDate(item.published_at)}` : "";
+        card.append(date);
         feed.append(card);
       });
 
-      emptyBox.classList.toggle("hidden", filtered.length > 0);
-      if (filtered.length === 0 && articles.length > 0) {
+      const noMatches = filtered.length === 0;
+      emptyBox.classList.toggle("hidden", !noMatches);
+      if (noMatches && articles.length > 0) {
         emptyBox.querySelector("h3").textContent = "No matching updates";
         emptyBox.querySelector("p").textContent = "Try another search term or choose a different category.";
       } else if (articles.length === 0) {
@@ -259,9 +364,9 @@
 
       const { data, error: contentError } = await supabaseClient
         .from("rule_radar_content")
-        .select("id, slug, title, category, summary, body, published_at")
+        .select("id, slug, title, category, summary, body, is_published, published_at, source_name, source_url, source_published_at, effective_date, impact_level, jurisdiction, affected_products, recommended_action, update_type")
         .eq("is_published", true)
-        .order("published_at", { ascending: false });
+        .order("published_at", { ascending: false, nullsFirst: false });
 
       if (contentError) throw contentError;
 
