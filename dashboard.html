@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Customer Dashboard | DMEvia Rule Radar</title>
-<meta name="description" content="Your DMEvia Rule Radar customer dashboard.">
+<meta name="description" content="Your DMEvia customer dashboard and Rule Radar subscription overview.">
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
@@ -58,7 +58,7 @@ button {
 }
 
 .navbar {
-    height: 76px;
+    min-height: 76px;
     border-bottom: 1px solid var(--border);
     display: flex;
     align-items: center;
@@ -186,6 +186,7 @@ button {
     font-size: 34px;
     font-weight: 800;
     margin-bottom: 10px;
+    overflow-wrap: anywhere;
 }
 
 .status {
@@ -207,6 +208,11 @@ button {
 .status.cancelled {
     color: #ff9a9a;
     background: rgba(255,100,100,.12);
+}
+
+.status.warning {
+    color: #ffd27a;
+    background: rgba(255,190,70,.12);
 }
 
 .plan-details {
@@ -427,7 +433,9 @@ footer a {
 
         <section class="card plan-card">
             <div class="plan-label">YOUR SUBSCRIPTION</div>
+
             <div class="plan-name" id="planName">No active plan</div>
+
             <p id="planDescription">
                 You haven't subscribed to Rule Radar yet.
             </p>
@@ -439,11 +447,13 @@ footer a {
             <div class="plan-details">
                 <div>
                     <div class="detail-label">Subscription Status</div>
-                    <div class="detail-value" id="statusDetail">Not subscribed</div>
+                    <div class="detail-value" id="statusDetail">
+                        Not subscribed
+                    </div>
                 </div>
 
                 <div>
-                    <div class="detail-label">Next Billing Date</div>
+                    <div class="detail-label">Current Period Ends</div>
                     <div class="detail-value" id="billingDate">—</div>
                 </div>
             </div>
@@ -456,25 +466,33 @@ footer a {
         <section class="card">
             <div class="icon">📡</div>
             <h2>Rule Radar</h2>
+
             <p>
-                Stay informed about US DME regulatory developments,
-                policy changes and industry intelligence.
+                Explore DME regulatory intelligence, policy developments
+                and industry updates planned for the Rule Radar platform.
             </p>
 
             <ul class="feature-list">
-                <li>Regulatory monitoring</li>
-                <li>Policy and industry updates</li>
-                <li>Actionable compliance intelligence</li>
+                <li>Regulatory monitoring plans</li>
+                <li>Policy and industry update plans</li>
+                <li>Compliance intelligence roadmap</li>
             </ul>
 
+            <div class="notice">
+                Rule Radar's subscription and member features are being
+                developed. An active subscription status does not yet
+                mean all intelligence features are operational.
+            </div>
+
             <a href="rule-radar.html" class="secondary-btn">
-                Explore Rule Radar →
+                View Rule Radar →
             </a>
         </section>
 
         <section class="card">
             <div class="icon">🔍</div>
             <h2>DME Supplier Directory</h2>
+
             <p>
                 Discover DME suppliers across the United States
                 through the DMEvia supplier directory.
@@ -494,16 +512,22 @@ footer a {
         <section class="card">
             <div class="icon">💳</div>
             <h2>Billing & Payments</h2>
+
             <p>
-                Subscription billing and payment management
-                will be available here.
+                Your subscription information is retrieved from
+                DMEvia's secure payment integration.
             </p>
 
             <div class="notice">
-                Billing management is being prepared.
-                Your subscription details will appear here
-                once payment integration is complete.
+                Billing management and self-service subscription
+                controls are still being prepared.
+                For assistance with a payment or subscription,
+                please contact DMEvia.
             </div>
+
+            <a href="contact.html" class="secondary-btn">
+                Contact DMEvia →
+            </a>
         </section>
 
         <section class="card full-width">
@@ -521,8 +545,8 @@ footer a {
             </div>
 
             <div class="account-row">
-                <span>Account Status</span>
-                <span style="color:var(--green);">Verified</span>
+                <span>Email Verification</span>
+                <span id="accountVerification">Checking...</span>
             </div>
 
             <a href="account.html" class="secondary-btn">
@@ -546,15 +570,147 @@ footer a {
 </div>
 
 <script>
-const SUPABASE_URL = "https://bqdixzojehjsrjjasudd.supabase.co";
+const SUPABASE_URL =
+    "https://bqdixzojehjsrjjasudd.supabase.co";
 
 const SUPABASE_KEY =
-"sb_publishable_IFF6nlYE26b550sMxS1KqA_FXFaWMnM";
+    "sb_publishable_IFF6nlYE26b550sMxS1KqA_FXFaWMnM";
 
 const supabaseClient = window.supabase.createClient(
     SUPABASE_URL,
     SUPABASE_KEY
 );
+
+// Only these subscription statuses grant access entitlement.
+const ACCESS_STATUSES = ["active", "trialing"];
+
+function formatStatus(status) {
+    if (!status) return "Unknown";
+
+    return status
+        .replace(/_/g, " ")
+        .replace(/\b\w/g, character => character.toUpperCase());
+}
+
+function formatDate(dateValue) {
+    if (!dateValue) return "—";
+
+    const date = new Date(dateValue);
+
+    if (Number.isNaN(date.getTime())) return "—";
+
+    return date.toLocaleDateString("en-US", {
+        year: "numeric",
+        month: "short",
+        day: "numeric"
+    });
+}
+
+function displaySubscription(subscriptions) {
+
+    const planName = document.getElementById("planName");
+    const planDescription = document.getElementById("planDescription");
+    const statusElement = document.getElementById("subscriptionStatus");
+    const statusDetail = document.getElementById("statusDetail");
+    const billingDate = document.getElementById("billingDate");
+    const planButton = document.getElementById("planButton");
+
+    if (!subscriptions || subscriptions.length === 0) {
+
+        planName.textContent = "No active plan";
+
+        planDescription.textContent =
+            "You haven't subscribed to Rule Radar yet.";
+
+        statusElement.textContent = "Not subscribed";
+        statusDetail.textContent = "Not subscribed";
+        billingDate.textContent = "—";
+
+        planButton.textContent = "Explore Rule Radar";
+
+        return;
+    }
+
+    // Sort records newest first.
+    const sortedSubscriptions = [...subscriptions].sort((a, b) => {
+        return new Date(b.created_at || 0) -
+               new Date(a.created_at || 0);
+    });
+
+    // Check every subscription, rather than only the newest one.
+    // An active subscription must not be overlooked because another
+    // subscription record happens to be newer.
+
+    const entitledSubscriptions = sortedSubscriptions.filter(sub => {
+        const status = (sub.subscription_status || "").toLowerCase();
+        return ACCESS_STATUSES.includes(status);
+    });
+
+    // Prefer an active/trialing subscription for entitlement display.
+    // If none exists, show the latest subscription record.
+
+    const selectedSubscription =
+        entitledSubscriptions.length > 0
+            ? entitledSubscriptions[0]
+            : sortedSubscriptions[0];
+
+    const status =
+        (selectedSubscription.subscription_status || "unknown").toLowerCase();
+
+    const plan =
+        selectedSubscription.plan_name || "Rule Radar";
+
+    planName.textContent = plan;
+
+    statusElement.className = "status";
+    statusElement.textContent = formatStatus(status);
+
+    statusDetail.textContent = formatStatus(status);
+
+    billingDate.textContent = formatDate(
+        selectedSubscription.current_period_end
+    );
+
+    if (entitledSubscriptions.length > 0) {
+
+        statusElement.classList.add("active");
+
+        planDescription.textContent =
+            "Your account has an active Rule Radar subscription.";
+
+        planButton.textContent = "View Rule Radar";
+
+    } else if (status === "past_due") {
+
+        statusElement.classList.add("warning");
+
+        planDescription.textContent =
+            "There is a payment issue with your subscription. Please review your billing.";
+
+        planButton.textContent = "Review Rule Radar";
+
+    } else if (
+        ["canceled", "cancelled", "paused", "unpaid", "expired"]
+            .includes(status)
+    ) {
+
+        statusElement.classList.add("cancelled");
+
+        planDescription.textContent =
+            "This subscription is not currently entitled to paid Rule Radar access.";
+
+        planButton.textContent = "View Plans";
+
+    } else {
+
+        statusElement.classList.add("warning");
+
+        planDescription.textContent =
+            "Your subscription status is being checked. Please contact DMEvia if you need assistance.";
+
+        planButton.textContent = "View Rule Radar";
+    }
+}
 
 async function loadDashboard() {
 
@@ -563,8 +719,10 @@ async function loadDashboard() {
 
     try {
 
-        const { data: { user }, error: authError } =
-            await supabaseClient.auth.getUser();
+        const {
+            data: { user },
+            error: authError
+        } = await supabaseClient.auth.getUser();
 
         if (authError || !user) {
             window.location.replace("account.html?mode=login");
@@ -575,79 +733,69 @@ async function loadDashboard() {
 
         const fullName =
             metadata.full_name ||
-            user.email.split("@")[0];
+            user.email?.split("@")[0] ||
+            "Customer";
 
         document.getElementById("customerName").textContent = fullName;
         document.getElementById("accountName").textContent = fullName;
-        document.getElementById("accountEmail").textContent = user.email;
+        document.getElementById("accountEmail").textContent =
+            user.email || "—";
 
-        // Load the customer's profile from Supabase.
+        // Display the actual email verification state.
+        const verificationElement =
+            document.getElementById("accountVerification");
 
-        const { error: profileError } = await supabaseClient
-            .from("profiles")
-            .select("id")
-            .eq("id", user.id)
-            .maybeSingle();
-
-        if (profileError) {
-            console.error("Profile loading issue:", profileError.message);
+        if (user.email_confirmed_at) {
+            verificationElement.textContent = "Verified";
+            verificationElement.style.color = "var(--green)";
+        } else {
+            verificationElement.textContent = "Not verified";
+            verificationElement.style.color = "#ffd27a";
         }
 
-        // Load subscription information.
-        // Subscription records must be created by the secure
-        // Paddle webhook, never directly by the browser.
+        // Retrieve every subscription belonging to this user.
+        // Supabase Row Level Security restricts access to the
+        // authenticated user's own subscription records.
 
-        const { data: subscriptions, error: subscriptionError } =
-            await supabaseClient
-                .from("subscriptions")
-                .select("*")
-                .eq("user_id", user.id)
-                .order("created_at", { ascending: false })
-                .limit(1);
+        const {
+            data: subscriptions,
+            error: subscriptionError
+        } = await supabaseClient
+            .from("subscriptions")
+            .select("*")
+            .eq("user_id", user.id)
+            .order("created_at", { ascending: false });
 
         if (subscriptionError) {
+
             console.error(
                 "Subscription loading issue:",
                 subscriptionError.message
             );
-        }
 
-        if (!subscriptionError && subscriptions && subscriptions.length) {
+            document.getElementById("planName").textContent =
+                "Unable to retrieve";
 
-            const sub = subscriptions[0];
-
-            const plan = sub.plan_name || "Rule Radar";
-            const status = (sub.subscription_status || "unknown").toLowerCase();
-
-            document.getElementById("planName").textContent = plan;
             document.getElementById("planDescription").textContent =
-                "Your Rule Radar subscription information.";
+                "We couldn't retrieve your subscription information. Please refresh or contact DMEvia.";
 
             const statusElement =
                 document.getElementById("subscriptionStatus");
 
-            statusElement.textContent =
-                status.charAt(0).toUpperCase() + status.slice(1);
+            statusElement.textContent = "Information unavailable";
+            statusElement.className = "status warning";
 
             document.getElementById("statusDetail").textContent =
-                status.charAt(0).toUpperCase() + status.slice(1);
+                "Unable to verify";
 
-            if (["active", "trialing"].includes(status)) {
-                statusElement.classList.add("active");
-                document.getElementById("planButton").textContent =
-                    "View Rule Radar";
-            } else if (["canceled", "cancelled", "paused"].includes(status)) {
-                statusElement.classList.add("cancelled");
-            }
+            document.getElementById("billingDate").textContent = "—";
 
-            if (sub.current_period_end) {
-                document.getElementById("billingDate").textContent =
-                    new Date(sub.current_period_end).toLocaleDateString(
-                        "en-US",
-                        { year: "numeric", month: "short", day: "numeric" }
-                    );
-            }
+            document.getElementById("planButton").textContent =
+                "View Rule Radar";
 
+        } else {
+
+            displaySubscription(subscriptions || []);
         }
 
         loading.style.display = "none";
@@ -673,9 +821,17 @@ async function loadDashboard() {
 
 document.getElementById("logoutBtn").addEventListener("click", async () => {
 
+    const button = document.getElementById("logoutBtn");
+
+    button.disabled = true;
+    button.textContent = "Signing out...";
+
     const { error } = await supabaseClient.auth.signOut();
 
     if (error) {
+        button.disabled = false;
+        button.textContent = "Sign Out";
+
         alert("Unable to sign out. Please try again.");
         return;
     }
