@@ -111,7 +111,7 @@ function fillForm(r){
 }
 function renderList(){
  const term=$("searchInput").value.trim().toLowerCase(),filter=$("statusFilter").value;
- const filtered=records.filter(r=>{const state=r.review_status|| (r.is_published?"approved":"draft");const hay=[r.title,r.slug,r.category,r.source_name,r.jurisdiction].join(" ").toLowerCase();return(!term||hay.includes(term))&&(filter==="all"||(filter==="published"?r.is_published===true:state===filter));});
+ const filtered=records.filter(r=>{const state=r.review_status|| (r.is_published?"approved":"draft");const hay=[r.title,r.slug,r.category,r.source_name,r.jurisdiction].join(" ").toLowerCase();return(!term||hay.includes(term))&&(filter==="all"||(filter==="published"?r.is_published===true:filter==="approved"?(state==="approved"&&r.is_published!==true):state===filter));});
  $("totalCount").textContent=records.length;$("draftCount").textContent=records.filter(r=>(r.review_status||"draft")==="draft").length;$("pendingCount").textContent=records.filter(r=>r.review_status==="pending_review").length;$("publishedCount").textContent=records.filter(r=>r.is_published===true).length;
  const list=$("alertList");list.replaceChildren();
  if(!filtered.length){const p=document.createElement("div");p.className="empty";p.textContent=records.length?"No alerts match this filter.":"No alerts yet. Create your first regulatory update using the form.";list.append(p);return}
