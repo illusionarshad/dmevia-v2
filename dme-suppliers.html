@@ -53,8 +53,16 @@ header{height:82px;display:flex;align-items:center;justify-content:space-between
   "inLanguage": "en-US"
 }
 </script>
+<style>
+/* DMEvia supplier account access */
+.supplier-access{position:relative;z-index:60;display:flex;justify-content:flex-end;align-items:center;padding:8px max(20px,calc((100% - 1160px)/2));background:#071326;border-bottom:1px solid rgba(20,198,178,.24);font-family:inherit}
+.supplier-access a{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:8px 17px;border-radius:999px;background:linear-gradient(135deg,#16c6b2,#3b82f6);color:#071326!important;text-decoration:none!important;font-size:14px;font-weight:800;line-height:1.25;box-shadow:0 5px 18px rgba(22,198,178,.18)}
+.supplier-access a:hover{filter:brightness(1.08);transform:translateY(-1px)}
+@media(max-width:600px){.supplier-access{padding:7px 16px}.supplier-access a{padding:8px 14px;font-size:13px}}
+</style>
 </head>
 <body>
+<div class="supplier-access" role="navigation" aria-label="Supplier account"><a href="supplier-sign-in.html">Supplier Sign In <span aria-hidden="true">→</span></a></div>
 <div class="orb one"></div><div class="orb two"></div><div class="orb three"></div>
 <header>
 <a class="brand" href="index.html"><svg class="logo" viewBox="0 0 60 70" fill="none" aria-hidden="true"><path d="M30 4C15 4 4 16 4 31c0 19 26 35 26 35s26-16 26-35C56 16 45 4 30 4Z" fill="#16C6B2"/><path d="M30 12C19 12 12 20 12 31c0 12 18 25 18 25s18-13 18-25c0-11-7-19-18-19Z" fill="#071B35"/><path d="M26 19h8v8h8v8h-8v8h-8v-8h-8v-8h8v-8Z" fill="#fff"/></svg>DME<span>via</span></a>
