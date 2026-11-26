@@ -131,7 +131,7 @@ async function initialiseMemberArea(){
  const{data:sessionData,error:sessionError}=await supabaseClient.auth.getSession();if(sessionError)throw sessionError;
  const user=sessionData.session?.user;if(!user){window.location.replace("account.html?mode=login");return}
  document.getElementById("emailLabel").textContent=user.email||"Signed in";
- const{data:subscriptions,error:subscriptionError}=await supabaseClient.from("subscriptions").select("plan_name,subscription_status,current_period_end,created_at").eq("user_id",user.id).in("subscription_status",["active","trialing"]).order("created_at",{ascending:false});
+ const{data:subscriptions,error:subscriptionError}=await supabaseClient.from("subscriptions").select("plan_name,subscription_status,current_period_end,created_at").eq("user_id",user.id).eq("paddle_environment","live").in("subscription_status",["active","trialing"]).order("created_at",{ascending:false});
  if(subscriptionError)throw subscriptionError;
  if(!subscriptions||!subscriptions.length){loading.classList.add("hidden");showError("An active Rule Radar subscription was not found for this account. You can review the plans on the Rule Radar page or contact DMEvia if you believe this is an error.");document.getElementById("planLabel").textContent="No active subscription";return}
  const sub=subscriptions[0];document.getElementById("planLabel").textContent=`${sub.plan_name||"Rule Radar"} · ${sub.subscription_status}`;
