@@ -1,404 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Private DMEvia Rule Radar member intelligence area for subscribers.">
-  <meta name="robots" content="noindex, nofollow">
-  <title>Rule Radar Member Area | DMEvia</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <style>
-    :root {
-      --bg: #071321; --panel: rgba(16, 35, 54, .86); --panel2: #10283d;
-      --text: #eef7ff; --muted: #a9bdcf; --teal: #38dfc2; --blue: #62a8ff;
-      --line: rgba(164, 204, 230, .16); --danger: #ff8d9b; --gold: #ffd27a;
-    }
-    * { box-sizing: border-box; }
-    body {
-      margin: 0; min-height: 100vh; color: var(--text);
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        radial-gradient(ellipse at 12% 5%, rgba(27, 177, 166, .17), transparent 34rem),
-        radial-gradient(ellipse at 92% 16%, rgba(84, 125, 255, .17), transparent 32rem),
-        linear-gradient(145deg, #06111e, #0a1b2c 55%, #071321);
-    }
-    a { color: inherit; }
-    .topbar {
-      position: sticky; top: 0; z-index: 5; display: flex; align-items: center;
-      justify-content: space-between; gap: 18px; padding: 17px clamp(18px, 5vw, 70px);
-      background: rgba(5, 16, 29, .82); backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--line);
-    }
-    .brand { font-weight: 850; letter-spacing: -.7px; font-size: 1.3rem; text-decoration: none; }
-    .brand span { color: var(--teal); }
-    .nav { display: flex; align-items: center; gap: 18px; color: var(--muted); font-size: .92rem; }
-    .nav a { text-decoration: none; }
-    .nav a:hover { color: var(--teal); }
-    button, .button {
-      border: 0; border-radius: 999px; padding: 10px 17px; cursor: pointer;
-      font-weight: 750; color: #06201e; background: linear-gradient(110deg, var(--teal), #8cf0d9);
-      text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
-    }
-    button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
-      outline: 3px solid var(--gold); outline-offset: 3px;
-    }
-    main { width: min(1120px, calc(100% - 36px)); margin: 0 auto; padding: 54px 0 80px; }
-    .eyebrow { color: var(--teal); text-transform: uppercase; letter-spacing: 2px; font-size: .76rem; font-weight: 850; }
-    h1 { font-size: clamp(2.2rem, 5vw, 4rem); line-height: 1.04; letter-spacing: -2px; margin: 12px 0; }
-    .intro { max-width: 700px; color: var(--muted); line-height: 1.7; font-size: 1.05rem; }
-    .status-row { display: flex; flex-wrap: wrap; gap: 12px; margin: 26px 0 32px; }
-    .pill { display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 999px; border: 1px solid var(--line); background: rgba(17, 42, 62, .72); color: var(--muted); font-size: .88rem; }
-    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--teal); box-shadow: 0 0 12px var(--teal); }
-    .panel {
-      background: var(--panel); border: 1px solid var(--line); border-radius: 22px;
-      box-shadow: 0 22px 70px rgba(0,0,0,.2); padding: clamp(20px, 3vw, 30px);
-      backdrop-filter: blur(14px);
-    }
-    .toolbar { display: flex; align-items: center; justify-content: space-between; gap: 18px; margin-bottom: 22px; }
-    .toolbar h2 { margin: 0; font-size: 1.35rem; }
-    .filters { display: flex; gap: 10px; flex-wrap: wrap; }
-    input, select {
-      color: var(--text); background: #0a1b2b; border: 1px solid var(--line);
-      border-radius: 12px; padding: 11px 13px; font: inherit; min-width: 170px;
-    }
-    select option { background: #0a1b2b; }
-    .feed { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
-    .article {
-      padding: 21px; border: 1px solid var(--line); border-radius: 17px;
-      background: linear-gradient(145deg, rgba(18, 48, 69, .9), rgba(11, 29, 46, .88));
-      transition: transform .25s ease, border-color .25s ease;
-      animation: rise .45s ease both; min-width: 0;
-    }
-    .article:hover { transform: translateY(-4px); border-color: rgba(56, 223, 194, .48); }
-    .category { color: var(--teal); font-size: .73rem; text-transform: uppercase; letter-spacing: 1.3px; font-weight: 850; }
-    .article h3 { margin: 10px 0 8px; font-size: 1.2rem; line-height: 1.35; }
-    .summary { color: var(--muted); line-height: 1.6; margin: 0 0 15px; }
-    .badges { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
-    .badge { display: inline-flex; align-items: center; border-radius: 999px; padding: 6px 10px; font-size: .73rem; font-weight: 800; border: 1px solid var(--line); color: #d5e5f1; background: rgba(7, 19, 33, .55); }
-    .impact-critical { color: #ffc0c7; border-color: rgba(255, 110, 130, .55); background: rgba(255, 80, 105, .12); }
-    .impact-high { color: #ffcfad; border-color: rgba(255, 160, 100, .5); background: rgba(255, 145, 75, .1); }
-    .impact-medium { color: #ffe2a6; border-color: rgba(255, 210, 122, .42); }
-    .impact-low { color: #b9e8d7; border-color: rgba(56, 223, 194, .35); }
-    .facts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin: 16px 0; }
-    .fact { padding: 11px 12px; border-radius: 11px; background: rgba(5, 17, 29, .42); border: 1px solid rgba(164, 204, 230, .1); min-width: 0; }
-    .fact-label { display: block; color: #829caf; font-size: .7rem; text-transform: uppercase; letter-spacing: .9px; margin-bottom: 5px; }
-    .fact-value { color: #e2eef7; font-size: .86rem; line-height: 1.45; overflow-wrap: anywhere; }
-    .section-label { color: #bcece4; font-size: .83rem; font-weight: 800; margin: 18px 0 7px; }
-    .body-copy { white-space: pre-wrap; color: #d9e7f2; line-height: 1.75; margin: 14px 0 0; }
-    .action-box { margin-top: 16px; padding: 14px; border-left: 3px solid var(--teal); border-radius: 8px; background: rgba(56, 223, 194, .07); color: #d9eee9; line-height: 1.6; font-size: .9rem; }
-    .source-link { display: inline-flex; margin-top: 15px; color: var(--teal); font-weight: 800; text-decoration: none; }
-    .source-link:hover { text-decoration: underline; }
-    details { border-top: 1px solid var(--line); padding-top: 13px; margin-top: 16px; }
-    summary { color: #bcece4; cursor: pointer; font-weight: 750; }
-    .date { color: #829caf; font-size: .78rem; margin-top: 16px; }
-    .empty, .message { text-align: center; padding: 42px 20px; color: var(--muted); line-height: 1.7; }
-    .empty h3 { color: var(--text); margin-top: 0; }
-    .message.error { color: var(--danger); }
-    .message a, .empty a { color: var(--teal); }
-    .notice { margin-top: 22px; padding: 15px 17px; border-left: 3px solid var(--gold); background: rgba(255, 210, 122, .07); color: #c9d6df; border-radius: 8px; font-size: .88rem; line-height: 1.6; }
-    footer { text-align: center; color: #7f96aa; font-size: .82rem; padding: 25px 18px 38px; }
-    .hidden { display: none !important; }
-    @keyframes rise { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
-    @media (max-width: 760px) {
-      .topbar { align-items: flex-start; }
-      .nav { gap: 10px; flex-wrap: wrap; justify-content: flex-end; font-size: .82rem; }
-      .feed { grid-template-columns: 1fr; }
-      .toolbar { align-items: flex-start; flex-direction: column; }
-      .filters { width: 100%; }
-      input, select { flex: 1; min-width: 0; width: 100%; }
-    }
-    @media (max-width: 440px) {
-      main { width: min(100% - 24px, 1120px); padding-top: 38px; }
-      .facts { grid-template-columns: 1fr; }
-      .panel { padding: 17px; }
-      .article { padding: 17px; }
-    }
-    @media (prefers-reduced-motion: reduce) {
-      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Private DMEvia Rule Radar member intelligence area for subscribers.">
+<meta name="robots" content="noindex, nofollow">
+<title>Rule Radar Member Area | DMEvia</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root{--bg:#071321;--panel:#102336;--text:#eef7ff;--muted:#a9bdcf;--teal:#38dfc2;--line:rgba(164,204,230,.16);--gold:#ffd27a;--danger:#ff8d9b}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;color:var(--text);font-family:Inter,system-ui,-apple-system,"Segoe UI",sans-serif;background:radial-gradient(ellipse at 12% 5%,rgba(27,177,166,.17),transparent 34rem),radial-gradient(ellipse at 92% 16%,rgba(84,125,255,.17),transparent 32rem),linear-gradient(145deg,#06111e,#0a1b2c 55%,#071321)}
+a{color:inherit}.topbar{position:sticky;top:0;z-index:5;display:flex;align-items:center;justify-content:space-between;gap:18px;padding:17px clamp(18px,5vw,70px);background:rgba(5,16,29,.88);backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.brand{font-weight:850;letter-spacing:-.7px;font-size:1.3rem;text-decoration:none}.brand span{color:var(--teal)}.nav{display:flex;align-items:center;gap:18px;color:var(--muted);font-size:.92rem}.nav a{text-decoration:none}.nav a:hover{color:var(--teal)}
+button,.button{border:0;border-radius:999px;padding:10px 17px;cursor:pointer;font-weight:750;color:#06201e;background:linear-gradient(110deg,var(--teal),#8cf0d9);text-decoration:none;display:inline-flex;align-items:center;justify-content:center}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+main{width:min(1120px,calc(100% - 36px));margin:0 auto;padding:54px 0 80px}.eyebrow{color:var(--teal);text-transform:uppercase;letter-spacing:2px;font-size:.76rem;font-weight:850}
+h1{font-size:clamp(2.2rem,5vw,4rem);line-height:1.04;letter-spacing:-2px;margin:12px 0}.intro{max-width:700px;color:var(--muted);line-height:1.7;font-size:1.05rem}
+.status-row{display:flex;flex-wrap:wrap;gap:12px;margin:26px 0 32px}.pill{display:inline-flex;align-items:center;gap:8px;padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:rgba(17,42,62,.72);color:var(--muted);font-size:.88rem}.dot{width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 12px var(--teal)}
+.panel{background:rgba(16,35,54,.88);border:1px solid var(--line);border-radius:22px;box-shadow:0 22px 70px rgba(0,0,0,.2);padding:clamp(20px,3vw,30px);backdrop-filter:blur(14px)}
+.toolbar{display:flex;align-items:center;justify-content:space-between;gap:18px;margin-bottom:22px}.toolbar h2{margin:0;font-size:1.35rem}.filters{display:flex;gap:10px;flex-wrap:wrap}
+input,select{color:var(--text);background:#0a1b2b;border:1px solid var(--line);border-radius:12px;padding:11px 13px;font:inherit;min-width:170px}select option{background:#0a1b2b}
+.feed{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}.article{padding:22px;border:1px solid var(--line);border-radius:17px;background:linear-gradient(145deg,rgba(18,48,69,.95),rgba(11,29,46,.92));transition:transform .25s,border-color .25s;animation:rise .4s ease both;min-width:0}.article:hover{transform:translateY(-3px);border-color:rgba(56,223,194,.48)}
+.category{color:var(--teal);font-size:.73rem;text-transform:uppercase;letter-spacing:1.3px;font-weight:850}.article h3{margin:10px 0 8px;font-size:1.2rem;line-height:1.4}.summary{color:var(--muted);line-height:1.65;margin:0 0 15px}
+.badges{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}.badge{display:inline-flex;align-items:center;border-radius:999px;padding:7px 11px;font-size:.75rem;font-weight:800;border:1px solid var(--line);color:#d5e5f1;background:rgba(7,19,33,.55);line-height:1.35}.impact-critical{color:#ffc0c7;border-color:rgba(255,110,130,.55);background:rgba(255,80,105,.12)}.impact-high{color:#ffcfad;border-color:rgba(255,160,100,.5);background:rgba(255,145,75,.1)}.impact-medium{color:#ffe2a6;border-color:rgba(255,210,122,.42)}.impact-low{color:#b9e8d7;border-color:rgba(56,223,194,.35)}
+.facts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:16px 0}.fact{padding:12px;border-radius:11px;background:rgba(5,17,29,.42);border:1px solid rgba(164,204,230,.1);min-width:0}.fact-label{display:block;color:#91a9bb;font-size:.7rem;text-transform:uppercase;letter-spacing:.9px;margin-bottom:6px}.fact-value{display:block;color:#e2eef7;font-size:.88rem;line-height:1.5;overflow-wrap:anywhere}
+.section-label{color:#bcece4;font-size:.86rem;font-weight:800;margin:19px 0 8px}.rich-copy{color:#d9e7f2;line-height:1.75;font-size:.93rem;overflow-wrap:anywhere}.rich-copy p{margin:8px 0 12px}.rich-copy h4{color:#bcece4;font-size:.96rem;margin:18px 0 7px}.rich-copy ul{margin:7px 0 13px;padding-left:23px}.rich-copy li{margin:5px 0}.rich-copy strong{color:#f3fbff}
+.action-box{margin-top:17px;padding:15px 16px;border-left:3px solid var(--teal);border-radius:8px;background:rgba(56,223,194,.07);color:#d9eee9;line-height:1.7;font-size:.92rem}.action-box strong{display:block;color:#bcece4;margin-bottom:5px}
+.source-link{display:inline-flex;margin:16px 0 0;color:var(--teal);font-weight:800;text-decoration:none}.source-link:hover{text-decoration:underline}
+details{border-top:1px solid var(--line);padding-top:14px;margin-top:17px}summary{color:#bcece4;cursor:pointer;font-weight:750;line-height:1.5}details[open] summary{margin-bottom:14px}
+.date{color:#829caf;font-size:.78rem;margin-top:18px}.empty,.message{text-align:center;padding:42px 20px;color:var(--muted);line-height:1.7}.empty h3{color:var(--text);margin-top:0}.message.error{color:var(--danger)}.message a,.empty a{color:var(--teal)}
+.notice{margin-top:22px;padding:15px 17px;border-left:3px solid var(--gold);background:rgba(255,210,122,.07);color:#c9d6df;border-radius:8px;font-size:.88rem;line-height:1.6}footer{text-align:center;color:#7f96aa;font-size:.82rem;padding:25px 18px 38px}.hidden{display:none!important}
+@keyframes rise{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@media(max-width:760px){.topbar{align-items:flex-start}.nav{gap:10px;flex-wrap:wrap;justify-content:flex-end;font-size:.82rem}.feed{grid-template-columns:1fr}.toolbar{align-items:flex-start;flex-direction:column}.filters{width:100%}input,select{flex:1;min-width:0;width:100%}}
+@media(max-width:440px){main{width:calc(100% - 24px);padding-top:38px}.facts{grid-template-columns:1fr}.panel{padding:17px}.article{padding:17px}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+</style>
 </head>
 <body>
-  <header class="topbar">
-    <a class="brand" href="index.html">DME<span>via</span></a>
-    <nav class="nav" aria-label="Main navigation">
-      <a href="dashboard.html">Dashboard</a>
-      <a href="dme-suppliers.html">DME Suppliers</a>
-      <button id="signOutBtn" type="button">Sign out</button>
-    </nav>
-  </header>
+<header class="topbar">
+<a class="brand" href="index.html">DME<span>via</span></a>
+<nav class="nav" aria-label="Main navigation"><a href="dashboard.html">Dashboard</a><a href="dme-suppliers.html">DME Suppliers</a><button id="signOutBtn" type="button">Sign out</button></nav>
+</header>
+<main>
+<div class="eyebrow">Subscriber intelligence</div>
+<h1>Rule Radar <span style="color:var(--teal)">Member Area</span></h1>
+<p class="intro">Your member space for DME regulatory updates, policy intelligence and practical industry insights.</p>
+<div class="status-row"><span class="pill"><span class="dot"></span><span id="planLabel">Checking subscription…</span></span><span class="pill" id="emailLabel">Checking account…</span></div>
+<section class="panel" aria-labelledby="feedHeading">
+<div class="toolbar"><h2 id="feedHeading">Latest intelligence</h2><div class="filters" id="filters"><input id="searchInput" type="search" placeholder="Search updates…" aria-label="Search updates"><select id="categoryFilter" aria-label="Filter by category"><option value="">All categories</option></select></div></div>
+<div id="loading" class="message">Securely checking your membership…</div><div id="error" class="message error hidden" role="alert"></div>
+<div id="empty" class="empty hidden"><h3>Your member area is ready.</h3><p>No intelligence updates have been published yet. New content will appear here when DMEvia publishes it.</p><a href="contact.html">Contact DMEvia</a></div>
+<div id="feed" class="feed" aria-live="polite"></div>
+</section>
+<div class="notice">Rule Radar content is provided for general informational purposes. It is not legal, medical, billing, reimbursement or compliance advice. Always verify requirements with the relevant official source and qualified advisers.</div>
+</main>
+<footer>© <span id="year"></span> DMEvia. All rights reserved.</footer>
+<script>
+const SUPABASE_URL="https://bqdixzojehjsrjjasudd.supabase.co";
+const SUPABASE_ANON_KEY="sb_publishable_IFF6nlYE26b550sMxS1KqA_FXFaWMnM";
+const supabaseClient=window.supabase.createClient(SUPABASE_URL,SUPABASE_ANON_KEY);
+const loading=document.getElementById("loading"),errorBox=document.getElementById("error"),emptyBox=document.getElementById("empty"),feed=document.getElementById("feed"),searchInput=document.getElementById("searchInput"),categoryFilter=document.getElementById("categoryFilter");
+let articles=[];
+document.getElementById("year").textContent=new Date().getFullYear();
 
-  <main>
-    <div class="eyebrow">Subscriber intelligence</div>
-    <h1>Rule Radar <span style="color:var(--teal)">Member Area</span></h1>
-    <p class="intro">Your member space for DME regulatory updates, policy intelligence and practical industry insights.</p>
-
-    <div class="status-row">
-      <span class="pill"><span class="dot"></span><span id="planLabel">Checking subscription…</span></span>
-      <span class="pill" id="emailLabel">Checking account…</span>
-    </div>
-
-    <section class="panel" aria-labelledby="feedHeading">
-      <div class="toolbar">
-        <h2 id="feedHeading">Latest intelligence</h2>
-        <div class="filters" id="filters">
-          <input id="searchInput" type="search" placeholder="Search updates…" aria-label="Search updates">
-          <select id="categoryFilter" aria-label="Filter by category">
-            <option value="">All categories</option>
-          </select>
-        </div>
-      </div>
-      <div id="loading" class="message">Securely checking your membership…</div>
-      <div id="error" class="message error hidden" role="alert"></div>
-      <div id="empty" class="empty hidden">
-        <h3>Your member area is ready.</h3>
-        <p>No intelligence updates have been published yet. New content will appear here when DMEvia publishes it.</p>
-        <a href="contact.html">Contact DMEvia</a>
-      </div>
-      <div id="feed" class="feed" aria-live="polite"></div>
-    </section>
-
-    <div class="notice">
-      Rule Radar content is provided for general informational purposes. It is not legal, medical, billing, reimbursement or compliance advice. Always verify requirements with the relevant official source and qualified advisers.
-    </div>
-  </main>
-
-  <footer>© <span id="year"></span> DMEvia. All rights reserved.</footer>
-
-  <script>
-    const SUPABASE_URL = "https://bqdixzojehjsrjjasudd.supabase.co";
-    const SUPABASE_ANON_KEY = "sb_publishable_IFF6nlYE26b550sMxS1KqA_FXFaWMnM";
-    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    const loading = document.getElementById("loading");
-    const errorBox = document.getElementById("error");
-    const emptyBox = document.getElementById("empty");
-    const feed = document.getElementById("feed");
-    const searchInput = document.getElementById("searchInput");
-    const categoryFilter = document.getElementById("categoryFilter");
-    let articles = [];
-
-    document.getElementById("year").textContent = new Date().getFullYear();
-
-    function showError(message) {
-      loading.classList.add("hidden");
-      emptyBox.classList.add("hidden");
-      feed.replaceChildren();
-      errorBox.textContent = message;
-      errorBox.classList.remove("hidden");
-    }
-
-    function safeDate(value) {
-      if (!value) return "Not specified";
-      const date = new Date(value);
-      return Number.isNaN(date.getTime()) ? "Not specified" : date.toLocaleDateString(undefined, {
-        year: "numeric", month: "short", day: "numeric", timeZone: "UTC"
-      });
-    }
-
-    function addFact(container, label, value) {
-      if (value === null || value === undefined || value === "") return;
-      const fact = document.createElement("div");
-      fact.className = "fact";
-      const factLabel = document.createElement("span");
-      factLabel.className = "fact-label";
-      factLabel.textContent = label;
-      const factValue = document.createElement("span");
-      factValue.className = "fact-value";
-      factValue.textContent = value;
-      fact.append(factLabel, factValue);
-      container.append(fact);
-    }
-
-    function validHttpUrl(value) {
-      try {
-        const url = new URL(value);
-        return url.protocol === "https:" || url.protocol === "http:" ? url.href : null;
-      } catch {
-        return null;
-      }
-    }
-
-    function renderArticles() {
-      const term = searchInput.value.trim().toLowerCase();
-      const category = categoryFilter.value;
-      const filtered = articles.filter(item => {
-        const products = Array.isArray(item.affected_products) ? item.affected_products.join(" ") : "";
-        const text = [
-          item.title, item.category, item.summary, item.body, item.recommended_action,
-          item.source_name, item.jurisdiction, products, item.impact_level
-        ].join(" ").toLowerCase();
-        return (!term || text.includes(term)) && (!category || item.category === category);
-      });
-
-      feed.replaceChildren();
-      filtered.forEach((item, index) => {
-        const card = document.createElement("article");
-        card.className = "article";
-        card.style.animationDelay = `${Math.min(index * 45, 300)}ms`;
-
-        const categoryEl = document.createElement("div");
-        categoryEl.className = "category";
-        categoryEl.textContent = item.category || "Industry update";
-
-        const title = document.createElement("h3");
-        title.textContent = item.title || "Untitled update";
-
-        const summary = document.createElement("p");
-        summary.className = "summary";
-        summary.textContent = item.summary || "";
-
-        const badges = document.createElement("div");
-        badges.className = "badges";
-        const impact = (item.impact_level || "medium").toLowerCase();
-        const impactBadge = document.createElement("span");
-        impactBadge.className = `badge impact-${["low", "medium", "high", "critical"].includes(impact) ? impact : "medium"}`;
-        impactBadge.textContent = `${impact.charAt(0).toUpperCase() + impact.slice(1)} impact`;
-        badges.append(impactBadge);
-        if (item.jurisdiction) {
-          const jurisdictionBadge = document.createElement("span");
-          jurisdictionBadge.className = "badge";
-          jurisdictionBadge.textContent = item.jurisdiction;
-          badges.append(jurisdictionBadge);
-        }
-
-        const facts = document.createElement("div");
-        facts.className = "facts";
-        addFact(facts, "Effective date", safeDate(item.effective_date));
-        addFact(facts, "Published", safeDate(item.source_published_at || item.published_at));
-        addFact(facts, "Source", item.source_name || "Not specified");
-        addFact(facts, "Update type", (item.update_type || "Industry update").replaceAll("_", " "));
-
-        card.append(categoryEl, title, summary, badges);
-        if (facts.childElementCount) card.append(facts);
-
-        if (Array.isArray(item.affected_products) && item.affected_products.length) {
-          const affectedLabel = document.createElement("div");
-          affectedLabel.className = "section-label";
-          affectedLabel.textContent = "Who or what is affected";
-          const affected = document.createElement("p");
-          affected.className = "body-copy";
-          affected.textContent = item.affected_products.join(" • ");
-          card.append(affectedLabel, affected);
-        }
-
-        if (item.recommended_action) {
-          const action = document.createElement("div");
-          action.className = "action-box";
-          const actionTitle = document.createElement("strong");
-          actionTitle.textContent = "Recommended action: ";
-          action.append(actionTitle, document.createTextNode(item.recommended_action));
-          card.append(action);
-        }
-
-        const sourceUrl = validHttpUrl(item.source_url);
-        if (sourceUrl) {
-          const sourceLink = document.createElement("a");
-          sourceLink.className = "source-link";
-          sourceLink.href = sourceUrl;
-          sourceLink.target = "_blank";
-          sourceLink.rel = "noopener noreferrer";
-          sourceLink.textContent = "View official source ↗";
-          card.append(sourceLink);
-        }
-
-        if (item.body) {
-          const details = document.createElement("details");
-          const summaryToggle = document.createElement("summary");
-          summaryToggle.textContent = "Read full intelligence analysis";
-          const body = document.createElement("p");
-          body.className = "body-copy";
-          body.textContent = item.body;
-          details.append(summaryToggle, body);
-          card.append(details);
-        }
-
-        const date = document.createElement("div");
-        date.className = "date";
-        date.textContent = item.published_at ? `Added to Rule Radar ${safeDate(item.published_at)}` : "";
-        card.append(date);
-        feed.append(card);
-      });
-
-      const noMatches = filtered.length === 0;
-      emptyBox.classList.toggle("hidden", !noMatches);
-      if (noMatches && articles.length > 0) {
-        emptyBox.querySelector("h3").textContent = "No matching updates";
-        emptyBox.querySelector("p").textContent = "Try another search term or choose a different category.";
-      } else if (articles.length === 0) {
-        emptyBox.querySelector("h3").textContent = "Your member area is ready.";
-        emptyBox.querySelector("p").textContent = "No intelligence updates have been published yet. New content will appear here when DMEvia publishes it.";
-      }
-    }
-
-    async function initialiseMemberArea() {
-      const { data: sessionData, error: sessionError } = await supabaseClient.auth.getSession();
-      if (sessionError) throw sessionError;
-
-      const user = sessionData.session?.user;
-      if (!user) {
-        window.location.replace("account.html?mode=login");
-        return;
-      }
-
-      document.getElementById("emailLabel").textContent = user.email || "Signed in";
-      const { data: subscriptions, error: subscriptionError } = await supabaseClient
-        .from("subscriptions")
-        .select("plan_name, subscription_status, current_period_end, created_at")
-        .eq("user_id", user.id)
-        .in("subscription_status", ["active", "trialing"])
-        .order("created_at", { ascending: false });
-
-      if (subscriptionError) throw subscriptionError;
-
-      if (!subscriptions || subscriptions.length === 0) {
-        loading.classList.add("hidden");
-        showError("An active Rule Radar subscription was not found for this account. You can review the plans on the Rule Radar page or contact DMEvia if you believe this is an error.");
-        document.getElementById("planLabel").textContent = "No active subscription";
-        return;
-      }
-
-      const subscription = subscriptions[0];
-      document.getElementById("planLabel").textContent =
-        `${subscription.plan_name || "Rule Radar"} · ${subscription.subscription_status}`;
-
-      const { data, error: contentError } = await supabaseClient
-        .from("rule_radar_content")
-        .select("id, slug, title, category, summary, body, is_published, published_at, source_name, source_url, source_published_at, effective_date, impact_level, jurisdiction, affected_products, recommended_action, update_type")
-        .eq("is_published", true)
-        .order("published_at", { ascending: false, nullsFirst: false });
-
-      if (contentError) throw contentError;
-
-      articles = data || [];
-      const categories = [...new Set(articles.map(item => item.category).filter(Boolean))].sort();
-      categories.forEach(category => {
-        const option = document.createElement("option");
-        option.value = category;
-        option.textContent = category;
-        categoryFilter.append(option);
-      });
-
-      loading.classList.add("hidden");
-      renderArticles();
-    }
-
-    searchInput.addEventListener("input", renderArticles);
-    categoryFilter.addEventListener("change", renderArticles);
-
-    document.getElementById("signOutBtn").addEventListener("click", async () => {
-      const { error } = await supabaseClient.auth.signOut();
-      if (error) {
-        showError("We couldn't sign you out. Please try again.");
-        return;
-      }
-      window.location.replace("account.html?mode=login");
-    });
-
-    initialiseMemberArea().catch(error => {
-      console.error("Rule Radar member area error:", error);
-      showError("We couldn't load the member area. Please refresh the page. If the problem continues, contact DMEvia.");
-    });
-  </script>
+function showError(message){loading.classList.add("hidden");emptyBox.classList.add("hidden");feed.replaceChildren();errorBox.textContent=message;errorBox.classList.remove("hidden")}
+function safeDate(value){if(!value)return "Not specified";const d=new Date(value);return Number.isNaN(d.getTime())?"Not specified":d.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric",timeZone:"UTC"})}
+function cleanText(value){
+ if(value===null||value===undefined)return "";
+ return String(value).replace(/&#x([0-9a-f]+);/gi,(_,hex)=>String.fromCodePoint(parseInt(hex,16))).replace(/&#(\d+);/g,(_,n)=>String.fromCodePoint(Number(n))).replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">").replace(/&quot;/g,'"').replace(/&#39;|&apos;/g,"'");
+}
+function addFact(container,label,value){
+ if(value===null||value===undefined||value==="")return;
+ const fact=document.createElement("div");fact.className="fact";
+ const l=document.createElement("span");l.className="fact-label";l.textContent=label;
+ const v=document.createElement("span");v.className="fact-value";v.textContent=cleanText(value);
+ fact.append(l,v);container.append(fact);
+}
+function validHttpUrl(value){try{const u=new URL(value);return u.protocol==="https:"||u.protocol==="http:"?u.href:null}catch{return null}}
+function appendRichText(container,raw){
+ const text=cleanText(raw).replace(/\r\n?/g,"\n").replace(/\\-/g,"-").trim();
+ const lines=text.split("\n");let paragraph=[],list=null;
+ const flushParagraph=()=>{if(!paragraph.length)return;const p=document.createElement("p");p.textContent=paragraph.join(" ");container.append(p);paragraph=[]};
+ const closeList=()=>{if(list){container.append(list);list=null}};
+ for(const original of lines){
+  const line=original.trim();
+  if(!line){flushParagraph();closeList();continue}
+  const heading=line.match(/^#{1,4}\s+(.+)$/)||line.match(/^\*\*(.+)\*\*$/);
+  if(heading){flushParagraph();closeList();const h=document.createElement("h4");h.textContent=heading[1].replace(/\*\*/g,"");container.append(h);continue}
+  const bullet=line.match(/^[-*•]\s+(.+)$/);
+  if(bullet){flushParagraph();if(!list){list=document.createElement("ul")}const li=document.createElement("li");li.textContent=bullet[1].replace(/\*\*(.*?)\*\*/g,"$1");list.append(li);continue}
+  closeList();paragraph.push(line);
+ }
+ flushParagraph();closeList();
+}
+function renderArticles(){
+ const term=searchInput.value.trim().toLowerCase(),category=categoryFilter.value;
+ const filtered=articles.filter(item=>{
+  const products=Array.isArray(item.affected_products)?item.affected_products.join(" "):"";
+  const haystack=[item.title,item.category,item.summary,item.body,item.recommended_action,item.source_name,item.jurisdiction,products,item.impact_level].map(cleanText).join(" ").toLowerCase();
+  return(!term||haystack.includes(term))&&(!category||item.category===category);
+ });
+ feed.replaceChildren();
+ filtered.forEach((item,index)=>{
+  const card=document.createElement("article");card.className="article";card.style.animationDelay=`${Math.min(index*45,300)}ms`;
+  const cat=document.createElement("div");cat.className="category";cat.textContent=cleanText(item.category)||"Industry update";
+  const title=document.createElement("h3");title.textContent=cleanText(item.title)||"Untitled update";
+  const summary=document.createElement("p");summary.className="summary";summary.textContent=cleanText(item.summary);
+  const badges=document.createElement("div");badges.className="badges";
+  const impact=(cleanText(item.impact_level)||"medium").toLowerCase(),ib=document.createElement("span");
+  ib.className=`badge impact-${["low","medium","high","critical"].includes(impact)?impact:"medium"}`;ib.textContent=`${impact.charAt(0).toUpperCase()+impact.slice(1)} impact`;badges.append(ib);
+  if(item.jurisdiction){const jb=document.createElement("span");jb.className="badge";jb.textContent=cleanText(item.jurisdiction);badges.append(jb)}
+  const facts=document.createElement("div");facts.className="facts";
+  addFact(facts,"Effective date",item.effective_date?safeDate(item.effective_date):"");
+  addFact(facts,"Published",safeDate(item.source_published_at||item.published_at));
+  addFact(facts,"Source",item.source_name||"Not specified");
+  addFact(facts,"Update type",(item.update_type||"Industry update").replaceAll("_"," "));
+  card.append(cat,title,summary,badges);if(facts.childElementCount)card.append(facts);
+  if(Array.isArray(item.affected_products)&&item.affected_products.length){const label=document.createElement("div");label.className="section-label";label.textContent="Who or what is affected";const content=document.createElement("div");content.className="rich-copy";const p=document.createElement("p");p.textContent=item.affected_products.join(" • ");content.append(p);card.append(label,content)}
+  if(item.recommended_action){const box=document.createElement("div");box.className="action-box";const heading=document.createElement("strong");heading.textContent="Recommended action";const copy=document.createElement("div");copy.className="rich-copy";appendRichText(copy,item.recommended_action);box.append(heading,copy);card.append(box)}
+  const sourceUrl=validHttpUrl(item.source_url);
+  if(sourceUrl){const link=document.createElement("a");link.className="source-link";link.href=sourceUrl;link.target="_blank";link.rel="noopener noreferrer";link.textContent="View official source ↗";card.append(link)}
+  if(item.body){const details=document.createElement("details"),toggle=document.createElement("summary"),body=document.createElement("div");toggle.textContent="Read full intelligence analysis";body.className="rich-copy";appendRichText(body,item.body);details.append(toggle,body);card.append(details)}
+  const date=document.createElement("div");date.className="date";date.textContent=item.published_at?`Added to Rule Radar ${safeDate(item.published_at)}`:"";card.append(date);feed.append(card);
+ });
+ const none=filtered.length===0;emptyBox.classList.toggle("hidden",!none);
+ if(none&&articles.length){emptyBox.querySelector("h3").textContent="No matching updates";emptyBox.querySelector("p").textContent="Try another search term or choose a different category."}
+ else if(!articles.length){emptyBox.querySelector("h3").textContent="Your member area is ready.";emptyBox.querySelector("p").textContent="No intelligence updates have been published yet. New content will appear here when DMEvia publishes it."}
+}
+async function initialiseMemberArea(){
+ const{data:sessionData,error:sessionError}=await supabaseClient.auth.getSession();if(sessionError)throw sessionError;
+ const user=sessionData.session?.user;if(!user){window.location.replace("account.html?mode=login");return}
+ document.getElementById("emailLabel").textContent=user.email||"Signed in";
+ const{subscriptions,error:subscriptionError}=await supabaseClient.from("subscriptions").select("plan_name,subscription_status,current_period_end,created_at").eq("user_id",user.id).in("subscription_status",["active","trialing"]).order("created_at",{ascending:false});
+ if(subscriptionError)throw subscriptionError;
+ if(!subscriptions||!subscriptions.length){loading.classList.add("hidden");showError("An active Rule Radar subscription was not found for this account. You can review the plans on the Rule Radar page or contact DMEvia if you believe this is an error.");document.getElementById("planLabel").textContent="No active subscription";return}
+ const sub=subscriptions[0];document.getElementById("planLabel").textContent=`${sub.plan_name||"Rule Radar"} · ${sub.subscription_status}`;
+ const{data,error:contentError}=await supabaseClient.from("rule_radar_content").select("id,slug,title,category,summary,body,is_published,published_at,source_name,source_url,source_published_at,effective_date,impact_level,jurisdiction,affected_products,recommended_action,update_type").eq("is_published",true).order("published_at",{ascending:false,nullsFirst:false});
+ if(contentError)throw contentError;articles=data||[];
+ [...new Set(articles.map(x=>x.category).filter(Boolean))].sort().forEach(c=>{const o=document.createElement("option");o.value=c;o.textContent=c;categoryFilter.append(o)});
+ loading.classList.add("hidden");renderArticles();
+}
+searchInput.addEventListener("input",renderArticles);categoryFilter.addEventListener("change",renderArticles);
+document.getElementById("signOutBtn").addEventListener("click",async()=>{const{error}=await supabaseClient.auth.signOut();if(error){showError("We couldn't sign you out. Please try again.");return}window.location.replace("account.html?mode=login")});
+initialiseMemberArea().catch(error=>{console.error("Rule Radar member area error:",error);showError("We couldn't load the member area. Please refresh the page. If the problem continues, contact DMEvia.")});
+</script>
 </body>
 </html>
