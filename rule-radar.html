@@ -806,9 +806,17 @@ footer {
   }
 }
 </script>
+<style>
+/* DMEvia supplier account access */
+.supplier-access{position:relative;z-index:60;display:flex;justify-content:flex-end;align-items:center;padding:8px max(20px,calc((100% - 1160px)/2));background:#071326;border-bottom:1px solid rgba(20,198,178,.24);font-family:inherit}
+.supplier-access a{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:8px 17px;border-radius:999px;background:linear-gradient(135deg,#16c6b2,#3b82f6);color:#071326!important;text-decoration:none!important;font-size:14px;font-weight:800;line-height:1.25;box-shadow:0 5px 18px rgba(22,198,178,.18)}
+.supplier-access a:hover{filter:brightness(1.08);transform:translateY(-1px)}
+@media(max-width:600px){.supplier-access{padding:7px 16px}.supplier-access a{padding:8px 14px;font-size:13px}}
+</style>
 </head>
 
 <body>
+<div class="supplier-access" role="navigation" aria-label="Supplier account"><a href="supplier-sign-in.html">Supplier Sign In <span aria-hidden="true">→</span></a></div>
 
 <div class="background">
     <div class="orb one"></div>
