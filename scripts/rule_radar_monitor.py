@@ -146,7 +146,7 @@ def build_payload(source_name: str, url: str, title: str, abstract: str,
 
 
 def submit(payload: dict) -> None:
-    response = SESSION.post(RPC_URL, headers=HEADERS, json={"alert": payload}, timeout=30)
+    response = SESSION.post(RPC_URL, headers=HEADERS, json={"p_payload": payload}, timeout=30)
     if response.status_code >= 400:
         # Do not print request headers or environment values.
         raise RuntimeError(f"Supabase review submission failed ({response.status_code}): {response.text[:700]}")
