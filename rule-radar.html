@@ -586,6 +586,90 @@ h1,h2,h3 {
     margin-top:8px;
 }
 
+/* ACCOUNT STATUS */
+
+.account-status {
+    max-width:820px;
+    margin:0 auto 22px;
+    padding:17px 20px;
+    border:1px solid rgba(255,255,255,.13);
+    border-radius:13px;
+    background:rgba(255,255,255,.045);
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:15px;
+    flex-wrap:wrap;
+    color:#dceefa;
+    font-size:13px;
+    line-height:1.6;
+}
+
+.account-status[hidden],
+.account-status-state[hidden] {
+    display:none!important;
+}
+
+.account-status-state {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.account-status-indicator {
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:#f0b85a;
+    box-shadow:0 0 10px rgba(240,184,90,.45);
+    flex:0 0 auto;
+}
+
+.account-status.signed-in {
+    border-color:rgba(0,198,170,.35);
+    background:rgba(0,198,170,.07);
+}
+
+.account-status.signed-in .account-status-indicator {
+    background:var(--teal);
+    box-shadow:0 0 10px rgba(0,198,170,.55);
+}
+
+.account-status-actions {
+    display:flex;
+    align-items:center;
+    gap:14px;
+    flex-wrap:wrap;
+}
+
+.account-status a {
+    color:var(--teal);
+    text-decoration:underline;
+    font-weight:800;
+}
+
+.account-status button {
+    border:1px solid rgba(255,255,255,.22);
+    border-radius:7px;
+    padding:8px 13px;
+    background:rgba(255,255,255,.06);
+    color:#fff;
+    font:inherit;
+    font-size:12px;
+    font-weight:700;
+    cursor:pointer;
+}
+
+.account-status button:hover {
+    border-color:var(--teal);
+}
+
+.account-status button:disabled {
+    opacity:.55;
+    cursor:wait;
+}
+
 /* CHECKOUT STATUS */
 
 .checkout-message {
@@ -1101,6 +1185,33 @@ footer {
             <p>Choose a monthly plan for DMEvia Rule Radar.</p>
         </div>
 
+        <div id="account-status" class="account-status" role="status" aria-live="polite" aria-busy="true">
+            <div id="account-status-loading" class="account-status-state">
+                <span class="account-status-indicator" aria-hidden="true"></span>
+                Checking your DMEvia account…
+            </div>
+            <div id="account-status-signed-in" class="account-status-state" hidden>
+                <span class="account-status-indicator" aria-hidden="true"></span>
+                <span>Signed in as <strong id="account-status-email"></strong></span>
+            </div>
+            <div id="account-status-signed-out" class="account-status-state" hidden>
+                <span class="account-status-indicator" aria-hidden="true"></span>
+                <span>You are not signed in to DMEvia.</span>
+            </div>
+            <div id="account-status-error" class="account-status-state" hidden>
+                <span class="account-status-indicator" aria-hidden="true"></span>
+                <span>We couldn't verify your sign-in status. Please refresh or sign in again.</span>
+            </div>
+            <div id="account-status-actions" class="account-status-actions" hidden>
+                <a id="account-status-dashboard" href="dashboard.html">My Dashboard</a>
+                <button id="account-status-signout" type="button">Sign Out</button>
+            </div>
+            <div id="account-status-login-action" class="account-status-actions" hidden>
+                <a href="account.html?mode=login">Sign In</a>
+                <a href="account.html?mode=signup">Create Account</a>
+            </div>
+        </div>
+
         <div id="checkout-message" class="checkout-message" role="status" aria-live="polite"></div>
 
         <div class="pricing-grid">
@@ -1311,6 +1422,71 @@ try {
         DMEVIA_SUPABASE_URL,
         DMEVIA_SUPABASE_PUBLISHABLE_KEY
     );
+
+    const accountStatus = document.getElementById("account-status");
+    const accountStatusLoading = document.getElementById("account-status-loading");
+    const accountStatusSignedIn = document.getElementById("account-status-signed-in");
+    const accountStatusSignedOut = document.getElementById("account-status-signed-out");
+    const accountStatusError = document.getElementById("account-status-error");
+    const accountStatusActions = document.getElementById("account-status-actions");
+    const accountStatusLoginAction = document.getElementById("account-status-login-action");
+    const accountStatusEmail = document.getElementById("account-status-email");
+    const accountStatusSignOut = document.getElementById("account-status-signout");
+
+    function renderAccountStatus(state, email = "") {
+        accountStatusLoading.hidden = state !== "loading";
+        accountStatusSignedIn.hidden = state !== "signed-in";
+        accountStatusSignedOut.hidden = state !== "signed-out";
+        accountStatusError.hidden = state !== "error";
+        accountStatusActions.hidden = state !== "signed-in";
+        accountStatusLoginAction.hidden = state !== "signed-out";
+        accountStatus.classList.toggle("signed-in", state === "signed-in");
+        accountStatus.setAttribute("aria-busy", state === "loading" ? "true" : "false");
+        accountStatusEmail.textContent = email;
+    }
+
+    async function refreshAccountStatus() {
+        renderAccountStatus("loading");
+        try {
+            const { data, error } = await dmeviaSupabase.auth.getUser();
+            if (error) throw error;
+            if (data && data.user) {
+                renderAccountStatus("signed-in", data.user.email || "your account");
+            } else {
+                renderAccountStatus("signed-out");
+            }
+        } catch (error) {
+            console.error("DMEvia account status check:", error);
+            renderAccountStatus("error");
+        }
+    }
+
+    dmeviaSupabase.auth.onAuthStateChange((event, session) => {
+        if (event === "SIGNED_OUT" || !session) {
+            renderAccountStatus("signed-out");
+        } else if (session.user) {
+            renderAccountStatus("signed-in", session.user.email || "your account");
+        }
+    });
+
+    accountStatusSignOut.addEventListener("click", async () => {
+        accountStatusSignOut.disabled = true;
+        accountStatusSignOut.textContent = "Signing out…";
+        try {
+            const { error } = await dmeviaSupabase.auth.signOut({ scope: "local" });
+            if (error) throw error;
+            renderAccountStatus("signed-out");
+            showCheckoutMessage("You have been signed out of this browser session.");
+        } catch (error) {
+            console.error("DMEvia sign-out error:", error);
+            showCheckoutMessage("We couldn't sign you out. Please try again.");
+        } finally {
+            accountStatusSignOut.disabled = false;
+            accountStatusSignOut.textContent = "Sign Out";
+        }
+    });
+
+    refreshAccountStatus();
 
     if (
         !DMEVIA_PADDLE_CLIENT_TOKEN ||
