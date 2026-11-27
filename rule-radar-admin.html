@@ -74,6 +74,7 @@ footer{text-align:center;color:#7f96aa;font-size:.8rem;padding:20px}
 <div class="field"><label for="effectiveDate">Effective date</label><input id="effectiveDate" type="date"></div>
 <div class="field"><label for="impact">Impact level</label><select id="impact"><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option><option value="critical">Critical</option></select></div>
 <div class="field"><label for="jurisdiction">Jurisdiction</label><select id="jurisdiction"><option>Federal</option><option>Texas</option><option>State</option><option>Other</option></select></div>
+<div class="field"><label for="minimumPlan">Minimum subscription tier</label><select id="minimumPlan"><option value="Basic">Basic — included in all plans</option><option value="Professional">Professional — Professional and Enterprise</option><option value="Enterprise">Enterprise only</option></select><span class="hint">This is enforced by the database, not just hidden in the page.</span></div>
 <div class="field"><label for="updateType">Update type</label><select id="updateType"><option value="regulatory_update">Regulatory update</option><option value="proposed_rule">Proposed rule</option><option value="final_rule">Final rule</option><option value="guidance">Guidance</option><option value="notice">Notice</option><option value="recall">Recall / safety alert</option><option value="coverage_update">Coverage update</option><option value="enforcement">Enforcement</option><option value="industry_update">Industry update</option></select></div>
 <div class="field"><label for="products">Affected products / HCPCS</label><input id="products" placeholder="E.g. oxygen equipment, E0601, K0001"><span class="hint">Separate multiple entries with commas.</span></div>
 <div class="field full"><label for="action">Recommended supplier action</label><textarea id="action" rows="3" placeholder="Practical next steps for affected DME suppliers"></textarea></div>
@@ -105,9 +106,9 @@ function makeSlug(value){return value.toLowerCase().normalize("NFKD").replace(/[
 function safeDate(value){if(!value)return "—";const d=new Date(value);return Number.isNaN(d.getTime())?value:d.toLocaleDateString(undefined,{year:"numeric",month:"short",day:"numeric"})}
 function statusLabel(status){return ({draft:"Draft",pending_review:"Pending review",approved:"Approved",rejected:"Rejected"})[status]||status||"Draft"}
 function setEditorMode(editing){$("editorHeading").textContent=editing?"Edit regulatory alert":"Create an alert";$("cancelBtn").classList.toggle("hidden",!editing)}
-function resetForm(){$("alertForm").reset();$("recordId").value="";$("impact").value="medium";$("jurisdiction").value="Federal";$("updateType").value="regulatory_update";$("slug").dataset.manual="";setEditorMode(false);formMessage("")}
+function resetForm(){$("alertForm").reset();$("recordId").value="";$("impact").value="medium";$("jurisdiction").value="Federal";$("updateType").value="regulatory_update";$("minimumPlan").value="Basic";$("slug").dataset.manual="";setEditorMode(false);formMessage("")}
 function fillForm(r){
- $("recordId").value=r.id;$("title").value=r.title||"";$("slug").value=r.slug||"";$("slug").dataset.manual="yes";$("category").value=r.category||"";$("summary").value=r.summary||"";$("body").value=r.body||"";$("sourceName").value=r.source_name||"";$("sourceUrl").value=r.source_url||"";$("sourceDate").value=r.source_published_at||"";$("effectiveDate").value=r.effective_date||"";$("impact").value=r.impact_level||"medium";$("jurisdiction").value=r.jurisdiction||"Federal";$("updateType").value=r.update_type||"regulatory_update";$("products").value=Array.isArray(r.affected_products)?r.affected_products.join(", "):"";$("action").value=r.recommended_action||"";setEditorMode(true);formMessage("Current status: "+statusLabel(r.review_status)+". Save as draft to withdraw it and require a fresh review.")
+ $("recordId").value=r.id;$("title").value=r.title||"";$("slug").value=r.slug||"";$("slug").dataset.manual="yes";$("category").value=r.category||"";$("summary").value=r.summary||"";$("body").value=r.body||"";$("sourceName").value=r.source_name||"";$("sourceUrl").value=r.source_url||"";$("sourceDate").value=r.source_published_at||"";$("effectiveDate").value=r.effective_date||"";$("impact").value=r.impact_level||"medium";$("jurisdiction").value=r.jurisdiction||"Federal";$("updateType").value=r.update_type||"regulatory_update";$("minimumPlan").value=r.minimum_plan||"Basic";$("products").value=Array.isArray(r.affected_products)?r.affected_products.join(", "):"";$("action").value=r.recommended_action||"";setEditorMode(true);formMessage("Current status: "+statusLabel(r.review_status)+". Save as draft to withdraw it and require a fresh review.")
 }
 function renderList(){
  const term=$("searchInput").value.trim().toLowerCase(),filter=$("statusFilter").value;
@@ -119,7 +120,7 @@ function renderList(){
   const state=r.review_status|| (r.is_published?"approved":"draft");
   const card=document.createElement("article");card.className="item";
   const head=document.createElement("div");head.className="item-head";
-  const left=document.createElement("div");const title=document.createElement("h3");title.textContent=r.title;const meta=document.createElement("div");meta.className="meta";meta.textContent=[r.category||"Uncategorised",r.source_name||"No source", "Impact: "+(r.impact_level||"medium"),r.effective_date?"Effective "+safeDate(r.effective_date):"",r.submitted_at?"Submitted "+safeDate(r.submitted_at):"",r.reviewed_at?"Reviewed "+safeDate(r.reviewed_at):""].filter(Boolean).join(" · ");left.append(title,meta);
+  const left=document.createElement("div");const title=document.createElement("h3");title.textContent=r.title;const meta=document.createElement("div");meta.className="meta";meta.textContent=[r.category||"Uncategorised",r.source_name||"No source", "Impact: "+(r.impact_level||"medium"),"Access: "+(r.minimum_plan||"Basic"),r.effective_date?"Effective "+safeDate(r.effective_date):"",r.submitted_at?"Submitted "+safeDate(r.submitted_at):"",r.reviewed_at?"Reviewed "+safeDate(r.reviewed_at):""].filter(Boolean).join(" · ");left.append(title,meta);
   const badge=document.createElement("span");badge.className="tag "+(r.is_published?"published":state);badge.textContent=r.is_published?"Published":statusLabel(state);head.append(left,badge);card.append(head);
   if(state==="rejected"&&r.rejection_reason){const reason=document.createElement("div");reason.className="meta";reason.style.marginTop="8px";reason.textContent="Rejection reason: "+r.rejection_reason;card.append(reason)}
   const actions=document.createElement("div");actions.className="item-actions";
@@ -137,7 +138,7 @@ function renderList(){
  });
 }
 async function loadRecords(){
- const{data,error}=await client.from("rule_radar_content").select("id,slug,title,category,summary,body,is_published,published_at,created_at,updated_at,source_name,source_url,source_published_at,effective_date,impact_level,jurisdiction,affected_products,recommended_action,update_type,review_status,submitted_at,reviewed_at,reviewed_by,rejection_reason").order("updated_at",{ascending:false});
+ const{data,error}=await client.from("rule_radar_content").select("id,slug,title,category,summary,body,is_published,published_at,created_at,updated_at,source_name,source_url,source_published_at,effective_date,impact_level,jurisdiction,affected_products,recommended_action,update_type,minimum_plan,review_status,submitted_at,reviewed_at,reviewed_by,rejection_reason").order("updated_at",{ascending:false});
  if(error)throw error;records=data||[];renderList();
 }
 function collectPayload(nextStatus){
@@ -147,6 +148,7 @@ function collectPayload(nextStatus){
  if(!$("recordId").value)slug=slug+"-"+Date.now().toString(36);
  const url=$("sourceUrl").value.trim();if(url){const parsed=new URL(url);if(!["http:","https:"].includes(parsed.protocol))throw new Error("The source URL must begin with http:// or https://.");}
  return {slug,title,category:$("category").value.trim()||null,summary:$("summary").value.trim()||null,body,
+  minimum_plan:$("minimumPlan").value,
   review_status:nextStatus,is_published:false,published_at:null,updated_at:new Date().toISOString(),
   source_name:$("sourceName").value.trim()||null,source_url:url||null,source_published_at:$("sourceDate").value||null,effective_date:$("effectiveDate").value||null,
   impact_level:$("impact").value,jurisdiction:$("jurisdiction").value,
