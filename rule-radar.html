@@ -1344,31 +1344,26 @@ document.querySelectorAll(".checkout-button").forEach(function (button) {
     button.addEventListener("click", async function () {
         if (!paddleReady || !dmeviaSupabase) {
             showCheckoutMessage(
-                "Checkout is not ready. Please check the Paddle Sandbox token and refresh this page."
+                "Checkout is not ready. Please refresh this page and try again."
             );
             return;
         }
 
-        const priceId = button.dataset.priceId;
         const planName = button.dataset.plan;
-
-        if (!priceId) {
+        if (!["Basic", "Professional", "Enterprise"].includes(planName)) {
             showCheckoutMessage("This plan is not configured correctly. Please contact DMEvia.");
             return;
         }
 
         button.disabled = true;
+        const originalText = button.textContent;
+        button.textContent = "Preparing secure checkout…";
 
         try {
-            const { data, error } = await dmeviaSupabase.auth.getUser();
+            const { data: sessionData, error: sessionError } = await dmeviaSupabase.auth.getSession();
+            if (sessionError) throw sessionError;
 
-            if (error) {
-                throw error;
-            }
-
-            const user = data && data.user;
-
-            if (!user) {
+            if (!sessionData || !sessionData.session) {
                 showCheckoutMessage(
                     "Please sign in to your DMEvia account before starting a subscription.",
                     true
@@ -1376,28 +1371,34 @@ document.querySelectorAll(".checkout-button").forEach(function (button) {
                 return;
             }
 
+            const { data, error } = await dmeviaSupabase.functions.invoke(
+                "create-paddle-checkout",
+                { body: { plan: planName } }
+            );
+
+            if (error) {
+                console.error("Secure checkout function error:", error);
+                throw new Error("We could not prepare your secure checkout. Please retry in a moment.");
+            }
+
+            if (!data || !data.transactionId || data.environment !== "sandbox") {
+                console.error("Unexpected secure checkout response:", data);
+                throw new Error("The payment service returned an unexpected response. Please contact DMEvia.");
+            }
+
             window.Paddle.Checkout.open({
-                items: [
-                    {
-                        priceId: priceId,
-                        quantity: 1
-                    }
-                ],
-                customer: {
-                    email: user.email
-                },
-                customData: {
-                    supabase_user_id: user.id,
-                    plan_name: planName
-                }
+                transactionId: data.transactionId
             });
         } catch (error) {
-            console.error("DMEvia checkout error:", error);
+            console.error("DMEvia secure checkout error:", error);
             showCheckoutMessage(
-                "We could not start checkout. Please sign in again and retry. If the problem continues, contact DMEvia."
+                error && error.message
+                    ? error.message
+                    : "We could not start checkout. Please sign in again and retry."
             );
         } finally {
             button.disabled = false;
+            button.textContent = originalText;
         }
     });
 });
