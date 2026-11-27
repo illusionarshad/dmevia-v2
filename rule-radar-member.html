@@ -109,6 +109,7 @@ function renderArticles(){
   const badges=document.createElement("div");badges.className="badges";
   const impact=(cleanText(item.impact_level)||"medium").toLowerCase(),ib=document.createElement("span");
   ib.className=`badge impact-${["low","medium","high","critical"].includes(impact)?impact:"medium"}`;ib.textContent=`${impact.charAt(0).toUpperCase()+impact.slice(1)} impact`;badges.append(ib);
+  const tier=cleanText(item.minimum_plan)||"Basic";const tb=document.createElement("span");tb.className="badge";tb.textContent=`${tier} tier`;badges.append(tb);
   if(item.jurisdiction){const jb=document.createElement("span");jb.className="badge";jb.textContent=cleanText(item.jurisdiction);badges.append(jb)}
   const facts=document.createElement("div");facts.className="facts";
   addFact(facts,"Effective date",item.effective_date?safeDate(item.effective_date):"");
@@ -135,7 +136,7 @@ async function initialiseMemberArea(){
  if(subscriptionError)throw subscriptionError;
  if(!subscriptions||!subscriptions.length){loading.classList.add("hidden");showError("An active Rule Radar subscription was not found for this account. You can review the plans on the Rule Radar page or contact DMEvia if you believe this is an error.");document.getElementById("planLabel").textContent="No active subscription";return}
  const sub=subscriptions[0];document.getElementById("planLabel").textContent=`${sub.plan_name||"Rule Radar"} · ${sub.subscription_status}`;
- const{data,error:contentError}=await supabaseClient.from("rule_radar_content").select("id,slug,title,category,summary,body,is_published,published_at,source_name,source_url,source_published_at,effective_date,impact_level,jurisdiction,affected_products,recommended_action,update_type").eq("is_published",true).order("published_at",{ascending:false,nullsFirst:false});
+ const{data,error:contentError}=await supabaseClient.from("rule_radar_content").select("id,slug,title,category,summary,body,is_published,published_at,source_name,source_url,source_published_at,effective_date,impact_level,jurisdiction,affected_products,recommended_action,update_type,minimum_plan").eq("is_published",true).order("published_at",{ascending:false,nullsFirst:false});
  if(contentError)throw contentError;articles=data||[];
  [...new Set(articles.map(x=>x.category).filter(Boolean))].sort().forEach(c=>{const o=document.createElement("option");o.value=c;o.textContent=c;categoryFilter.append(o)});
  loading.classList.add("hidden");renderArticles();
