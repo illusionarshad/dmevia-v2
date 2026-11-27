@@ -716,9 +716,13 @@ form.addEventListener("submit", async function(event) {
             if (data.session) {
 
                 showMessage(
-                    "Your account has been created successfully. You are signed in. Customer dashboard access will be enabled after the subscription system is completed.",
+                    "Your account has been created successfully. Opening your DMEvia dashboard…",
                     "success"
                 );
+
+                window.setTimeout(() => {
+                    window.location.assign("dashboard.html");
+                }, 700);
 
             } else {
 
@@ -746,9 +750,16 @@ form.addEventListener("submit", async function(event) {
             if (error) throw error;
 
             showMessage(
-                "Sign-in successful! Your account is verified. The customer dashboard is still under development.",
+                "Sign-in successful. Opening your DMEvia customer dashboard…",
                 "success"
             );
+
+            // Send authenticated customers to the existing dashboard.
+            // The dashboard reads the signed-in user's own subscription
+            // through Supabase Row Level Security.
+            window.setTimeout(() => {
+                window.location.assign("dashboard.html");
+            }, 700);
 
         }
 
