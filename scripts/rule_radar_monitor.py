@@ -5,6 +5,10 @@ This first release polls official Federal Register CMS/FDA documents and FDA
 medical-product safety RSS feeds. It creates unpublished Pending Review
 records only. It never approves or publishes alerts.
 
+Each official source is isolated: an unavailable feed or agency endpoint is
+reported without preventing the remaining sources from being checked.
+Individual source-page verification failures also hold only that candidate.
+
 Important: generated summaries are structured extracts, not legal advice or
 independent legal interpretation. The administrator must verify every item.
 """
@@ -16,7 +20,6 @@ import json
 import os
 import re
 import sys
-import time
 import xml.etree.ElementTree as ET
 from datetime import datetime, timedelta, timezone
 from email.utils import parsedate_to_datetime
@@ -53,6 +56,7 @@ FDA_FEEDS = [
     ("FDA MedWatch Safety Alerts", "https://www.fda.gov/about-fda/contact-fda/stay-informed/rss-feeds/medwatch/rss.xml"),
 ]
 FEDERAL_REGISTER_AGENCIES = ["centers-for-medicare-medicaid-services", "food-and-drug-administration"]
+TOTAL_SOURCE_ENDPOINTS = len(FDA_FEEDS) + len(FEDERAL_REGISTER_AGENCIES)
 
 
 def clean(value: str | None) -> str:
@@ -107,7 +111,6 @@ def build_payload(source_name: str, url: str, title: str, abstract: str,
     excerpt = clean(source_excerpt)[:1800]
     abstract_clean = clean(abstract)[:5000]
     slug_base = re.sub(r"[^a-z0-9]+", "-", title_clean.lower()).strip("-")[:145] or "regulatory-update"
-    # Stable suffix prevents collisions while remaining deterministic.
     slug = f"{slug_base}-{fp[:10]}"
     summary = abstract_clean[:900] or excerpt[:900] or "Official-source update identified for administrator review."
     body = (
@@ -153,69 +156,125 @@ def submit(payload: dict) -> None:
     print(f"Submitted to Pending Review: {payload['title']} [{response.status_code}]")
 
 
-def federal_register_candidates(since: str):
+def federal_register_candidates(since: str, source_errors: list[str]):
     for agency in FEDERAL_REGISTER_AGENCIES:
-        params = [
-            ("conditions[agencies][]", agency),
-            ("conditions[publication_date][gte]", since),
-            ("per_page", "100"),
-            ("order", "newest"),
-        ]
-        response = SESSION.get("https://www.federalregister.gov/api/v1/documents.json", params=params, timeout=30)
-        response.raise_for_status()
-        docs = response.json().get("results", [])
-        for doc in docs:
-            title = clean(doc.get("title"))
-            abstract = clean(doc.get("abstract"))
-            url = doc.get("html_url") or ""
-            if not url.startswith("https://www.federalregister.gov/") or not is_relevant(title, abstract):
-                continue
-            yield ("Federal Register — " + agency.replace("-", " ").title(), url, title, abstract,
-                   date_only(doc.get("publication_date")), date_only(doc.get("effective_on")),
-                   agency.replace("-", " ").title(), abstract)
+        source_label = f"Federal Register — {agency}"
+        try:
+            params = [
+                ("conditions[agencies][]", agency),
+                ("conditions[publication_date][gte]", since),
+                ("per_page", "100"),
+                ("order", "newest"),
+            ]
+            response = SESSION.get(
+                "https://www.federalregister.gov/api/v1/documents.json",
+                params=params,
+                timeout=30,
+            )
+            response.raise_for_status()
+            docs = response.json().get("results", [])
+            for doc in docs:
+                title = clean(doc.get("title"))
+                abstract = clean(doc.get("abstract"))
+                url = doc.get("html_url") or ""
+                if not url.startswith("https://www.federalregister.gov/") or not is_relevant(title, abstract):
+                    continue
+                yield (
+                    "Federal Register — " + agency.replace("-", " ").title(),
+                    url, title, abstract, date_only(doc.get("publication_date")),
+                    date_only(doc.get("effective_on")), agency.replace("-", " ").title(), abstract,
+                )
+        except Exception as exc:
+            message = f"{source_label}: {type(exc).__name__}: {str(exc)[:300]}"
+            source_errors.append(message)
+            print(f"WARNING: {message}", file=sys.stderr)
 
 
-def fda_rss_candidates():
+def fda_rss_candidates(source_errors: list[str]):
     for feed_name, feed_url in FDA_FEEDS:
-        response = SESSION.get(feed_url, timeout=30)
-        response.raise_for_status()
-        root = ET.fromstring(response.content)
-        for item in root.findall(".//item"):
-            title = clean(item.findtext("title"))
-            url = clean(item.findtext("link"))
-            description = clean(item.findtext("description"))
-            published = date_only(item.findtext("pubDate"))
-            if not url.startswith("https://www.fda.gov/") or not is_relevant(title, description):
-                continue
-            yield (feed_name, url, title, description, published, None, "U.S. Food and Drug Administration", description)
+        try:
+            response = SESSION.get(feed_url, timeout=30)
+            response.raise_for_status()
+            root = ET.fromstring(response.content)
+            for item in root.findall(".//item"):
+                title = clean(item.findtext("title"))
+                url = clean(item.findtext("link"))
+                description = clean(item.findtext("description"))
+                published = date_only(item.findtext("pubDate"))
+                if not url.startswith("https://www.fda.gov/") or not is_relevant(title, description):
+                    continue
+                yield (
+                    feed_name, url, title, description, published, None,
+                    "U.S. Food and Drug Administration", description,
+                )
+        except Exception as exc:
+            message = f"{feed_name}: {type(exc).__name__}: {str(exc)[:300]}"
+            source_errors.append(message)
+            print(f"WARNING: {message}", file=sys.stderr)
 
 
 def main():
     since = (datetime.now(timezone.utc).date() - timedelta(days=10)).isoformat()
     candidates = []
-    candidates.extend(federal_register_candidates(since))
-    candidates.extend(fda_rss_candidates())
+    source_errors: list[str] = []
+
+    # Each endpoint catches its own errors, so one unavailable source cannot
+    # prevent results from the other official sources from being collected.
+    candidates.extend(federal_register_candidates(since, source_errors))
+    candidates.extend(fda_rss_candidates(source_errors))
+
     seen = set()
     submitted = 0
+    held = 0
+    submission_errors = 0
+
     for source_name, url, title, abstract, published, effective, agency, excerpt in candidates:
         fp = fingerprint(url, title)
         if fp in seen:
             continue
         seen.add(fp)
-        # Fetch the actual official record before sending it to the review queue.
-        page_text = fetch_text(url)
-        evidence = clean(excerpt)
-        if len(evidence) < 40 or evidence[:160].lower() not in page_text.lower():
-            print(f"Held (source excerpt could not be confirmed on page): {title}")
+
+        # Verify each official record independently. A dead or blocked page
+        # holds only that candidate; it must not stop the remaining checks.
+        try:
+            page_text = fetch_text(url)
+            evidence = clean(excerpt)
+            if len(evidence) < 40 or evidence[:160].lower() not in page_text.lower():
+                print(f"Held (source excerpt could not be confirmed on page): {title}")
+                held += 1
+                continue
+        except Exception as exc:
+            print(
+                f"WARNING: Held candidate because official page verification failed "
+                f"({type(exc).__name__}: {str(exc)[:250]}): {title}",
+                file=sys.stderr,
+            )
+            held += 1
             continue
+
         payload = build_payload(source_name, url, title, abstract, published, effective, agency, evidence, fp)
         try:
             submit(payload)
             submitted += 1
         except Exception as exc:
+            submission_errors += 1
             print(f"ERROR submitting {title}: {exc}", file=sys.stderr)
-    print(f"Monitor complete. Candidates examined: {len(seen)}; submitted: {submitted}.")
+
+    print(
+        f"Monitor complete. Candidates examined: {len(seen)}; "
+        f"submitted to Pending Review: {submitted}; held: {held}; "
+        f"submission errors: {submission_errors}; source endpoint errors: {len(source_errors)}."
+    )
+    if source_errors:
+        print("Source errors (monitor continued):")
+        for error in source_errors:
+            print(f" - {error}")
     print("No alert was approved or published by this workflow.")
+
+    # A partial outage is a degraded but useful run. Fail only when every
+    # configured source endpoint failed, making a total monitoring outage clear.
+    if len(source_errors) >= TOTAL_SOURCE_ENDPOINTS:
+        raise SystemExit("All configured official source endpoints failed; no reliable monitoring was possible.")
 
 
 if __name__ == "__main__":
